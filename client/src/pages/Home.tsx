@@ -5,214 +5,280 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      {/* Hero Section - nano·universe style */}
+      
+      {/* Hero Section */}
       <section id="top" className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="text-center space-y-6">
-          <div className="text-6xl md:text-8xl lg:text-9xl font-light tracking-wider text-gray-800 transition-all">
-            LS
+        <div className="text-center space-y-8 px-4">
+          <div className="mb-8">
+            <img src="/ls-logo.jpg" alt="株式会社LS" className="w-48 h-48 mx-auto" />
           </div>
-          <div className="text-base md:text-xl tracking-[0.3em] text-gray-600 uppercase">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-wider text-gray-800">
             株式会社LS
-          </div>
-        </div>
-      </section>
-
-      {/* KIITO Section */}
-      <section id="about" className="min-h-screen flex items-center justify-center bg-white">
-        <div className="container max-w-4xl">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold leading-none text-black">
-            LS:
           </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl mt-6 text-black tracking-wide font-light">
-            SPACE STORYTELLING STUDIO
+          <p className="text-xl md:text-2xl text-gray-600 font-light tracking-wide">
+            空間を超え、ブランドを創造する。
           </p>
         </div>
       </section>
 
-      {/* PHASE Section - Dark with diagonal lines */}
-      <section className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          {Array.from({ length: 30 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute h-full w-px bg-white"
-              style={{
-                left: `${i * 3.33}%`,
-                transform: 'rotate(-45deg) translateX(-50%)',
-                transformOrigin: 'top left',
-              }}
-            />
-          ))}
-        </div>
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-white relative z-10 tracking-widest">
-          PHASE
-        </h1>
-      </section>
-
-      {/* Grid Section - TOPICS style */}
-      <section id="projects" className="py-24 bg-gray-50">
-        <div className="container">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-16 text-black">TOPICS</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div key={item} className="bg-white aspect-[4/3] relative group overflow-hidden">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400 text-sm">Project {item}</span>
-                </div>
-                <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="text-white text-center p-6">
-                    <h3 className="text-2xl font-bold mb-2">Project Title {item}</h3>
-                    <p className="text-sm">Architecture & Design</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {/* Mission Section */}
+      <section id="about" className="py-32 bg-white">
+        <div className="container max-w-5xl">
+          <div className="mb-16">
+            <p className="text-sm tracking-widest text-gray-500 mb-4">MISSION</p>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black mb-8">
+              ミッション
+            </h2>
+          </div>
+          <div className="space-y-8">
+            <h3 className="text-3xl md:text-4xl font-bold text-black leading-tight">
+              空間を超え、ブランドを創造する。
+            </h3>
+            <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+              私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
+              立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
+            </p>
           </div>
         </div>
       </section>
 
-      {/* WELCOME Section */}
-      <section className="py-32 bg-white">
-        <div className="container max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="aspect-[4/3] bg-gray-200 overflow-hidden image-overlay">
-              <img src="/interior-1.jpg" alt="Modern interior design" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-            </div>
-            <div className="space-y-6">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-black">WELCOME</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                建築・空間・体験を横断し、感情を動かすストーリーでプロジェクトを導く。
-                私たちは、図面の先にある記憶を設計します。
-              </p>
-              <Button variant="outline" className="mt-8">
-                Learn More
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* LEGACY Section */}
+      {/* Vision Section */}
       <section className="py-32 bg-gray-50">
-        <div className="container max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6 order-2 lg:order-1">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-black">LEGACY</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                空間を超え、ブランドを創造する。内装という「箱」を作るだけではなく、
-                事業の世界観と収益モデルまで設計する。
-              </p>
-              <Button variant="outline" className="mt-8">
-                View Projects
-              </Button>
-            </div>
-            <div className="aspect-[4/3] bg-gray-200 order-1 lg:order-2 overflow-hidden image-overlay">
-              <img src="/interior-2.jpg" alt="Contemporary architecture" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* HOSHIZAKI DESIGN Section */}
-      <section className="py-32 bg-white">
-        <div className="container max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-black mb-4">HOSHIZAKI DESIGN</h2>
-            <p className="text-xl text-gray-600 writing-mode-vertical-rl mx-auto">
-              設計図に物語を
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="aspect-[3/4] bg-gray-200 overflow-hidden image-overlay">
-              <img src="/interior-3.jpg" alt="Minimalist design" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-            </div>
-            <div className="space-y-6">
-              <p className="text-lg text-gray-700 leading-relaxed">
-                そこにどんな人が集まり、どんな時間を過ごし、どんな記憶を持ち帰るのか。
-                私たちは、空間の先にある物語を設計します。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quality Section - Dark */}
-      <section className="py-32 bg-gray-900">
-        <div className="container">
-          <h2 className="text-7xl font-bold text-white mb-16">Quality</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="aspect-square bg-gray-800"></div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Architecture Projects Section - Right side style */}
-      <section className="min-h-screen bg-black relative">
-        <div className="absolute inset-0 bg-gray-800/50"></div>
-        <div className="relative z-10 container py-32">
-          <div className="max-w-4xl ml-auto text-white">
-            <h2 className="text-6xl font-bold mb-8">
-              МЫ СОЗДАЁМ НАСТОЯЩЕЕ<br />
-              СБАЛАНСИРОВАННОЕ ДОМА
+        <div className="container max-w-5xl">
+          <div className="mb-16">
+            <p className="text-sm tracking-widest text-gray-500 mb-4">VISION</p>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black mb-8">
+              ビジョン
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-              <div>
-                <div className="text-5xl font-bold">15</div>
-                <div className="text-sm mt-2 text-gray-400">лет на рынке</div>
-              </div>
-              <div>
-                <div className="text-5xl font-bold">186</div>
-                <div className="text-sm mt-2 text-gray-400">реализованных проектов</div>
-              </div>
-              <div>
-                <div className="text-5xl font-bold">110</div>
-                <div className="text-sm mt-2 text-gray-400">постоянных клиентов</div>
-              </div>
-              <div>
-                <div className="text-5xl font-bold">5</div>
-                <div className="text-sm mt-2 text-gray-400">строительных бригад</div>
-              </div>
-            </div>
+          </div>
+          <div className="space-y-8">
+            <h3 className="text-3xl md:text-4xl font-bold text-black leading-tight">
+              業界を変革し、ブランドカンパニーになる。
+            </h3>
+            <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+              内装＝コストという常識を変え、内装＝投資へ。コンサル／設計／施工を一気通貫し、データとAIを活用した再現性の高い出店モデルで全国展開を支援します。
+            </p>
+            <ul className="space-y-4 mt-8">
+              <li className="flex items-start gap-4">
+                <span className="text-2xl font-bold text-gray-300">•</span>
+                <span className="text-lg text-gray-700">事業づくり視点の内装で、成果に直結する店舗を増やす</span>
+              </li>
+              <li className="flex items-start gap-4">
+                <span className="text-2xl font-bold text-gray-300">•</span>
+                <span className="text-lg text-gray-700">パートナーと連携し、全国で同品質・同スピードを実現</span>
+              </li>
+              <li className="flex items-start gap-4">
+                <span className="text-2xl font-bold text-gray-300">•</span>
+                <span className="text-lg text-gray-700">「建築 × AI」で意思決定と設計・現場管理を高度化</span>
+              </li>
+              <li className="flex items-start gap-4">
+                <span className="text-2xl font-bold text-gray-300">•</span>
+                <span className="text-lg text-gray-700">5年で"ブランドカンパニー"としてのスタンダードを確立</span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Japanese Content Section - Bottom right style */}
-      <section id="philosophy" className="min-h-screen bg-black relative">
-        <div className="absolute inset-0 opacity-40 bg-gradient-to-b from-purple-900/30 to-black"></div>
-        <div className="relative z-10 container py-32">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-6xl font-bold mb-8 leading-tight">
-              まだ見ぬ<br />
-              世界を<br />
-              つくせ。
+      {/* Film Section */}
+      <section id="film" className="py-32 bg-black">
+        <div className="container max-w-6xl">
+          <div className="mb-16 text-center">
+            <p className="text-sm tracking-widest text-gray-400 mb-4">FILM</p>
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              ブランドが動き出す瞬間
             </h2>
-            <p className="text-xl mt-12 leading-relaxed text-gray-300">
-              コンセプトメイキングから始まる、ブランド体験のデザイン。
-              ユーザーの心に響く物語を、空間とサービスに落とし込み、
-              これまでにないブランド体験を創造します。
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+              LSが手がける空間とブランド体験の哲学を、短編映像に凝縮しました。
             </p>
-            <div className="mt-16">
-              <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-black">
-                Learn more
-              </Button>
+          </div>
+          <div className="aspect-video max-w-4xl mx-auto bg-gray-900 rounded-lg overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/GjfqIFZ2SPg?si=AZ8gf3B0byRfezB7"
+              title="LS Brand Film"
+              className="w-full h-full"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section id="values" className="py-32 bg-white">
+        <div className="container max-w-6xl">
+          <div className="mb-16">
+            <p className="text-sm tracking-widest text-gray-500 mb-4">VALUES</p>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black mb-8">
+              バリュー
+            </h2>
+            <p className="text-2xl md:text-3xl text-gray-700 font-light">
+              "超"で貫く5つの基準
+            </p>
+          </div>
+
+          <div className="space-y-12">
+            {/* Value 1 */}
+            <div className="border-l-4 border-black pl-8 py-6">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-4xl font-bold text-gray-300">01</span>
+                <h3 className="text-3xl md:text-4xl font-bold text-black">超顧客思考</h3>
+              </div>
+              <p className="text-lg text-gray-700 mb-4">成果から逆算して設計・工事・運用まで伴走。</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>売上・粗利・席数・回転率を初回提案に数値で明記</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>「やらない提案」（費用対効果の低い装飾は切る）</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>引渡し後30日レビューで改善提案を必ず実施</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Value 2 */}
+            <div className="border-l-4 border-black pl-8 py-6">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-4xl font-bold text-gray-300">02</span>
+                <h3 className="text-3xl md:text-4xl font-bold text-black">超徹底</h3>
+              </div>
+              <p className="text-lg text-gray-700 mb-4">約束・基準・手順を守り切る。</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>現調→設計→積算→工程のチェックリスト運用</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>記録主義（現場写真・変更履歴・図面差分を全て残す）</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>リスクは"はじめに言う"。曖昧さを残さない</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Value 3 */}
+            <div className="border-l-4 border-black pl-8 py-6">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-4xl font-bold text-gray-300">03</span>
+                <h3 className="text-3xl md:text-4xl font-bold text-black">超追求</h3>
+              </div>
+              <p className="text-lg text-gray-700 mb-4">品質と再現性に貪欲。</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>ディテール（R、目地、納まり、見えない裏側）まで詰める</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>原価と仕上がりの最適点を比較提示（A/B/ミニマム）</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>現場から学んだ改善を標準化して次案件に反映</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Value 4 */}
+            <div className="border-l-4 border-black pl-8 py-6">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-4xl font-bold text-gray-300">04</span>
+                <h3 className="text-3xl md:text-4xl font-bold text-black">超連携</h3>
+              </div>
+              <p className="text-lg text-gray-700 mb-4">コンサル・設計・施工・協力会社・発注者が一体。</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>ワンチーム工程表とSlack/Notionの情報一元化</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>決裁者・現場・サプライヤーの三者合意ルール</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>トラブル時は"事実→影響→代替案→決定"の4点で即共有</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Value 5 */}
+            <div className="border-l-4 border-black pl-8 py-6">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="text-4xl font-bold text-gray-300">05</span>
+                <h3 className="text-3xl md:text-4xl font-bold text-black">超挑戦</h3>
+              </div>
+              <p className="text-lg text-gray-700 mb-4">スピードと挑戦で業界を前進。</p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>初回提案は最短48時間・3案（ミニマム／スタンダード／ブランディング）</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>新素材・新工法・AIを積極採用、検証結果を公開</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-black">•</span>
+                  <span>失敗は学びに変換し、再発防止を仕組みに残す</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ONE BY ONE Project Section */}
-      <section className="py-32 bg-gray-900">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-white">
-            <h3 className="text-sm tracking-widest mb-4 text-gray-400">PROJECT</h3>
-            <h2 className="text-5xl font-bold mb-8">ONE BY ONE Project</h2>
-            <p className="text-lg leading-relaxed text-gray-300">
-              一つひとつのプロジェクトに、固有の物語がある。
-              私たちは、その物語を丁寧に紡ぎ、形にしていきます。
-            </p>
+      {/* Company Section */}
+      <section id="company" className="py-32 bg-gray-50">
+        <div className="container max-w-5xl">
+          <div className="mb-16">
+            <p className="text-sm tracking-widest text-gray-500 mb-4">COMPANY</p>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black mb-8">
+              会社概要
+            </h2>
+          </div>
+          <div className="bg-white p-8 md:p-12 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">会社名</div>
+              <div className="md:col-span-3 text-gray-700">株式会社LS</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">設立</div>
+              <div className="md:col-span-3 text-gray-700">2023年10月</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">所在地</div>
+              <div className="md:col-span-3 text-gray-700">東京都渋谷区渋谷1-12-2 クロスオフィス渋谷505</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">代表者</div>
+              <div className="md:col-span-3 text-gray-700">本間 拓彌</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">資本金</div>
+              <div className="md:col-span-3 text-gray-700">1,000,000円</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">事業内容</div>
+              <div className="md:col-span-3 text-gray-700">店舗内装のコンサルティング／設計デザイン／施工・PM／ブランド展開支援</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 border-b border-gray-200 pb-6">
+              <div className="font-bold text-gray-900">建設業許可</div>
+              <div className="md:col-span-3 text-gray-700">東京都知事 許可（般-7）第159994号</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="font-bold text-gray-900">従業員数</div>
+              <div className="md:col-span-3 text-gray-700">コアメンバー5名</div>
+            </div>
           </div>
         </div>
       </section>
@@ -222,26 +288,28 @@ export default function Home() {
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
             <div>
-              <h3 className="text-white text-2xl font-bold mb-4">LS</h3>
+              <div className="mb-6">
+                <img src="/ls-logo.jpg" alt="株式会社LS" className="w-32 h-32 brightness-0 invert" />
+              </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                空間に、感情を。<br />
-                デザインに、物語を。
+                空間を超え、ブランドを創造する。
               </p>
+            </div>
+            <div>
+              <h4 className="text-white text-sm font-bold mb-4 tracking-wider">COMPANY</h4>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>株式会社LS</p>
+                <p>東京都渋谷区渋谷1-12-2</p>
+                <p>クロスオフィス渋谷505</p>
+              </div>
             </div>
             <div>
               <h4 className="text-white text-sm font-bold mb-4 tracking-wider">CONTACT</h4>
               <div className="space-y-2 text-gray-400 text-sm">
-                <p>Email: info@ls-design.jp</p>
-                <p>Tel: +81-3-1234-5678</p>
-                <p>Address: Tokyo, Japan</p>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-white text-sm font-bold mb-4 tracking-wider">FOLLOW US</h4>
-              <div className="space-y-2 text-gray-400 text-sm">
-                <p>Instagram</p>
-                <p>Facebook</p>
-                <p>LinkedIn</p>
+                <p>お問い合わせはこちら</p>
+                <Button variant="outline" className="mt-4 text-white border-white hover:bg-white hover:text-black">
+                  Contact Us
+                </Button>
               </div>
             </div>
           </div>

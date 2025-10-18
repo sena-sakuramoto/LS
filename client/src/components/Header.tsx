@@ -27,19 +27,25 @@ export default function Header() {
               href="#about"
               className="text-sm tracking-wider hover:opacity-60 transition-opacity"
             >
-              ABOUT
+              MISSION
             </a>
             <a
-              href="#projects"
+              href="#film"
               className="text-sm tracking-wider hover:opacity-60 transition-opacity"
             >
-              PROJECTS
+              FILM
             </a>
             <a
-              href="#philosophy"
+              href="#values"
               className="text-sm tracking-wider hover:opacity-60 transition-opacity"
             >
-              PHILOSOPHY
+              VALUES
+            </a>
+            <a
+              href="#company"
+              className="text-sm tracking-wider hover:opacity-60 transition-opacity"
+            >
+              COMPANY
             </a>
             <a
               href="#contact"

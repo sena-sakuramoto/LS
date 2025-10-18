@@ -6,7 +6,9 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
+  const [scrollY, setScrollY] = useState(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -17,6 +19,7 @@ export default function Home() {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(progress);
+      setScrollY(window.scrollY);
     };
 
     // Intersection Observer for scroll animations
@@ -50,8 +53,100 @@ export default function Home() {
     };
   }, []);
 
+  // Canvas particle system
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      alpha: number;
+    }> = [];
+
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2 + 1,
+        alpha: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw connections
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.1)';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw and update particles
+      particles.forEach((p) => {
+        ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Calculate mouse parallax
+  const getParallax = (depth: number) => {
+    const x = (mousePosition.x - window.innerWidth / 2) * depth;
+    const y = (mousePosition.y - window.innerHeight / 2) * depth;
+    return { x, y };
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ perspective: '1000px' }}>
+      {/* Canvas Particle Network */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-[5]"
+      />
+
       {/* Scroll Progress Bar with Glow */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-[100]">
         <div 
@@ -60,7 +155,7 @@ export default function Home() {
         ></div>
       </div>
 
-      {/* Custom Cursor with Trail */}
+      {/* Custom Cursor with Magnetic Effect */}
       <div 
         className="hidden lg:block fixed w-6 h-6 border-2 border-[#d4af37] rounded-full pointer-events-none z-[100] mix-blend-difference transition-transform duration-200"
         style={{ 
@@ -80,15 +175,21 @@ export default function Home() {
 
       <Header />
       
-      {/* Hero Section - Ultra Premium with Parallax */}
+      {/* Hero Section - 3D Parallax */}
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
-        {/* Parallax Background Layers */}
-        <div className="absolute inset-0 z-0">
+        {/* 3D Parallax Layers */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateZ(-100px) scale(1.1) translate(${getParallax(0.02).x}px, ${getParallax(0.02).y}px)`
+          }}
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
           <div 
             className="absolute inset-0 opacity-20"
             style={{
-              transform: `translateY(${scrollProgress * 0.5}px) scale(${1 + scrollProgress * 0.001})`
+              transform: `translateY(${scrollProgress * 0.5}px) scale(${1 + scrollProgress * 0.001})`,
+              filter: `blur(${scrollProgress * 0.05}px)`
             }}
           >
             <img 
@@ -100,68 +201,86 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-black"></div>
         </div>
         
-        {/* Animated Particles with Random Movement */}
+        {/* Animated Mesh Gradient Orbs with 3D */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          {[...Array(30)].map((_, i) => (
+          {[
+            { size: 600, top: '10%', left: '5%', delay: 0, depth: 0.03 },
+            { size: 500, bottom: '15%', right: '10%', delay: 2, depth: 0.04 },
+            { size: 400, top: '50%', left: '50%', delay: 4, depth: 0.05 }
+          ].map((orb, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-[#d4af37] rounded-full animate-float"
+              className="absolute rounded-full blur-3xl animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${5 + Math.random() * 5}s`,
-                opacity: 0.3 + Math.random() * 0.3
+                width: `${orb.size}px`,
+                height: `${orb.size}px`,
+                top: orb.top,
+                bottom: orb.bottom,
+                left: orb.left,
+                right: orb.right,
+                background: `radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)`,
+                animationDelay: `${orb.delay}s`,
+                transform: `translate(${getParallax(orb.depth).x}px, ${getParallax(orb.depth).y}px) translateZ(${orb.delay * 20}px)`,
+                transition: 'transform 0.3s ease-out'
               }}
             ></div>
           ))}
         </div>
         
-        {/* Floating Gradient Orbs with Scroll Effect */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <div 
-            className="absolute top-20 left-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse"
-            style={{ transform: `translateY(${scrollProgress * 0.3}px)` }}
-          ></div>
-          <div 
-            className="absolute bottom-20 right-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse" 
-            style={{
-              animationDelay: '2s',
-              transform: `translateY(${-scrollProgress * 0.2}px)`
-            }}
-          ></div>
-          <div 
-            className="absolute top-1/2 left-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" 
-            style={{
-              animationDelay: '4s',
-              transform: `translate(-50%, -50%) scale(${1 + scrollProgress * 0.002})`
-            }}
-          ></div>
-        </div>
-        
-        {/* Content with Stagger Animation */}
-        <div className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto">
+        {/* Content with 3D Transform */}
+        <div 
+          className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto"
+          style={{
+            transform: `translateZ(50px) translate(${getParallax(0.01).x}px, ${getParallax(0.01).y}px)`,
+            transition: 'transform 0.3s ease-out'
+          }}
+        >
           <div className="mb-20 animate-fade-in-up">
             <img 
               src="/ls-logo.jpg" 
               alt="株式会社LS" 
-              className="w-56 h-56 mx-auto opacity-90 brightness-200 drop-shadow-2xl hover:scale-110 hover:rotate-6 transition-all duration-700"
+              className="w-56 h-56 mx-auto opacity-90 brightness-200 drop-shadow-2xl transition-all duration-700"
+              style={{
+                transform: `rotate(${mousePosition.x * 0.01}deg) scale(${1 + (mousePosition.y * 0.0001)})`
+              }}
             />
           </div>
           
           <div className="space-y-12">
             <h1 className="text-8xl md:text-[10rem] lg:text-[14rem] font-light tracking-[0.15em] leading-none drop-shadow-2xl">
-              <span className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" style={{animationDelay: '0.2s'}}>L</span>
-              <span className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" style={{animationDelay: '0.3s'}}>S</span>
+              {['L', 'S'].map((letter, i) => (
+                <span 
+                  key={i}
+                  className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" 
+                  style={{
+                    animationDelay: `${0.2 + i * 0.1}s`,
+                    transform: `translateY(${Math.sin(scrollY * 0.01 + i) * 10}px)`,
+                    transition: 'transform 0.3s ease-out'
+                  }}
+                >
+                  {letter}
+                </span>
+              ))}
             </h1>
             
             <div className="flex items-center justify-center gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
               <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-              <div className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"></div>
+              <div 
+                className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"
+                style={{
+                  transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.3})`
+                }}
+              ></div>
               <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
             </div>
             
-            <p className="text-3xl md:text-5xl lg:text-7xl font-light tracking-[0.1em] leading-relaxed animate-fade-in-up" style={{animationDelay: '0.7s'}}>
+            <p 
+              className="text-3xl md:text-5xl lg:text-7xl font-light tracking-[0.1em] leading-relaxed animate-fade-in-up" 
+              style={{
+                animationDelay: '0.7s',
+                transform: `translateZ(30px)`
+              }}
+            >
               空間を超え、<br className="md:hidden" />ブランドを創造する。
             </p>
           </div>
@@ -171,6 +290,9 @@ export default function Home() {
               variant="outline" 
               size="lg"
               className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
+              style={{
+                transform: `translateZ(40px)`
+              }}
             >
               OUR VISION
             </Button>
@@ -178,23 +300,33 @@ export default function Home() {
               variant="outline" 
               size="lg"
               className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+              style={{
+                transform: `translateZ(40px)`
+              }}
             >
               CONTACT US
             </Button>
           </div>
           
-          {/* Scroll Indicator with Animation */}
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-[#d4af37] animate-bounce">
+          {/* Scroll Indicator with Wave Animation */}
+          <div 
+            className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-[#d4af37]"
+            style={{
+              animation: 'bounce 2s infinite',
+              transform: `translateY(${Math.sin(scrollY * 0.1) * 5}px)`
+            }}
+          >
             <span className="text-xs tracking-[0.4em] font-light">SCROLL</span>
             <div className="w-px h-24 bg-gradient-to-b from-[#d4af37] to-transparent"></div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section - Premium Numbers with Counter Animation */}
+      {/* Stats Section - 3D Flip Cards */}
       <section 
         id="stats" 
         className={`relative py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-16">
@@ -206,10 +338,20 @@ export default function Home() {
             ].map((stat, index) => (
               <div 
                 key={index} 
-                className="text-center space-y-6 group cursor-pointer stagger-item hover-lift" 
-                style={{animationDelay: stat.delay}}
+                className="text-center space-y-6 group cursor-pointer stagger-item" 
+                style={{
+                  animationDelay: stat.delay,
+                  transformStyle: 'preserve-3d',
+                  transform: `translateZ(${20 + index * 10}px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                }}
               >
-                <div className={`text-7xl md:text-8xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}>
+                <div 
+                  className={`text-7xl md:text-8xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}
+                  style={{
+                    transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 5}px)`,
+                    textShadow: '0 0 30px rgba(212,175,55,0.5)'
+                  }}
+                >
                   {stat.value}<span className="text-5xl">{stat.unit}</span>
                 </div>
                 <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-32 transition-all duration-500"></div>
@@ -220,10 +362,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mission Section - Luxury Layout with Scroll Reveal */}
+      {/* Mission Section - Tilt on Hover */}
       <section 
         id="mission" 
         className={`relative py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Decorative Elements with Scroll Animation */}
         <div 
@@ -232,9 +375,17 @@ export default function Home() {
         ></div>
         <div 
           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
-          style={{ transform: isVisible.mission ? 'scale(1)' : 'scale(0.5)' }}
+          style={{ 
+            transform: isVisible.mission ? `scale(1) translate(${getParallax(0.02).x}px, ${getParallax(0.02).y}px)` : 'scale(0.5)'
+          }}
         ></div>
-        <div className="absolute top-20 right-20 w-[400px] h-[400px] border border-[#d4af37]/10 rounded-full animate-pulse"></div>
+        <div 
+          className="absolute top-20 right-20 w-[400px] h-[400px] border border-[#d4af37]/10 rounded-full"
+          style={{
+            animation: 'spin 20s linear infinite',
+            transform: `rotate(${scrollY * 0.1}deg)`
+          }}
+        ></div>
         
         <div className="container max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
@@ -253,7 +404,8 @@ export default function Home() {
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
                       style={{
-                        transitionDelay: `${i * 0.1}s`
+                        transitionDelay: `${i * 0.1}s`,
+                        transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
                       }}
                     >
                       {text}<br />
@@ -284,13 +436,22 @@ export default function Home() {
             <div 
               className={`lg:col-span-7 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
             >
-              <div className="relative h-[800px]">
-                {/* Main Image with Hover Effect */}
-                <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay group">
+              <div 
+                className="relative h-[800px] group"
+                style={{
+                  transformStyle: 'preserve-3d',
+                  transform: `rotateY(${getParallax(0.01).x * 0.05}deg) rotateX(${-getParallax(0.01).y * 0.05}deg)`
+                }}
+              >
+                {/* Main Image with 3D Tilt */}
+                <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
                   <img 
                     src="/luxury-1.webp" 
                     alt="Premium Interior Design" 
                     className="w-full h-full object-cover"
+                    style={{
+                      transform: `scale(${1 + Math.abs(getParallax(0.01).x) * 0.0001})`
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                   
@@ -304,39 +465,55 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Floating Card with Glass Effect and Hover */}
-                <div className="absolute -bottom-16 -left-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group cursor-pointer">
+                {/* Floating Card with 3D */}
+                <div 
+                  className="absolute -bottom-16 -left-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer"
+                  style={{
+                    transform: `translateZ(60px) translate(${getParallax(0.03).x}px, ${getParallax(0.03).y}px)`
+                  }}
+                >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-px bg-[#d4af37] group-hover:w-20 transition-all duration-500"></div>
+                    <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
                     <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
                   </div>
-                  <p className="text-2xl text-black font-light leading-relaxed group-hover:gold-gradient transition-all duration-500">
+                  <p className="text-2xl text-black font-light leading-relaxed group-hover/card:gold-gradient transition-all duration-500">
                     "続く売上"が生まれる<br />ブランド体験をつくる
                   </p>
                 </div>
                 
-                {/* Decorative Frame with Animation */}
-                <div className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30 group-hover:w-40 group-hover:h-40 transition-all duration-700"></div>
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30 group-hover:w-40 group-hover:h-40 transition-all duration-700"></div>
+                {/* Decorative Frame with Rotation */}
+                <div 
+                  className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30 transition-all duration-700"
+                  style={{
+                    transform: `rotate(${scrollY * 0.05}deg)`
+                  }}
+                ></div>
+                <div 
+                  className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30 transition-all duration-700"
+                  style={{
+                    transform: `rotate(${-scrollY * 0.05}deg)`
+                  }}
+                ></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Vision Section - Dark Elegance with Scroll Parallax */}
+      {/* Vision Section - Morphing Grid */}
       <section 
         id="vision" 
         className={`relative py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
       >
-        {/* Animated Background Pattern */}
+        {/* Animated Morphing Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div 
-            className="absolute inset-0 transition-transform duration-1000" 
+            className="absolute inset-0 transition-all duration-1000" 
             style={{
               backgroundImage: 'radial-gradient(circle at 3px 3px, #d4af37 2px, transparent 0)',
               backgroundSize: '60px 60px',
-              transform: isVisible.vision ? 'scale(1)' : 'scale(0.8)'
+              transform: `scale(${1 + Math.sin(scrollY * 0.01) * 0.1}) rotate(${scrollY * 0.05}deg)`,
+              backgroundPosition: `${scrollY * 0.5}px ${scrollY * 0.3}px`
             }}
           ></div>
         </div>
@@ -345,10 +522,16 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
             <div 
               className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+              style={{ transformStyle: 'preserve-3d' }}
             >
               <div className="grid grid-cols-2 gap-8">
-                {/* Large Image with Parallax */}
-                <div className="col-span-2 relative h-[600px] group overflow-hidden image-overlay">
+                {/* Large Image with 3D Depth */}
+                <div 
+                  className="col-span-2 relative h-[600px] group overflow-hidden image-overlay"
+                  style={{
+                    transform: `translateZ(30px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                  }}
+                >
                   <img 
                     src="/luxury-3.jpg" 
                     alt="Luxury Space Design" 
@@ -356,20 +539,28 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                   
-                  {/* Image Number Badge with Hover */}
-                  <div className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
+                  {/* Image Number Badge with Pulse */}
+                  <div 
+                    className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500"
+                    style={{
+                      transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.1})`
+                    }}
+                  >
                     <span className="text-sm tracking-[0.3em] font-light">01</span>
                   </div>
                 </div>
                 
-                {/* Small Images with Stagger */}
+                {/* Small Images with 3D Stagger */}
                 {[
-                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02" },
-                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03" }
+                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02", depth: 20 },
+                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03", depth: 40 }
                 ].map((img, index) => (
                   <div 
                     key={index}
                     className={`relative h-72 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                    style={{
+                      transform: `translateZ(${img.depth}px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                    }}
                   >
                     <img 
                       src={img.src} 
@@ -399,7 +590,8 @@ export default function Home() {
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
                       style={{
-                        transitionDelay: `${i * 0.1}s`
+                        transitionDelay: `${i * 0.1}s`,
+                        transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
                       }}
                     >
                       {text}<br />
@@ -422,8 +614,17 @@ export default function Home() {
                   <div 
                     key={index} 
                     className={`flex items-start gap-8 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+                    style={{
+                      transform: `translateZ(${10 + index * 5}px)`
+                    }}
                   >
-                    <div className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700 group-hover:rotate-180">
+                    <div 
+                      className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700"
+                      style={{
+                        transform: `rotate(${scrollY * 0.05 + index * 10}deg)`,
+                        transition: 'all 0.7s ease-out'
+                      }}
+                    >
                       <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                     </div>
                     <div className="flex-1 pt-2">
@@ -438,10 +639,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Film Section - Cinematic with Scroll Scale */}
+      {/* Film Section - 3D Frame */}
       <section 
         id="film" 
         className={`relative py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
           <div className="text-center mb-32">
@@ -460,17 +662,46 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="relative max-w-6xl mx-auto">
-            {/* Decorative Multi-Layer Frame with Pulse */}
-            <div className="absolute -inset-12 border border-[#d4af37]/20 pointer-events-none animate-pulse"></div>
-            <div className="absolute -inset-20 border border-[#d4af37]/10 pointer-events-none animate-pulse" style={{animationDelay: '0.5s'}}></div>
-            <div className="absolute -inset-28 border border-[#d4af37]/5 pointer-events-none animate-pulse" style={{animationDelay: '1s'}}></div>
+          <div 
+            className="relative max-w-6xl mx-auto"
+            style={{
+              transform: `translateZ(50px) rotateY(${getParallax(0.005).x * 0.05}deg) rotateX(${-getParallax(0.005).y * 0.05}deg)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            {/* Decorative Multi-Layer Frame with 3D Depth */}
+            {[-12, -20, -28].map((inset, i) => (
+              <div 
+                key={i}
+                className="absolute border border-[#d4af37] pointer-events-none animate-pulse"
+                style={{
+                  inset: `${inset}px`,
+                  opacity: 0.2 - i * 0.05,
+                  animationDelay: `${i * 0.5}s`,
+                  transform: `translateZ(${-i * 10}px)`
+                }}
+              ></div>
+            ))}
             
-            {/* Corner Decorations with Hover */}
-            <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
-            <div className="absolute -top-4 -right-4 w-24 h-24 border-t-2 border-r-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 border-b-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
+            {/* Corner Decorations with Rotation */}
+            {[
+              { top: '-16px', left: '-16px', rotateVal: 0 },
+              { top: '-16px', right: '-16px', rotateVal: 90 },
+              { bottom: '-16px', left: '-16px', rotateVal: 270 },
+              { bottom: '-16px', right: '-16px', rotateVal: 180 }
+            ].map((corner, i) => (
+              <div 
+                key={i}
+                className="absolute w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"
+                style={{
+                  top: corner.top,
+                  left: corner.left,
+                  right: corner.right,
+                  bottom: corner.bottom,
+                  transform: `rotate(${corner.rotateVal + scrollY * 0.1}deg) translateZ(20px)`
+                }}
+              ></div>
+            ))}
             
             <div className="relative aspect-video bg-black shadow-2xl overflow-hidden group hover-lift">
               <iframe
@@ -486,10 +717,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Values Section - Interactive Premium Cards with Flip */}
+      {/* Values Section - 3D Card Flip */}
       <section 
         id="values" 
         className={`relative py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
           <div className="text-center mb-32">
@@ -544,7 +776,11 @@ export default function Home() {
               <div 
                 key={index} 
                 className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-14 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-1000 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-                style={{ transitionDelay: `${index * 0.1}s` }}
+                style={{ 
+                  transitionDelay: `${index * 0.1}s`,
+                  transformStyle: 'preserve-3d',
+                  transform: `translateZ(${index * 10}px) rotateY(${getParallax(0.002).x * 0.1}deg)`
+                }}
               >
                 {/* Top Border Animation */}
                 <div className="absolute top-0 left-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
@@ -553,7 +789,12 @@ export default function Home() {
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
                 
                 <div className="mb-16 relative">
-                  <span className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 group-hover:scale-110 inline-block">
+                  <span 
+                    className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 inline-block"
+                    style={{
+                      transform: `scale(${1 + Math.sin(scrollY * 0.01 + index) * 0.05})`
+                    }}
+                  >
                     {value.num}
                   </span>
                 </div>
@@ -580,19 +821,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Company Section - Sophisticated Glass with Scroll */}
+      {/* Company Section - 3D Glass Box */}
       <section 
         id="company" 
         className={`relative py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        style={{ transformStyle: 'preserve-3d' }}
       >
-        {/* Background Pattern with Animation */}
+        {/* Background Pattern with 3D Rotation */}
         <div className="absolute inset-0 opacity-5">
           <div 
             className="absolute inset-0 transition-transform duration-1000" 
             style={{
               backgroundImage: 'linear-gradient(30deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37), linear-gradient(150deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37)',
               backgroundSize: '80px 140px',
-              transform: isVisible.company ? 'rotate(0deg)' : 'rotate(10deg)'
+              transform: `rotate(${scrollY * 0.05}deg) scale(${1 + Math.sin(scrollY * 0.01) * 0.1})`
             }}
           ></div>
         </div>
@@ -610,12 +852,36 @@ export default function Home() {
             </h2>
           </div>
           
-          <div className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-700">
-            {/* Decorative Corners with Hover */}
-            <div className="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
-            <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
+          <div 
+            className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-700"
+            style={{
+              transform: `translateZ(40px) rotateY(${getParallax(0.003).x * 0.05}deg) rotateX(${-getParallax(0.003).y * 0.05}deg)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            {/* Decorative Corners with 3D */}
+            {[
+              { top: '0', left: '0', borderTop: true, borderLeft: true, rotateVal: 0 },
+              { top: '0', right: '0', borderTop: true, borderRight: true, rotateVal: 90 },
+              { bottom: '0', left: '0', borderBottom: true, borderLeft: true, rotateVal: 270 },
+              { bottom: '0', right: '0', borderBottom: true, borderRight: true, rotateVal: 180 }
+            ].map((corner, i) => (
+              <div 
+                key={i}
+                className="absolute w-32 h-32 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"
+                style={{
+                  top: corner.top,
+                  left: corner.left,
+                  right: corner.right,
+                  bottom: corner.bottom,
+                  borderTopWidth: corner.borderTop ? '4px' : '0',
+                  borderBottomWidth: corner.borderBottom ? '4px' : '0',
+                  borderLeftWidth: corner.borderLeft ? '4px' : '0',
+                  borderRightWidth: corner.borderRight ? '4px' : '0',
+                  transform: `rotate(${corner.rotateVal + scrollY * 0.02}deg) translateZ(10px)`
+                }}
+              ></div>
+            ))}
             
             <div className="space-y-12">
               {[
@@ -631,7 +897,10 @@ export default function Home() {
                 <div 
                   key={index} 
                   className={`grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
-                  style={{ transitionDelay: `${index * 0.05}s` }}
+                  style={{ 
+                    transitionDelay: `${index * 0.05}s`,
+                    transform: `translateZ(${5 + index * 2}px)`
+                  }}
                 >
                   <div className="text-sm tracking-[0.3em] text-gray-400 font-light uppercase">
                     {item.label}
@@ -646,17 +915,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section - Powerful with Scroll Animation */}
+      {/* CTA Section - Magnetic Pull Effect */}
       <section 
         id="cta"
         className={`relative py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       >
-        {/* Animated Background Grid */}
+        {/* Animated Background Grid with Morph */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent)',
-            backgroundSize: '80px 80px'
-          }}></div>
+          <div 
+            className="absolute inset-0" 
+            style={{
+              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent)',
+              backgroundSize: '80px 80px',
+              transform: `scale(${1 + Math.sin(scrollY * 0.01) * 0.05})`,
+              backgroundPosition: `${Math.sin(scrollY * 0.01) * 20}px ${Math.cos(scrollY * 0.01) * 20}px`
+            }}
+          ></div>
         </div>
         
         <div className="container max-w-6xl relative z-10 text-center">
@@ -673,13 +947,16 @@ export default function Home() {
           <Button 
             size="lg"
             className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
+            style={{
+              transform: `translateZ(50px) translate(${getParallax(0.01).x * 0.1}px, ${getParallax(0.01).y * 0.1}px)`
+            }}
           >
             JOIN US
           </Button>
         </div>
       </section>
 
-      {/* Footer - Minimalist Luxury */}
+      {/* Footer - 3D Depth */}
       <footer id="contact" className="relative py-40 bg-black border-t-2 border-[#d4af37]/20">
         <div className="container max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-24 mb-32">
@@ -687,7 +964,10 @@ export default function Home() {
               <img 
                 src="/ls-logo.jpg" 
                 alt="株式会社LS" 
-                className="w-48 h-48 brightness-200 opacity-80 hover:scale-110 hover:rotate-6 transition-all duration-700"
+                className="w-48 h-48 brightness-200 opacity-80 transition-all duration-700"
+                style={{
+                  transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
+                }}
               />
               <p className="text-3xl text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。

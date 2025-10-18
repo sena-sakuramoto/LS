@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -17,28 +19,58 @@ export default function Home() {
       setScrollProgress(progress);
     };
 
+    // Intersection Observer for scroll animations
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Observe all sections
+    document.querySelectorAll('section[id]').forEach((section) => {
+      if (observerRef.current) {
+        observerRef.current.observe(section);
+      }
+    });
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
     };
   }, []);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Scroll Progress Bar */}
+      {/* Scroll Progress Bar with Glow */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-[100]">
         <div 
-          className="h-full bg-gradient-to-r from-[#d4af37] via-[#f4e5c3] to-[#d4af37] transition-all duration-300"
+          className="h-full bg-gradient-to-r from-[#d4af37] via-[#f4e5c3] to-[#d4af37] transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.8)]"
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </div>
 
-      {/* Custom Cursor */}
+      {/* Custom Cursor with Trail */}
       <div 
         className="hidden lg:block fixed w-6 h-6 border-2 border-[#d4af37] rounded-full pointer-events-none z-[100] mix-blend-difference transition-transform duration-200"
+        style={{ 
+          left: `${mousePosition.x}px`, 
+          top: `${mousePosition.y}px`,
+          transform: 'translate(-50%, -50%)'
+        }}
+      ></div>
+      <div 
+        className="hidden lg:block fixed w-2 h-2 bg-[#d4af37] rounded-full pointer-events-none z-[99] transition-all duration-500"
         style={{ 
           left: `${mousePosition.x}px`, 
           top: `${mousePosition.y}px`,
@@ -49,14 +81,14 @@ export default function Home() {
       <Header />
       
       {/* Hero Section - Ultra Premium with Parallax */}
-      <section id="top" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
         {/* Parallax Background Layers */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
           <div 
             className="absolute inset-0 opacity-20"
             style={{
-              transform: `translateY(${scrollProgress * 0.5}px)`
+              transform: `translateY(${scrollProgress * 0.5}px) scale(${1 + scrollProgress * 0.001})`
             }}
           >
             <img 
@@ -68,9 +100,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-black"></div>
         </div>
         
-        {/* Animated Particles */}
+        {/* Animated Particles with Random Movement */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(30)].map((_, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-[#d4af37] rounded-full animate-float"
@@ -79,38 +111,53 @@ export default function Home() {
                 top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 5}s`,
                 animationDuration: `${5 + Math.random() * 5}s`,
-                opacity: 0.3
+                opacity: 0.3 + Math.random() * 0.3
               }}
             ></div>
           ))}
         </div>
         
-        {/* Floating Gradient Orbs */}
+        {/* Floating Gradient Orbs with Scroll Effect */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
+          <div 
+            className="absolute top-20 left-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse"
+            style={{ transform: `translateY(${scrollProgress * 0.3}px)` }}
+          ></div>
+          <div 
+            className="absolute bottom-20 right-10 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl animate-pulse" 
+            style={{
+              animationDelay: '2s',
+              transform: `translateY(${-scrollProgress * 0.2}px)`
+            }}
+          ></div>
+          <div 
+            className="absolute top-1/2 left-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" 
+            style={{
+              animationDelay: '4s',
+              transform: `translate(-50%, -50%) scale(${1 + scrollProgress * 0.002})`
+            }}
+          ></div>
         </div>
         
-        {/* Content */}
+        {/* Content with Stagger Animation */}
         <div className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto">
           <div className="mb-20 animate-fade-in-up">
             <img 
               src="/ls-logo.jpg" 
               alt="株式会社LS" 
-              className="w-56 h-56 mx-auto opacity-90 brightness-200 drop-shadow-2xl hover:scale-110 transition-transform duration-700"
+              className="w-56 h-56 mx-auto opacity-90 brightness-200 drop-shadow-2xl hover:scale-110 hover:rotate-6 transition-all duration-700"
             />
           </div>
           
           <div className="space-y-12">
             <h1 className="text-8xl md:text-[10rem] lg:text-[14rem] font-light tracking-[0.15em] leading-none drop-shadow-2xl">
-              <span className="inline-block animate-fade-in-up" style={{animationDelay: '0.2s'}}>L</span>
-              <span className="inline-block animate-fade-in-up" style={{animationDelay: '0.3s'}}>S</span>
+              <span className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" style={{animationDelay: '0.2s'}}>L</span>
+              <span className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" style={{animationDelay: '0.3s'}}>S</span>
             </h1>
             
             <div className="flex items-center justify-center gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
               <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-              <div className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)]"></div>
+              <div className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"></div>
               <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
             </div>
             
@@ -123,20 +170,20 @@ export default function Home() {
             <Button 
               variant="outline" 
               size="lg"
-              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110"
+              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
             >
               OUR VISION
             </Button>
             <Button 
               variant="outline" 
               size="lg"
-              className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+              className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
             >
               CONTACT US
             </Button>
           </div>
           
-          {/* Scroll Indicator */}
+          {/* Scroll Indicator with Animation */}
           <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-[#d4af37] animate-bounce">
             <span className="text-xs tracking-[0.4em] font-light">SCROLL</span>
             <div className="w-px h-24 bg-gradient-to-b from-[#d4af37] to-transparent"></div>
@@ -145,37 +192,55 @@ export default function Home() {
       </section>
 
       {/* Stats Section - Premium Numbers with Counter Animation */}
-      <section className="relative py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20">
+      <section 
+        id="stats" 
+        className={`relative py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         <div className="container max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-16">
             {[
-              { value: "50", unit: "億", label: "TARGET REVENUE", delay: "0s" },
-              { value: "100", unit: "+", label: "PROJECTS", delay: "0.2s" },
-              { value: "5", unit: "年", label: "TO STANDARD", delay: "0.4s" },
-              { value: "AI", unit: "×", label: "INNOVATION", delay: "0.6s" }
+              { value: "50", unit: "億", label: "TARGET REVENUE", delay: "0s", color: "from-[#d4af37] to-[#f4e5c3]" },
+              { value: "100", unit: "+", label: "PROJECTS", delay: "0.2s", color: "from-[#f4e5c3] to-[#d4af37]" },
+              { value: "5", unit: "年", label: "TO STANDARD", delay: "0.4s", color: "from-[#d4af37] to-[#f4e5c3]" },
+              { value: "AI", unit: "×", label: "INNOVATION", delay: "0.6s", color: "from-[#f4e5c3] to-[#d4af37]" }
             ].map((stat, index) => (
-              <div key={index} className="text-center space-y-6 group cursor-pointer stagger-item" style={{animationDelay: stat.delay}}>
-                <div className="text-7xl md:text-8xl font-light gold-gradient group-hover:scale-125 transition-all duration-700">
+              <div 
+                key={index} 
+                className="text-center space-y-6 group cursor-pointer stagger-item hover-lift" 
+                style={{animationDelay: stat.delay}}
+              >
+                <div className={`text-7xl md:text-8xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}>
                   {stat.value}<span className="text-5xl">{stat.unit}</span>
                 </div>
                 <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-32 transition-all duration-500"></div>
-                <p className="text-xs tracking-[0.3em] text-gray-400 font-light">{stat.label}</p>
+                <p className="text-xs tracking-[0.3em] text-gray-400 font-light group-hover:text-[#d4af37] transition-colors">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Mission Section - Luxury Layout with Reveal */}
-      <section id="about" className="relative py-56 bg-white text-black overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-50 to-transparent opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#d4af37]/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-20 right-20 w-[400px] h-[400px] border border-[#d4af37]/10 rounded-full"></div>
+      {/* Mission Section - Luxury Layout with Scroll Reveal */}
+      <section 
+        id="mission" 
+        className={`relative py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
+      >
+        {/* Decorative Elements with Scroll Animation */}
+        <div 
+          className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-50 to-transparent opacity-50 transition-transform duration-1000"
+          style={{ transform: isVisible.mission ? 'translateX(0)' : 'translateX(100px)' }}
+        ></div>
+        <div 
+          className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
+          style={{ transform: isVisible.mission ? 'scale(1)' : 'scale(0.5)' }}
+        ></div>
+        <div className="absolute top-20 right-20 w-[400px] h-[400px] border border-[#d4af37]/10 rounded-full animate-pulse"></div>
         
         <div className="container max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-            <div className="lg:col-span-5 space-y-16">
+            <div 
+              className={`lg:col-span-5 space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+            >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
@@ -183,9 +248,17 @@ export default function Home() {
                 </div>
                 
                 <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
-                  空間を超え、<br />
-                  ブランドを<br />
-                  創造する。
+                  {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
+                    <span 
+                      key={i}
+                      className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
+                      style={{
+                        transitionDelay: `${i * 0.1}s`
+                      }}
+                    >
+                      {text}<br />
+                    </span>
+                  ))}
                 </h2>
               </div>
               
@@ -201,14 +274,16 @@ export default function Home() {
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="magnetic-button mt-12 border-2 border-black text-black hover:bg-black hover:text-white px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700 hover:scale-105"
+                  className="magnetic-button mt-12 border-2 border-black text-black hover:bg-black hover:text-white px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2"
                 >
                   READ MORE
                 </Button>
               </div>
             </div>
             
-            <div className="lg:col-span-7 relative">
+            <div 
+              className={`lg:col-span-7 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+            >
               <div className="relative h-[800px]">
                 {/* Main Image with Hover Effect */}
                 <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay group">
@@ -219,51 +294,60 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                   
-                  {/* Hover Overlay Info */}
+                  {/* Hover Overlay Info with Fade */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10">
                     <div className="text-center text-white space-y-4">
-                      <div className="w-20 h-px bg-white mx-auto mb-6"></div>
+                      <div className="w-20 h-px bg-white mx-auto mb-6 group-hover:w-32 transition-all duration-500"></div>
                       <p className="text-2xl font-light tracking-[0.2em]">PREMIUM DESIGN</p>
-                      <div className="w-20 h-px bg-white mx-auto mt-6"></div>
+                      <div className="w-20 h-px bg-white mx-auto mt-6 group-hover:w-32 transition-all duration-500"></div>
                     </div>
                   </div>
                 </div>
                 
-                {/* Floating Card with Glass Effect */}
-                <div className="absolute -bottom-16 -left-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift">
+                {/* Floating Card with Glass Effect and Hover */}
+                <div className="absolute -bottom-16 -left-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group cursor-pointer">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-px bg-[#d4af37]"></div>
+                    <div className="w-12 h-px bg-[#d4af37] group-hover:w-20 transition-all duration-500"></div>
                     <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
                   </div>
-                  <p className="text-2xl text-black font-light leading-relaxed">
+                  <p className="text-2xl text-black font-light leading-relaxed group-hover:gold-gradient transition-all duration-500">
                     "続く売上"が生まれる<br />ブランド体験をつくる
                   </p>
                 </div>
                 
-                {/* Decorative Frame */}
-                <div className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30"></div>
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30"></div>
+                {/* Decorative Frame with Animation */}
+                <div className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30 group-hover:w-40 group-hover:h-40 transition-all duration-700"></div>
+                <div className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30 group-hover:w-40 group-hover:h-40 transition-all duration-700"></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Vision Section - Dark Elegance with Grid */}
-      <section className="relative py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg">
+      {/* Vision Section - Dark Elegance with Scroll Parallax */}
+      <section 
+        id="vision" 
+        className={`relative py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
+      >
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 3px 3px, #d4af37 2px, transparent 0)',
-            backgroundSize: '60px 60px'
-          }}></div>
+          <div 
+            className="absolute inset-0 transition-transform duration-1000" 
+            style={{
+              backgroundImage: 'radial-gradient(circle at 3px 3px, #d4af37 2px, transparent 0)',
+              backgroundSize: '60px 60px',
+              transform: isVisible.vision ? 'scale(1)' : 'scale(0.8)'
+            }}
+          ></div>
         </div>
         
         <div className="container max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-            <div className="lg:col-span-7 relative order-2 lg:order-1">
+            <div 
+              className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+            >
               <div className="grid grid-cols-2 gap-8">
-                {/* Large Image */}
+                {/* Large Image with Parallax */}
                 <div className="col-span-2 relative h-[600px] group overflow-hidden image-overlay">
                   <img 
                     src="/luxury-3.jpg" 
@@ -272,37 +356,37 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                   
-                  {/* Image Number Badge */}
-                  <div className="absolute top-8 left-8 glass px-6 py-3 border border-white/20">
+                  {/* Image Number Badge with Hover */}
+                  <div className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
                     <span className="text-sm tracking-[0.3em] font-light">01</span>
                   </div>
                 </div>
                 
-                {/* Small Images */}
-                <div className="relative h-72 group overflow-hidden image-overlay">
-                  <img 
-                    src="/luxury-4.png" 
-                    alt="Interior Detail" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-6 left-6 glass px-4 py-2 border border-white/20">
-                    <span className="text-xs tracking-[0.3em] font-light">02</span>
+                {/* Small Images with Stagger */}
+                {[
+                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02" },
+                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03" }
+                ].map((img, index) => (
+                  <div 
+                    key={index}
+                    className={`relative h-72 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                  >
+                    <img 
+                      src={img.src} 
+                      alt={img.alt} 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-6 left-6 glass px-4 py-2 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
+                      <span className="text-xs tracking-[0.3em] font-light">{img.num}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="relative h-72 group overflow-hidden image-overlay">
-                  <img 
-                    src="/luxury-5.jpg" 
-                    alt="Design Detail" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-6 left-6 glass px-4 py-2 border border-white/20">
-                    <span className="text-xs tracking-[0.3em] font-light">03</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
             
-            <div className="lg:col-span-5 space-y-16 order-1 lg:order-2">
+            <div 
+              className={`lg:col-span-5 space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+            >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
@@ -310,10 +394,17 @@ export default function Home() {
                 </div>
                 
                 <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
-                  業界を変革し、<br />
-                  ブランド<br />
-                  カンパニー<br />
-                  になる。
+                  {['業界を変革し、', 'ブランド', 'カンパニー', 'になる。'].map((text, i) => (
+                    <span 
+                      key={i}
+                      className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
+                      style={{
+                        transitionDelay: `${i * 0.1}s`
+                      }}
+                    >
+                      {text}<br />
+                    </span>
+                  ))}
                 </h2>
               </div>
               
@@ -328,7 +419,10 @@ export default function Home() {
                   { title: "建築 × AI", desc: "意思決定と設計を高度化" },
                   { title: "5年でスタンダードへ", desc: "ブランドカンパニーとしての地位確立" }
                 ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-8 group cursor-pointer stagger-item" style={{animationDelay: `${index * 0.1}s`}}>
+                  <div 
+                    key={index} 
+                    className={`flex items-start gap-8 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+                  >
                     <div className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700 group-hover:rotate-180">
                       <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                     </div>
@@ -344,8 +438,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Film Section - Cinematic with Frame */}
-      <section id="film" className="relative py-56 bg-black">
+      {/* Film Section - Cinematic with Scroll Scale */}
+      <section 
+        id="film" 
+        className={`relative py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+      >
         <div className="container max-w-7xl">
           <div className="text-center mb-32">
             <div className="flex items-center justify-center gap-6 mb-12">
@@ -364,16 +461,16 @@ export default function Home() {
           </div>
           
           <div className="relative max-w-6xl mx-auto">
-            {/* Decorative Multi-Layer Frame */}
-            <div className="absolute -inset-12 border border-[#d4af37]/20 pointer-events-none"></div>
-            <div className="absolute -inset-20 border border-[#d4af37]/10 pointer-events-none"></div>
-            <div className="absolute -inset-28 border border-[#d4af37]/5 pointer-events-none"></div>
+            {/* Decorative Multi-Layer Frame with Pulse */}
+            <div className="absolute -inset-12 border border-[#d4af37]/20 pointer-events-none animate-pulse"></div>
+            <div className="absolute -inset-20 border border-[#d4af37]/10 pointer-events-none animate-pulse" style={{animationDelay: '0.5s'}}></div>
+            <div className="absolute -inset-28 border border-[#d4af37]/5 pointer-events-none animate-pulse" style={{animationDelay: '1s'}}></div>
             
-            {/* Corner Decorations */}
-            <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-[#d4af37]"></div>
-            <div className="absolute -top-4 -right-4 w-24 h-24 border-t-2 border-r-2 border-[#d4af37]"></div>
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 border-b-2 border-l-2 border-[#d4af37]"></div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-[#d4af37]"></div>
+            {/* Corner Decorations with Hover */}
+            <div className="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
+            <div className="absolute -top-4 -right-4 w-24 h-24 border-t-2 border-r-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
+            <div className="absolute -bottom-4 -left-4 w-24 h-24 border-b-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"></div>
             
             <div className="relative aspect-video bg-black shadow-2xl overflow-hidden group hover-lift">
               <iframe
@@ -389,8 +486,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Values Section - Interactive Premium Cards */}
-      <section id="values" className="relative py-56 bg-white text-black">
+      {/* Values Section - Interactive Premium Cards with Flip */}
+      <section 
+        id="values" 
+        className={`relative py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
+      >
         <div className="container max-w-7xl">
           <div className="text-center mb-32">
             <div className="flex items-center justify-center gap-6 mb-12">
@@ -443,7 +543,8 @@ export default function Home() {
             ].map((value, index) => (
               <div 
                 key={index} 
-                className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-14 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-1000 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""}`}
+                className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-14 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-1000 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+                style={{ transitionDelay: `${index * 0.1}s` }}
               >
                 {/* Top Border Animation */}
                 <div className="absolute top-0 left-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
@@ -452,7 +553,7 @@ export default function Home() {
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
                 
                 <div className="mb-16 relative">
-                  <span className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000">
+                  <span className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 group-hover:scale-110 inline-block">
                     {value.num}
                   </span>
                 </div>
@@ -479,14 +580,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Company Section - Sophisticated Glass */}
-      <section id="company" className="relative py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden">
-        {/* Background Pattern */}
+      {/* Company Section - Sophisticated Glass with Scroll */}
+      <section 
+        id="company" 
+        className={`relative py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+      >
+        {/* Background Pattern with Animation */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(30deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37), linear-gradient(150deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37)',
-            backgroundSize: '80px 140px'
-          }}></div>
+          <div 
+            className="absolute inset-0 transition-transform duration-1000" 
+            style={{
+              backgroundImage: 'linear-gradient(30deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37), linear-gradient(150deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37)',
+              backgroundSize: '80px 140px',
+              transform: isVisible.company ? 'rotate(0deg)' : 'rotate(10deg)'
+            }}
+          ></div>
         </div>
         
         <div className="container max-w-6xl relative z-10">
@@ -502,12 +610,12 @@ export default function Home() {
             </h2>
           </div>
           
-          <div className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20">
-            {/* Decorative Corners */}
-            <div className="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-[#d4af37]"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-[#d4af37]"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-[#d4af37]"></div>
-            <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-[#d4af37]"></div>
+          <div className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-700">
+            {/* Decorative Corners with Hover */}
+            <div className="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
+            <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"></div>
             
             <div className="space-y-12">
               {[
@@ -520,7 +628,11 @@ export default function Home() {
                 { label: "建設業許可", value: "東京都知事 許可（般-7）第159994号" },
                 { label: "従業員数", value: "コアメンバー5名" }
               ].map((item, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500">
+                <div 
+                  key={index} 
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+                  style={{ transitionDelay: `${index * 0.05}s` }}
+                >
                   <div className="text-sm tracking-[0.3em] text-gray-400 font-light uppercase">
                     {item.label}
                   </div>
@@ -534,8 +646,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section - Powerful with Animation */}
-      <section className="relative py-48 bg-white text-black overflow-hidden">
+      {/* CTA Section - Powerful with Scroll Animation */}
+      <section 
+        id="cta"
+        className={`relative py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+      >
         {/* Animated Background Grid */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
@@ -557,7 +672,7 @@ export default function Home() {
           
           <Button 
             size="lg"
-            className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 border-0"
+            className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
           >
             JOIN US
           </Button>
@@ -572,7 +687,7 @@ export default function Home() {
               <img 
                 src="/ls-logo.jpg" 
                 alt="株式会社LS" 
-                className="w-48 h-48 brightness-200 opacity-80 hover:scale-110 transition-transform duration-700"
+                className="w-48 h-48 brightness-200 opacity-80 hover:scale-110 hover:rotate-6 transition-all duration-700"
               />
               <p className="text-3xl text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。
@@ -591,7 +706,7 @@ export default function Home() {
               <h4 className="text-white text-sm font-light mb-10 tracking-[0.4em]">CONTACT</h4>
               <Button 
                 variant="outline" 
-                className="magnetic-button bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 px-10 py-7 text-sm tracking-[0.3em] font-light hover:scale-105"
+                className="magnetic-button bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 px-10 py-7 text-sm tracking-[0.3em] font-light hover:scale-105 hover:-translate-y-2"
               >
                 お問い合わせ
               </Button>

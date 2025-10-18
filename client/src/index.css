@@ -52,8 +52,8 @@
   --chart-3: var(--color-blue-600);
   --chart-4: var(--color-blue-700);
   --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
+  --radius: 0rem;
+  --background: oklch(0.99 0 0);
   --foreground: oklch(0.235 0.015 65);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.235 0.015 65);
@@ -67,8 +67,8 @@
   --accent-foreground: oklch(0.141 0.005 285.823);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
   --ring: oklch(0.623 0.214 259.815);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.235 0.015 65);
@@ -166,7 +166,7 @@
     .container {
       padding-left: 2rem; /* 32px - desktop padding */
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1440px; /* Wide content width for portfolio */
     }
   }
 }

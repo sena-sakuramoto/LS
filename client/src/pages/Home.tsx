@@ -8,10 +8,10 @@ export default function Home() {
       {/* Hero Section - nano·universe style */}
       <section id="top" className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center space-y-6">
-          <div className="text-8xl font-light tracking-wider text-gray-800">
+          <div className="text-6xl md:text-8xl lg:text-9xl font-light tracking-wider text-gray-800 transition-all">
             LS
           </div>
-          <div className="text-xl tracking-[0.3em] text-gray-600 uppercase">
+          <div className="text-base md:text-xl tracking-[0.3em] text-gray-600 uppercase">
             株式会社LS
           </div>
         </div>
@@ -20,10 +20,10 @@ export default function Home() {
       {/* KIITO Section */}
       <section id="about" className="min-h-screen flex items-center justify-center bg-white">
         <div className="container max-w-4xl">
-          <h1 className="text-9xl font-bold leading-none text-black">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold leading-none text-black">
             LS:
           </h1>
-          <p className="text-3xl mt-6 text-black tracking-wide font-light">
+          <p className="text-xl md:text-2xl lg:text-3xl mt-6 text-black tracking-wide font-light">
             SPACE STORYTELLING STUDIO
           </p>
         </div>
@@ -44,7 +44,7 @@ export default function Home() {
             />
           ))}
         </div>
-        <h1 className="text-9xl font-bold text-white relative z-10 tracking-widest">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-white relative z-10 tracking-widest">
           PHASE
         </h1>
       </section>
@@ -52,7 +52,7 @@ export default function Home() {
       {/* Grid Section - TOPICS style */}
       <section id="projects" className="py-24 bg-gray-50">
         <div className="container">
-          <h2 className="text-5xl font-bold mb-16 text-black">TOPICS</h2>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-16 text-black">TOPICS</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div key={item} className="bg-white aspect-[4/3] relative group overflow-hidden">
@@ -75,11 +75,11 @@ export default function Home() {
       <section className="py-32 bg-white">
         <div className="container max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
-              <img src="/interior-1.jpg" alt="Modern interior design" className="w-full h-full object-cover" />
+            <div className="aspect-[4/3] bg-gray-200 overflow-hidden image-overlay">
+              <img src="/interior-1.jpg" alt="Modern interior design" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
             </div>
             <div className="space-y-6">
-              <h2 className="text-6xl font-serif text-black">WELCOME</h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-black">WELCOME</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 建築・空間・体験を横断し、感情を動かすストーリーでプロジェクトを導く。
                 私たちは、図面の先にある記憶を設計します。
@@ -97,7 +97,7 @@ export default function Home() {
         <div className="container max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-6 order-2 lg:order-1">
-              <h2 className="text-6xl font-serif text-black">LEGACY</h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-black">LEGACY</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 空間を超え、ブランドを創造する。内装という「箱」を作るだけではなく、
                 事業の世界観と収益モデルまで設計する。
@@ -106,8 +106,8 @@ export default function Home() {
                 View Projects
               </Button>
             </div>
-            <div className="aspect-[4/3] bg-gray-200 order-1 lg:order-2 overflow-hidden">
-              <img src="/interior-2.jpg" alt="Contemporary architecture" className="w-full h-full object-cover" />
+            <div className="aspect-[4/3] bg-gray-200 order-1 lg:order-2 overflow-hidden image-overlay">
+              <img src="/interior-2.jpg" alt="Contemporary architecture" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
             </div>
           </div>
         </div>
@@ -123,8 +123,8 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="aspect-[3/4] bg-gray-200 overflow-hidden">
-              <img src="/interior-3.jpg" alt="Minimalist design" className="w-full h-full object-cover" />
+            <div className="aspect-[3/4] bg-gray-200 overflow-hidden image-overlay">
+              <img src="/interior-3.jpg" alt="Minimalist design" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
             </div>
             <div className="space-y-6">
               <p className="text-lg text-gray-700 leading-relaxed">
@@ -218,9 +218,34 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="py-16 bg-black border-t border-gray-800">
+      <footer id="contact" className="py-24 bg-black border-t border-gray-800">
         <div className="container">
-          <div className="text-center text-gray-500 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+            <div>
+              <h3 className="text-white text-2xl font-bold mb-4">LS</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                空間に、感情を。<br />
+                デザインに、物語を。
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white text-sm font-bold mb-4 tracking-wider">CONTACT</h4>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>Email: info@ls-design.jp</p>
+                <p>Tel: +81-3-1234-5678</p>
+                <p>Address: Tokyo, Japan</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-white text-sm font-bold mb-4 tracking-wider">FOLLOW US</h4>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>Instagram</p>
+                <p>Facebook</p>
+                <p>LinkedIn</p>
+              </div>
+            </div>
+          </div>
+          <div className="text-center text-gray-500 text-sm border-t border-gray-800 pt-8">
             <p>&copy; 2025 株式会社LS. All rights reserved.</p>
           </div>
         </div>

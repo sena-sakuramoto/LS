@@ -402,8 +402,8 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.2] tracking-tight mb-16">
-                  {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.3] tracking-tight mb-16">
+                  {['空間を超', 'え、', 'ブランド', 'を', '創造す', 'る。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
@@ -422,7 +422,7 @@ export default function Home() {
                 <div className="space-y-6">
                   <div className="inline-block">
                     <div className="text-sm tracking-[0.3em] text-[#d4af37] font-light mb-4">PHILOSOPHY</div>
-                    <p className="text-4xl md:text-5xl text-gray-800 leading-[1.4] font-light">
+                    <p className="text-3xl md:text-4xl text-gray-800 leading-[1.5] font-light">
                       “続く売上”が生まれる<br />
                       ブランド体験をつくる
                     </p>
@@ -602,8 +602,8 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.2] tracking-tight mb-16">
-                  {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.3] tracking-tight mb-16">
+                  {['業界を変', '革し、', 'ブランドカ', 'ンパニーに', 'なる。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
@@ -953,10 +953,11 @@ export default function Home() {
         </div>
         
         <div className="container max-w-6xl relative z-10 text-center">
-          <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-20 tracking-tight leading-[1.1]">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-light mb-20 tracking-tight leading-[1.4]">
             次世代の<br />
             ブランド体験を、<br />
-            共に創造しませんか。
+            共に創造しません<br />
+            か。
           </h2>
           
           <p className="text-3xl md:text-4xl text-gray-600 mb-24 font-light max-w-4xl mx-auto leading-relaxed">

@@ -65,10 +65,11 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight leading-[1.1] animate-fade-in-up">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.4] animate-fade-in-up">
               次世代の<br />
               ブランド体験を、<br />
-              共に創造する。
+              共に創造しません<br />
+              か。
             </h1>
             
             <p className="text-2xl md:text-3xl text-gray-300 font-light leading-relaxed max-w-4xl mx-auto animate-fade-in" style={{animationDelay: '0.3s'}}>
@@ -151,12 +152,12 @@ export default function Careers() {
               { 
                 title: "MISSION", 
                 subtitle: "ミッション",
-                content: "空間を超え、ブランドを創造する" 
+                content: "空間を超え、\nブランドを創造する" 
               },
               { 
                 title: "VISION", 
                 subtitle: "ビジョン",
-                content: "業界を変革し、ブランドカンパニーになる" 
+                content: "業界を変革し、\nブランドカンパニーに\nなる" 
               },
               { 
                 title: "VALUES", 
@@ -173,7 +174,7 @@ export default function Careers() {
                   <h3 className="text-sm tracking-[0.5em] text-[#d4af37] font-light">{item.title}</h3>
                   <p className="text-base tracking-[0.3em] text-gray-400 font-light">{item.subtitle}</p>
                 </div>
-                <p className="text-4xl md:text-5xl lg:text-6xl font-light leading-relaxed max-w-5xl mx-auto">
+                <p className="text-3xl md:text-4xl lg:text-5xl font-light leading-[1.6] max-w-5xl mx-auto whitespace-pre-line">
                   {item.content}
                 </p>
                 <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto"></div>

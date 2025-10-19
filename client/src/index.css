@@ -369,3 +369,12 @@ button {
 .stagger-item:nth-child(4) { animation-delay: 0.4s; }
 .stagger-item:nth-child(5) { animation-delay: 0.5s; }
 
+
+/* Scale down entire layout to 90% */
+body > div#root {
+  transform: scale(0.9);
+  transform-origin: top center;
+  width: 111.11%; /* 100% / 0.9 to compensate for scale */
+  margin-left: -5.56%; /* Center the scaled content */
+}
+

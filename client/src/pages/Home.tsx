@@ -403,7 +403,7 @@ export default function Home() {
                 </div>
                 
                 <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
-                  {['空間を超', 'え、', 'ブランド', 'を', '創造す', 'る。'].map((text, i) => (
+                  {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
@@ -603,7 +603,7 @@ export default function Home() {
                 </div>
                 
                 <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
-                  {['業界を変', '革し、', 'ブランドカ', 'ンパニーに', 'なる。'].map((text, i) => (
+                  {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"

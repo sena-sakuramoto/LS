@@ -948,7 +948,7 @@ export default function Home() {
             LSは、あなたの情熱と専門性を求めています。
           </p>
           
-          <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer">
+          <a href="/careers">
             <Button 
               size="lg"
               className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"

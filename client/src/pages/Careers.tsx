@@ -540,7 +540,7 @@ export default function Careers() {
             LSで、次世代のブランド体験を共に創造しませんか。
           </p>
           
-          <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer">
+          <a href="#application-form">
             <Button 
               size="lg"
               className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
@@ -548,6 +548,147 @@ export default function Careers() {
               応募する
             </Button>
           </a>
+        </div>
+      </section>
+
+      {/* Application Form */}
+      <section 
+        id="application-form"
+        className={`relative py-56 bg-white text-black transition-all duration-1000 ${isVisible['application-form'] ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <div className="container max-w-5xl">
+          <div className="text-center mb-32">
+            <div className="flex items-center justify-center gap-6 mb-12">
+              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">APPLICATION</span>
+              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+            </div>
+            
+            <h2 className="text-6xl md:text-7xl lg:text-8xl font-light mb-12 tracking-tight">
+              応募フォーム
+            </h2>
+            <p className="text-2xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
+              以下のフォームに必要事項をご記入の上、送信してください。<br />
+              担当者より3営業日以内にご連絡いたします。
+            </p>
+          </div>
+
+          <form 
+            action="mailto:t.homma@lsgroup-co.jp"
+            method="post"
+            encType="text/plain"
+            className="space-y-12"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                  お名前 <span className="text-[#d4af37]">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="name"
+                  required
+                  className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light"
+                  placeholder="山田 太郎"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                  メールアドレス <span className="text-[#d4af37]">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  name="email"
+                  required
+                  className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light"
+                  placeholder="example@email.com"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                  電話番号 <span className="text-[#d4af37]">*</span>
+                </label>
+                <input 
+                  type="tel" 
+                  name="phone"
+                  required
+                  className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light"
+                  placeholder="090-1234-5678"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                  応募職種 <span className="text-[#d4af37]">*</span>
+                </label>
+                <select 
+                  name="position"
+                  required
+                  className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light"
+                >
+                  <option value="">選択してください</option>
+                  <option value="営業コンサルタント職（PM職）">営業コンサルタント職（PM職）</option>
+                  <option value="店舗設計デザイナー職">店舗設計デザイナー職</option>
+                  <option value="施工管理職（幹部候補）">施工管理職（幹部候補）</option>
+                  <option value="その他">その他</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                志望動機 <span className="text-[#d4af37]">*</span>
+              </label>
+              <textarea 
+                name="motivation"
+                required
+                rows={8}
+                className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light resize-none"
+                placeholder="LSへの志望動機をお聞かせください"
+              ></textarea>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                職務経歴・スキル
+              </label>
+              <textarea 
+                name="experience"
+                rows={8}
+                className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light resize-none"
+                placeholder="これまでの職務経歴や保有スキルをご記入ください"
+              ></textarea>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
+                その他・ご質問
+              </label>
+              <textarea 
+                name="other"
+                rows={6}
+                className="w-full px-8 py-6 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-lg font-light resize-none"
+                placeholder="その他、ご質問やお伝えしたいことがあればご記入ください"
+              ></textarea>
+            </div>
+
+            <div className="text-center pt-12">
+              <Button 
+                type="submit"
+                size="lg"
+                className="bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-8 text-xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2 border-0"
+              >
+                送信する
+              </Button>
+              <p className="text-sm text-gray-400 mt-8 font-light">
+                ※ 送信ボタンを押すと、メールアプリが起動します
+              </p>
+            </div>
+          </form>
         </div>
       </section>
 

@@ -281,7 +281,7 @@ export default function Home() {
                 transform: `translateZ(30px)`
               }}
             >
-              空間を超え、<br className="md:hidden" />ブランドを創造する。
+              空間を超え、<br />ブランドを<br />創造する。
             </p>
           </div>
           
@@ -402,7 +402,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
+                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.2] tracking-tight mb-16">
                   {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
                     <span 
                       key={i}
@@ -412,19 +412,33 @@ export default function Home() {
                         transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
                       }}
                     >
-                      {text}<br />
+                      {text}
                     </span>
                   ))}
                 </h2>
               </div>
               
               <div className="space-y-10">
-                <p className="text-3xl md:text-4xl text-gray-700 leading-relaxed font-light">
-                  私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
+                <div className="space-y-6">
+                  <div className="inline-block">
+                    <div className="text-sm tracking-[0.3em] text-[#d4af37] font-light mb-4">PHILOSOPHY</div>
+                    <p className="text-4xl md:text-5xl text-gray-800 leading-[1.4] font-light">
+                      “続く売上”が生まれる<br />
+                      ブランド体験をつくる
+                    </p>
+                  </div>
+                </div>
+                
+                <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light pt-6">
+                  私たちLSは、内装という「箱」を作るだけではなく、<br />
+                  <span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
                 
-                <p className="text-xl text-gray-500 leading-relaxed font-light">
-                  立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
+                <p className="text-lg text-gray-500 leading-relaxed font-light">
+                  立地・動線・席数・オペレーション・採用・販促——<br />
+                  店舗の成功に関わる要素を統合し、<br />
+                  “続く売上”が生まれるブランド体験をつくる。<br />
+                  それが私たちの使命です。
                 </p>
                 
                 <Button 
@@ -588,8 +602,8 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
-                  {['業界を変革し、', 'ブランド', 'カンパニー', 'になる。'].map((text, i) => (
+                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.2] tracking-tight mb-16">
+                  {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
@@ -598,14 +612,15 @@ export default function Home() {
                         transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
                       }}
                     >
-                      {text}<br />
+                      {text}
                     </span>
                   ))}
                 </h2>
               </div>
               
-              <p className="text-3xl md:text-4xl text-gray-300 leading-relaxed font-light">
-                内装＝コストという常識を変え、<span className="gold-gradient font-normal">内装＝投資</span>へ。
+              <p className="text-2xl md:text-3xl text-gray-300 leading-[1.6] font-light">
+                内装＝コストという常識を変え、<br />
+                <span className="gold-gradient font-normal">内装＝投資</span>へ。
               </p>
               
               <div className="space-y-10 pt-12">

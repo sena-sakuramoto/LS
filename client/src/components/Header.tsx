@@ -59,6 +59,12 @@ export default function Header() {
             >
               CONTACT
             </a>
+            <a href="/careers" className="ml-6">
+              <div className="relative px-6 py-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black text-xs tracking-[0.2em] font-medium rounded-sm hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] transition-all duration-500 hover:scale-105">
+                <span className="relative z-10">求人中</span>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              </div>
+            </a>
           </nav>
         </div>
       </div>

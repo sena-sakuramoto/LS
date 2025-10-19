@@ -237,9 +237,9 @@ export default function Home() {
         >
           <div className="mb-20 animate-fade-in-up">
             <img 
-              src="/ls-logo.jpg" 
+              src="/ls-logo.png" 
               alt="株式会社LS" 
-              className="w-56 h-56 mx-auto opacity-90 brightness-200 drop-shadow-2xl transition-all duration-700"
+              className="w-56 h-56 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
                 transform: `rotate(${mousePosition.x * 0.01}deg) scale(${1 + (mousePosition.y * 0.0001)})`
               }}
@@ -286,26 +286,30 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col md:flex-row gap-8 justify-center items-center pt-16 animate-fade-in-up" style={{animationDelay: '0.9s'}}>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
-              style={{
-                transform: `translateZ(40px)`
-              }}
-            >
-              OUR VISION
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
-              style={{
-                transform: `translateZ(40px)`
-              }}
-            >
-              CONTACT US
-            </Button>
+            <a href="#vision">
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
+                style={{
+                  transform: `translateZ(40px)`
+                }}
+              >
+                OUR VISION
+              </Button>
+            </a>
+            <a href="#contact">
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+                style={{
+                  transform: `translateZ(40px)`
+                }}
+              >
+                CONTACT US
+              </Button>
+            </a>
           </div>
           
           {/* Scroll Indicator with Wave Animation */}
@@ -944,15 +948,17 @@ export default function Home() {
             LSは、あなたの情熱と専門性を求めています。
           </p>
           
-          <Button 
-            size="lg"
-            className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
-            style={{
-              transform: `translateZ(50px) translate(${getParallax(0.01).x * 0.1}px, ${getParallax(0.01).y * 0.1}px)`
-            }}
-          >
-            JOIN US
-          </Button>
+          <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer">
+            <Button 
+              size="lg"
+              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
+              style={{
+                transform: `translateZ(50px) translate(${getParallax(0.01).x * 0.1}px, ${getParallax(0.01).y * 0.1}px)`
+              }}
+            >
+              JOIN US
+            </Button>
+          </a>
         </div>
       </section>
 
@@ -962,9 +968,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-24 mb-32">
             <div className="md:col-span-2 space-y-10">
               <img 
-                src="/ls-logo.jpg" 
+                src="/ls-logo.png" 
                 alt="株式会社LS" 
-                className="w-48 h-48 brightness-200 opacity-80 transition-all duration-700"
+                className="w-48 h-48 opacity-80 transition-all duration-700"
                 style={{
                   transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
                 }}

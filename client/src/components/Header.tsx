@@ -36,6 +36,18 @@ export default function Header() {
               FILM
             </a>
             <a
+              href="/#philosophy"
+              className="text-xs tracking-[0.2em] text-white/80 hover:text-white transition-colors font-light"
+            >
+              PHILOSOPHY
+            </a>
+            <a
+              href="/#projects"
+              className="text-xs tracking-[0.2em] text-white/80 hover:text-white transition-colors font-light"
+            >
+              PROJECTS
+            </a>
+            <a
               href="/#values"
               className="text-xs tracking-[0.2em] text-white/80 hover:text-white transition-colors font-light"
             >

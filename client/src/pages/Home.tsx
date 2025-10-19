@@ -419,17 +419,7 @@ export default function Home() {
               </div>
               
               <div className="space-y-10">
-                <div className="space-y-6">
-                  <div className="inline-block">
-                    <div className="text-sm tracking-[0.3em] text-[#d4af37] font-light mb-4">PHILOSOPHY</div>
-                    <p className="text-3xl md:text-4xl text-gray-800 leading-[1.5] font-light">
-                      “続く売上”が生まれる<br />
-                      ブランド体験をつくる
-                    </p>
-                  </div>
-                </div>
-                
-                <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light pt-6">
+                <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light">
                   私たちLSは、内装という「箱」を作るだけではなく、<br />
                   <span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
@@ -437,17 +427,9 @@ export default function Home() {
                 <p className="text-lg text-gray-500 leading-relaxed font-light">
                   立地・動線・席数・オペレーション・採用・販促——<br />
                   店舗の成功に関わる要素を統合し、<br />
-                  “続く売上”が生まれるブランド体験をつくる。<br />
+                  "続く売上"が生まれるブランド体験をつくる。<br />
                   それが私たちの使命です。
                 </p>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="magnetic-button mt-12 border-2 border-black text-black hover:bg-black hover:text-white px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2"
-                >
-                  READ MORE
-                </Button>
               </div>
             </div>
             
@@ -732,6 +714,105 @@ export default function Home() {
                 allowFullScreen
               ></iframe>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy Section */}
+      <section 
+        id="philosophy" 
+        className={`relative py-56 bg-gradient-to-br from-gray-50 to-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <div className="container max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-12">
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-px bg-[#d4af37]"></div>
+                <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
+              </div>
+              
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.3] tracking-tight">
+                "続く売上"が生まれる<br />
+                ブランド体験をつくる
+              </h2>
+              
+              <p className="text-xl text-gray-600 leading-relaxed font-light">
+                私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
+              </p>
+            </div>
+            
+            <div className="relative">
+              <img 
+                src="/architecture-2.jpg" 
+                alt="Philosophy" 
+                className="w-full h-[600px] object-cover shadow-2xl hover-lift"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Gallery Section */}
+      <section 
+        id="projects" 
+        className="relative py-56 bg-black text-white"
+      >
+        <div className="container max-w-7xl">
+          <div className="text-center mb-32">
+            <div className="flex items-center justify-center gap-6 mb-12">
+              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PROJECTS</span>
+              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+            </div>
+            
+            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight gold-gradient">
+              実績
+            </h2>
+            
+            <p className="text-2xl text-gray-400 font-light">
+              私たちが手掛けたブランド空間
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { img: '/architecture-1.jpg', title: 'プロジェクト 01', category: '店舗内装' },
+              { img: '/architecture-2.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
+              { img: '/architecture-3.jpg', title: 'プロジェクト 03', category: '商業施設' },
+              { img: '/architecture-1.jpg', title: 'プロジェクト 04', category: '飲食店' },
+              { img: '/architecture-2.jpg', title: 'プロジェクト 05', category: 'ホテル' },
+              { img: '/architecture-3.jpg', title: 'プロジェクト 06', category: '小売店舗' },
+              { img: '/architecture-1.jpg', title: 'プロジェクト 07', category: 'サロン' },
+              { img: '/architecture-2.jpg', title: 'プロジェクト 08', category: 'ショールーム' },
+              { img: '/architecture-3.jpg', title: 'プロジェクト 09', category: '複合施設' },
+            ].map((project, i) => (
+              <div 
+                key={i}
+                className="group relative overflow-hidden bg-gray-900 aspect-[4/3] hover-lift cursor-pointer"
+              >
+                <img 
+                  src={project.img} 
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                    <div className="text-xs tracking-[0.3em] text-[#d4af37] mb-2">{project.category}</div>
+                    <h3 className="text-2xl font-light">{project.title}</h3>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-24">
+            <Button 
+              variant="outline" 
+              size="lg"
+              className="magnetic-button border-2 border-white text-white hover:bg-white hover:text-black px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700"
+            >
+              VIEW ALL PROJECTS
+            </Button>
           </div>
         </div>
       </section>

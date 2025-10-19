@@ -65,7 +65,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.3] animate-fade-in-up">
+            <h1 className="text-8xl font-light tracking-tight leading-[1.3] animate-fade-in-up">
               次世代の<br />
               ブランド体験を、<br />
               共に創造しません<br />

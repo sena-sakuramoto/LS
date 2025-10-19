@@ -275,7 +275,7 @@ export default function Home() {
             </div>
             
             <p 
-              className="text-4xl md:text-6xl lg:text-8xl font-light tracking-[0.1em] leading-[1.3] animate-fade-in-up" 
+              className="text-8xl font-light tracking-[0.1em] leading-[1.3] animate-fade-in-up" 
               style={{
                 animationDelay: '0.7s',
                 transform: `translateZ(30px)`
@@ -402,7 +402,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                <h2 className="text-8xl font-light leading-[1.3] tracking-tight mb-16">
                   {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
                     <span 
                       key={i}
@@ -584,7 +584,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-6xl md:text-7xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                <h2 className="text-8xl font-light leading-[1.3] tracking-tight mb-16">
                   {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
                     <span 
                       key={i}
@@ -1034,7 +1034,7 @@ export default function Home() {
         </div>
         
         <div className="container max-w-6xl relative z-10 text-center">
-          <h2 className="text-6xl md:text-7xl lg:text-8xl font-light mb-20 tracking-tight leading-[1.3]">
+          <h2 className="text-8xl font-light mb-20 tracking-tight leading-[1.3]">
             次世代の<br />
             ブランド体験を、<br />
             共に創造しません<br />

@@ -229,25 +229,25 @@ export default function Home() {
         
         {/* Content with 3D Transform */}
         <div 
-          className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto"
+          className="relative z-10 text-center space-y-8 px-4 max-w-7xl mx-auto"
           style={{
             transform: `translateZ(50px) translate(${getParallax(0.01).x}px, ${getParallax(0.01).y}px)`,
             transition: 'transform 0.3s ease-out'
           }}
         >
-          <div className="mb-20 animate-fade-in-up">
+          <div className="mb-8 animate-fade-in-up">
             <img 
               src="/ls-logo.png" 
               alt="株式会社LS" 
-              className="w-56 h-56 mx-auto drop-shadow-2xl transition-all duration-700"
+              className="w-44 h-44 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
                 transform: `rotate(${mousePosition.x * 0.01}deg) scale(${1 + (mousePosition.y * 0.0001)})`
               }}
             />
           </div>
           
-          <div className="space-y-12">
-            <h1 className="text-8xl md:text-[10rem] lg:text-[14rem] font-light tracking-[0.15em] leading-none drop-shadow-2xl">
+          <div className="space-y-8">
+            <h1 className="text-base md:text-[10rem] lg:text-[14rem] font-light tracking-[0.15em] leading-none drop-shadow-2xl">
               {['L', 'S'].map((letter, i) => (
                 <span 
                   key={i}
@@ -263,19 +263,19 @@ export default function Home() {
               ))}
             </h1>
             
-            <div className="flex items-center justify-center gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
-              <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+            <div className="flex items-center justify-center gap-6 animate-fade-in" style={{animationDelay: '0.5s'}}>
+              <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
               <div 
                 className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"
                 style={{
                   transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.3})`
                 }}
               ></div>
-              <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+              <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
             </div>
             
             <p 
-              className="text-3xl md:text-5xl lg:text-7xl font-light tracking-[0.1em] leading-relaxed animate-fade-in-up" 
+              className="text-base md:text-base lg:text-base font-light tracking-[0.1em] leading-relaxed animate-fade-in-up" 
               style={{
                 animationDelay: '0.7s',
                 transform: `translateZ(30px)`
@@ -285,12 +285,12 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="flex flex-col md:flex-row gap-8 justify-center items-center pt-16 animate-fade-in-up" style={{animationDelay: '0.9s'}}>
+          <div className="flex flex-col md:flex-row gap-6 justify-center items-center pt-16 animate-fade-in-up" style={{animationDelay: '0.9s'}}>
             <a href="#vision">
               <Button 
                 variant="outline" 
                 size="lg"
-                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
+                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-10 py-6 text-base tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
                 style={{
                   transform: `translateZ(40px)`
                 }}
@@ -302,7 +302,7 @@ export default function Home() {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+                className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-10 py-6 text-base tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
                 style={{
                   transform: `translateZ(40px)`
                 }}
@@ -329,11 +329,11 @@ export default function Home() {
       {/* Stats Section - 3D Flip Cards */}
       <section 
         id="stats" 
-        className={`relative py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`relative py-6 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { value: "50", unit: "億", label: "TARGET REVENUE", delay: "0s", color: "from-[#d4af37] to-[#f4e5c3]" },
               { value: "100", unit: "+", label: "PROJECTS", delay: "0.2s", color: "from-[#f4e5c3] to-[#d4af37]" },
@@ -350,15 +350,15 @@ export default function Home() {
                 }}
               >
                 <div 
-                  className={`text-7xl md:text-8xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}
+                  className={`text-base md:text-base font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 5}px)`,
                     textShadow: '0 0 30px rgba(212,175,55,0.5)'
                   }}
                 >
-                  {stat.value}<span className="text-5xl">{stat.unit}</span>
+                  {stat.value}<span className="text-base">{stat.unit}</span>
                 </div>
-                <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-32 transition-all duration-500"></div>
+                <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-24 transition-all duration-500"></div>
                 <p className="text-xs tracking-[0.3em] text-gray-400 font-light group-hover:text-[#d4af37] transition-colors">{stat.label}</p>
               </div>
             ))}
@@ -369,7 +369,7 @@ export default function Home() {
       {/* Mission Section - Tilt on Hover */}
       <section 
         id="mission" 
-        className={`relative py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
+        className={`relative py-44 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Decorative Elements with Scroll Animation */}
@@ -392,9 +392,9 @@ export default function Home() {
         ></div>
         
         <div className="container max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div 
-              className={`lg:col-span-5 space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+              className={`lg:col-span-5 space-y-8 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
@@ -402,7 +402,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
+                <h2 className="text-base md:text-base lg:text-base font-light leading-[0.95] tracking-tight mb-8">
                   {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
                     <span 
                       key={i}
@@ -418,19 +418,19 @@ export default function Home() {
                 </h2>
               </div>
               
-              <div className="space-y-10">
-                <p className="text-3xl md:text-4xl text-gray-700 leading-relaxed font-light">
+              <div className="space-y-8">
+                <p className="text-base md:text-base text-gray-700 leading-relaxed font-light">
                   私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
                 
-                <p className="text-xl text-gray-500 leading-relaxed font-light">
+                <p className="text-base text-gray-500 leading-relaxed font-light">
                   立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
                 </p>
                 
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="magnetic-button mt-12 border-2 border-black text-black hover:bg-black hover:text-white px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2"
+                  className="magnetic-button mt-12 border-2 border-black text-black hover:bg-black hover:text-white px-10 py-6 text-sm tracking-[0.3em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2"
                 >
                   READ MORE
                 </Button>
@@ -462,9 +462,9 @@ export default function Home() {
                   {/* Hover Overlay Info with Fade */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10">
                     <div className="text-center text-white space-y-4">
-                      <div className="w-20 h-px bg-white mx-auto mb-6 group-hover:w-32 transition-all duration-500"></div>
-                      <p className="text-2xl font-light tracking-[0.2em]">PREMIUM DESIGN</p>
-                      <div className="w-20 h-px bg-white mx-auto mt-6 group-hover:w-32 transition-all duration-500"></div>
+                      <div className="w-20 h-px bg-white mx-auto mb-6 group-hover:w-24 transition-all duration-500"></div>
+                      <p className="text-base font-light tracking-[0.2em]">PREMIUM DESIGN</p>
+                      <div className="w-20 h-px bg-white mx-auto mt-6 group-hover:w-24 transition-all duration-500"></div>
                     </div>
                   </div>
                 </div>
@@ -480,20 +480,20 @@ export default function Home() {
                     <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
                     <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
                   </div>
-                  <p className="text-2xl text-black font-light leading-relaxed group-hover/card:gold-gradient transition-all duration-500">
+                  <p className="text-base text-black font-light leading-relaxed group-hover/card:gold-gradient transition-all duration-500">
                     "続く売上"が生まれる<br />ブランド体験をつくる
                   </p>
                 </div>
                 
                 {/* Decorative Frame with Rotation */}
                 <div 
-                  className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30 transition-all duration-700"
+                  className="absolute -top-8 -right-8 w-24 h-24 border-t-2 border-r-2 border-[#d4af37]/30 transition-all duration-700"
                   style={{
                     transform: `rotate(${scrollY * 0.05}deg)`
                   }}
                 ></div>
                 <div 
-                  className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30 transition-all duration-700"
+                  className="absolute -bottom-8 -left-8 w-24 h-24 border-b-2 border-l-2 border-[#d4af37]/30 transition-all duration-700"
                   style={{
                     transform: `rotate(${-scrollY * 0.05}deg)`
                   }}
@@ -507,7 +507,7 @@ export default function Home() {
       {/* Vision Section - Morphing Grid */}
       <section 
         id="vision" 
-        className={`relative py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
+        className={`relative py-44 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
       >
         {/* Animated Morphing Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -523,12 +523,12 @@ export default function Home() {
         </div>
         
         <div className="container max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div 
               className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-2 gap-6">
                 {/* Large Image with 3D Depth */}
                 <div 
                   className="col-span-2 relative h-[600px] group overflow-hidden image-overlay"
@@ -580,7 +580,7 @@ export default function Home() {
             </div>
             
             <div 
-              className={`lg:col-span-5 space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+              className={`lg:col-span-5 space-y-8 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
@@ -588,7 +588,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-7xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-16">
+                <h2 className="text-base md:text-base lg:text-base font-light leading-[0.95] tracking-tight mb-8">
                   {['業界を変革し、', 'ブランド', 'カンパニー', 'になる。'].map((text, i) => (
                     <span 
                       key={i}
@@ -604,11 +604,11 @@ export default function Home() {
                 </h2>
               </div>
               
-              <p className="text-3xl md:text-4xl text-gray-300 leading-relaxed font-light">
+              <p className="text-base md:text-base text-gray-300 leading-relaxed font-light">
                 内装＝コストという常識を変え、<span className="gold-gradient font-normal">内装＝投資</span>へ。
               </p>
               
-              <div className="space-y-10 pt-12">
+              <div className="space-y-8 pt-12">
                 {[
                   { title: "事業づくり視点の内装", desc: "成果に直結する店舗を増やす" },
                   { title: "全国展開の実現", desc: "同品質・同スピードで全国へ" },
@@ -617,7 +617,7 @@ export default function Home() {
                 ].map((item, index) => (
                   <div 
                     key={index} 
-                    className={`flex items-start gap-8 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+                    className={`flex items-start gap-6 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
                     style={{
                       transform: `translateZ(${10 + index * 5}px)`
                     }}
@@ -632,7 +632,7 @@ export default function Home() {
                       <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                     </div>
                     <div className="flex-1 pt-2">
-                      <h4 className="text-2xl font-light mb-3 group-hover:gold-gradient transition-colors duration-500">{item.title}</h4>
+                      <h4 className="text-base font-light mb-3 group-hover:gold-gradient transition-colors duration-500">{item.title}</h4>
                       <p className="text-gray-400 text-sm font-light leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
@@ -646,22 +646,22 @@ export default function Home() {
       {/* Film Section - 3D Frame */}
       <section 
         id="film" 
-        className={`relative py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        className={`relative py-44 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-6 mb-8">
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
               <span className="text-xs tracking-[0.5em] text-gray-400 font-light">BRAND FILM</span>
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-16 tracking-tight leading-tight">
+            <h2 className="text-base md:text-base lg:text-base font-light mb-8 tracking-tight leading-tight">
               ブランドが<br className="md:hidden" />動き出す瞬間
             </h2>
             
-            <p className="text-2xl md:text-3xl text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
+            <p className="text-base md:text-base text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
               LSが手がける空間とブランド体験の哲学を、短編映像に凝縮しました。
             </p>
           </div>
@@ -696,7 +696,7 @@ export default function Home() {
             ].map((corner, i) => (
               <div 
                 key={i}
-                className="absolute w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"
+                className="absolute w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-24 hover:h-24 transition-all duration-500"
                 style={{
                   top: corner.top,
                   left: corner.left,
@@ -724,27 +724,27 @@ export default function Home() {
       {/* Values Section - 3D Card Flip */}
       <section 
         id="values" 
-        className={`relative py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
+        className={`relative py-44 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-6 mb-8">
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
               <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VALUES</span>
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight">
+            <h2 className="text-base md:text-base lg:text-base font-light mb-8 tracking-tight">
               バリュー
             </h2>
             
-            <p className="text-5xl md:text-6xl text-gray-600 font-light tracking-wide">
+            <p className="text-base md:text-base text-gray-600 font-light tracking-wide">
               "超"で貫く5つの基準
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
                 num: "01",
@@ -792,9 +792,9 @@ export default function Home() {
                 {/* Background Shimmer */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
                 
-                <div className="mb-16 relative">
+                <div className="mb-8 relative">
                   <span 
-                    className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 inline-block"
+                    className="text-base font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 inline-block"
                     style={{
                       transform: `scale(${1 + Math.sin(scrollY * 0.01 + index) * 0.05})`
                     }}
@@ -803,11 +803,11 @@ export default function Home() {
                   </span>
                 </div>
                 
-                <h3 className="text-4xl font-light mb-10 tracking-tight group-hover:tracking-wide transition-all duration-700 relative z-10">
+                <h3 className="text-base font-light mb-8 tracking-tight group-hover:tracking-wide transition-all duration-700 relative z-10">
                   {value.title}
                 </h3>
                 
-                <p className="text-2xl mb-10 text-gray-600 font-light leading-relaxed relative z-10">
+                <p className="text-base mb-8 text-gray-600 font-light leading-relaxed relative z-10">
                   {value.desc}
                 </p>
                 
@@ -828,7 +828,7 @@ export default function Home() {
       {/* Company Section - 3D Glass Box */}
       <section 
         id="company" 
-        className={`relative py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        className={`relative py-44 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Background Pattern with 3D Rotation */}
@@ -844,14 +844,14 @@ export default function Home() {
         </div>
         
         <div className="container max-w-6xl relative z-10">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-6 mb-8">
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
               <span className="text-xs tracking-[0.5em] text-gray-400 font-light">COMPANY</span>
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight">
+            <h2 className="text-base md:text-base lg:text-base font-light mb-8 tracking-tight">
               会社概要
             </h2>
           </div>
@@ -872,7 +872,7 @@ export default function Home() {
             ].map((corner, i) => (
               <div 
                 key={i}
-                className="absolute w-32 h-32 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"
+                className="absolute w-24 h-24 border-[#d4af37] hover:w-24 hover:h-24 transition-all duration-500"
                 style={{
                   top: corner.top,
                   left: corner.left,
@@ -887,7 +887,7 @@ export default function Home() {
               ></div>
             ))}
             
-            <div className="space-y-12">
+            <div className="space-y-8">
               {[
                 { label: "会社名", value: "株式会社LS" },
                 { label: "設立", value: "2023年10月" },
@@ -900,7 +900,7 @@ export default function Home() {
               ].map((item, index) => (
                 <div 
                   key={index} 
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-6 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
                   style={{ 
                     transitionDelay: `${index * 0.05}s`,
                     transform: `translateZ(${5 + index * 2}px)`
@@ -909,7 +909,7 @@ export default function Home() {
                   <div className="text-sm tracking-[0.3em] text-gray-400 font-light uppercase">
                     {item.label}
                   </div>
-                  <div className="md:col-span-3 text-2xl font-light group-hover:gold-gradient transition-all duration-500">
+                  <div className="md:col-span-3 text-base font-light group-hover:gold-gradient transition-all duration-500">
                     {item.value}
                   </div>
                 </div>
@@ -922,7 +922,7 @@ export default function Home() {
       {/* CTA Section - Magnetic Pull Effect */}
       <section 
         id="cta"
-        className={`relative py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`relative py-6 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       >
         {/* Animated Background Grid with Morph */}
         <div className="absolute inset-0 opacity-5">
@@ -938,20 +938,20 @@ export default function Home() {
         </div>
         
         <div className="container max-w-6xl relative z-10 text-center">
-          <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-20 tracking-tight leading-[1.1]">
+          <h2 className="text-base md:text-base lg:text-base font-light mb-8 tracking-tight leading-[1.1]">
             次世代の<br />
             ブランド体験を、<br />
             共に創造しませんか。
           </h2>
           
-          <p className="text-3xl md:text-4xl text-gray-600 mb-24 font-light max-w-4xl mx-auto leading-relaxed">
+          <p className="text-base md:text-base text-gray-600 mb-8 font-light max-w-4xl mx-auto leading-relaxed">
             LSは、あなたの情熱と専門性を求めています。
           </p>
           
           <a href="/careers">
             <Button 
               size="lg"
-              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
+              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-10 py-6 text-base tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
               style={{
                 transform: `translateZ(50px) translate(${getParallax(0.01).x * 0.1}px, ${getParallax(0.01).y * 0.1}px)`
               }}
@@ -963,25 +963,25 @@ export default function Home() {
       </section>
 
       {/* Footer - 3D Depth */}
-      <footer id="contact" className="relative py-40 bg-black border-t-2 border-[#d4af37]/20">
+      <footer id="contact" className="relative py-6 bg-black border-t-2 border-[#d4af37]/20">
         <div className="container max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-24 mb-32">
-            <div className="md:col-span-2 space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="md:col-span-2 space-y-8">
               <img 
                 src="/ls-logo.png" 
                 alt="株式会社LS" 
-                className="w-48 h-48 opacity-80 transition-all duration-700"
+                className="w-24 h-24 opacity-80 transition-all duration-700"
                 style={{
                   transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
                 }}
               />
-              <p className="text-3xl text-gray-300 font-light leading-relaxed max-w-md">
+              <p className="text-base text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。
               </p>
             </div>
             
             <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-10 tracking-[0.4em]">COMPANY</h4>
+              <h4 className="text-white text-sm font-light mb-8 tracking-[0.4em]">COMPANY</h4>
               <div className="space-y-5 text-gray-400 text-base font-light leading-relaxed">
                 <p>株式会社LS</p>
                 <p>東京都渋谷区渋谷1-12-2<br />クロスオフィス渋谷505</p>
@@ -989,7 +989,7 @@ export default function Home() {
             </div>
             
             <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-10 tracking-[0.4em]">CONTACT</h4>
+              <h4 className="text-white text-sm font-light mb-8 tracking-[0.4em]">CONTACT</h4>
               <Button 
                 variant="outline" 
                 className="magnetic-button bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 px-10 py-7 text-sm tracking-[0.3em] font-light hover:scale-105 hover:-translate-y-2"

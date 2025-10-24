@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  // マウス追従機能を削除
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [scrollY, setScrollY] = useState(0);
@@ -11,10 +11,6 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
@@ -41,11 +37,9 @@ export default function Home() {
       }
     });
 
-    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
       if (observerRef.current) {
         observerRef.current.disconnect();
@@ -132,12 +126,7 @@ export default function Home() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Calculate mouse parallax
-  const getParallax = (depth: number) => {
-    const x = (mousePosition.x - window.innerWidth / 2) * depth;
-    const y = (mousePosition.y - window.innerHeight / 2) * depth;
-    return { x, y };
-  };
+  // マウスパララックスを削除
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ perspective: '1000px' }}>
@@ -155,23 +144,7 @@ export default function Home() {
         ></div>
       </div>
 
-      {/* Custom Cursor with Magnetic Effect */}
-      <div 
-        className="hidden lg:block fixed w-6 h-6 border-2 border-[#d4af37] rounded-full pointer-events-none z-[100] mix-blend-difference transition-transform duration-200"
-        style={{ 
-          left: `${mousePosition.x}px`, 
-          top: `${mousePosition.y}px`,
-          transform: 'translate(-50%, -50%)'
-        }}
-      ></div>
-      <div 
-        className="hidden lg:block fixed w-2 h-2 bg-[#d4af37] rounded-full pointer-events-none z-[99] transition-all duration-500"
-        style={{ 
-          left: `${mousePosition.x}px`, 
-          top: `${mousePosition.y}px`,
-          transform: 'translate(-50%, -50%)'
-        }}
-      ></div>
+      {/* カスタムカーソルを削除 */}
 
       <Header />
       
@@ -181,7 +154,7 @@ export default function Home() {
         <div 
           className="absolute inset-0 z-0"
           style={{
-            transform: `translateZ(-100px) scale(1.1) translate(${getParallax(0.02).x}px, ${getParallax(0.02).y}px)`
+            transform: `translateZ(-100px) scale(1.1) translate(${0}px, ${0}px)`
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
@@ -220,7 +193,7 @@ export default function Home() {
                 right: orb.right,
                 background: `radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)`,
                 animationDelay: `${orb.delay}s`,
-                transform: `translate(${getParallax(orb.depth).x}px, ${getParallax(orb.depth).y}px) translateZ(${orb.delay * 20}px)`,
+                transform: `translate(${0}px, ${0}px) translateZ(${orb.delay * 20}px)`,
                 transition: 'transform 0.3s ease-out'
               }}
             ></div>
@@ -231,7 +204,7 @@ export default function Home() {
         <div 
           className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto"
           style={{
-            transform: `translateZ(50px) translate(${getParallax(0.01).x}px, ${getParallax(0.01).y}px)`,
+            transform: `translateZ(50px) translate(${0}px, ${0}px)`,
             transition: 'transform 0.3s ease-out'
           }}
         >
@@ -241,7 +214,7 @@ export default function Home() {
               alt="株式会社LS" 
               className="w-56 h-56 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
-                transform: `rotate(${mousePosition.x * 0.01}deg) scale(${1 + (mousePosition.y * 0.0001)})`
+                transform: `rotate(0deg) scale(1)`
               }}
             />
           </div>
@@ -275,13 +248,13 @@ export default function Home() {
             </div>
             
             <p 
-              className="text-8xl font-light tracking-[0.1em] leading-[1.3] animate-fade-in-up" 
+              className="text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.1em] leading-[1.3] animate-fade-in-up" 
               style={{
                 animationDelay: '0.7s',
                 transform: `translateZ(30px)`
               }}
             >
-              空間を超え、<br />ブランドを<br />創造する。
+              空間を超え、<br />ブランドを創造する。
             </p>
           </div>
           
@@ -329,7 +302,7 @@ export default function Home() {
       {/* Stats Section - 3D Flip Cards */}
       <section 
         id="stats" 
-        className={`relative py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`relative py-20 md:py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="container max-w-7xl">
@@ -346,7 +319,7 @@ export default function Home() {
                 style={{
                   animationDelay: stat.delay,
                   transformStyle: 'preserve-3d',
-                  transform: `translateZ(${20 + index * 10}px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                  transform: `translateZ(${20 + index * 10}px) rotateY(${0 * 0.1}deg)`
                 }}
               >
                 <div 
@@ -380,7 +353,7 @@ export default function Home() {
         <div 
           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
           style={{ 
-            transform: isVisible.mission ? `scale(1) translate(${getParallax(0.02).x}px, ${getParallax(0.02).y}px)` : 'scale(0.5)'
+            transform: isVisible.mission ? `scale(1) translate(${0}px, ${0}px)` : 'scale(0.5)'
           }}
         ></div>
         <div 
@@ -402,8 +375,8 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-8xl font-light leading-[1.3] tracking-tight mb-16">
-                  {['空間を超え、', 'ブランドを', '創造する。'].map((text, i) => (
+                <h2 className="text-4xl md:text-6xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                  {['空間を超え、', 'ブランドを創造する。'].map((text, i) => (
                     <span 
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
@@ -419,16 +392,12 @@ export default function Home() {
               </div>
               
               <div className="space-y-10">
-                <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light">
-                  私たちLSは、内装という「箱」を作るだけではなく、<br />
-                  <span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
+                <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 leading-relaxed font-light md:whitespace-nowrap">
+                  私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
                 
-                <p className="text-lg text-gray-500 leading-relaxed font-light">
-                  立地・動線・席数・オペレーション・採用・販促——<br />
-                  店舗の成功に関わる要素を統合し、<br />
-                  "続く売上"が生まれるブランド体験をつくる。<br />
-                  それが私たちの使命です。
+                <p className="text-base md:text-lg text-gray-500 leading-relaxed font-light md:whitespace-nowrap">
+                  立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
                 </p>
               </div>
             </div>
@@ -440,7 +409,7 @@ export default function Home() {
                 className="relative h-[800px] group"
                 style={{
                   transformStyle: 'preserve-3d',
-                  transform: `rotateY(${getParallax(0.01).x * 0.05}deg) rotateX(${-getParallax(0.01).y * 0.05}deg)`
+                  transform: `rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`
                 }}
               >
                 {/* Main Image with 3D Tilt */}
@@ -450,7 +419,7 @@ export default function Home() {
                     alt="Premium Interior Design" 
                     className="w-full h-full object-cover"
                     style={{
-                      transform: `scale(${1 + Math.abs(getParallax(0.01).x) * 0.0001})`
+                      transform: `scale(${1 + Math.abs(0) * 0.0001})`
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
@@ -467,9 +436,9 @@ export default function Home() {
                 
                 {/* Floating Card with 3D */}
                 <div 
-                  className="absolute -bottom-16 -left-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer"
+                  className="absolute -bottom-16 -right-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer"
                   style={{
-                    transform: `translateZ(60px) translate(${getParallax(0.03).x}px, ${getParallax(0.03).y}px)`
+                    transform: `translateZ(60px) translate(${0}px, ${0}px)`
                   }}
                 >
                   <div className="flex items-center gap-4 mb-6">
@@ -529,7 +498,7 @@ export default function Home() {
                 <div 
                   className="col-span-2 relative h-[600px] group overflow-hidden image-overlay"
                   style={{
-                    transform: `translateZ(30px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                    transform: `translateZ(30px) rotateY(${0 * 0.1}deg)`
                   }}
                 >
                   <img 
@@ -542,9 +511,6 @@ export default function Home() {
                   {/* Image Number Badge with Pulse */}
                   <div 
                     className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500"
-                    style={{
-                      transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.1})`
-                    }}
                   >
                     <span className="text-sm tracking-[0.3em] font-light">01</span>
                   </div>
@@ -559,7 +525,7 @@ export default function Home() {
                     key={index}
                     className={`relative h-72 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
                     style={{
-                      transform: `translateZ(${img.depth}px) rotateY(${getParallax(0.005).x * 0.1}deg)`
+                      transform: `translateZ(${img.depth}px) rotateY(${0 * 0.1}deg)`
                     }}
                   >
                     <img 
@@ -584,7 +550,7 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                <h2 className="text-4xl md:text-6xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
                   {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
                     <span 
                       key={i}
@@ -621,10 +587,6 @@ export default function Home() {
                   >
                     <div 
                       className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700"
-                      style={{
-                        transform: `rotate(${scrollY * 0.05 + index * 10}deg)`,
-                        transition: 'all 0.7s ease-out'
-                      }}
                     >
                       <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                     </div>
@@ -655,7 +617,7 @@ export default function Home() {
             </div>
             
             <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-16 tracking-tight leading-tight">
-              ブランドが<br className="md:hidden" />動き出す瞬間
+              ブランドが<br />動き出す瞬間
             </h2>
             
             <p className="text-2xl md:text-3xl text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
@@ -666,7 +628,7 @@ export default function Home() {
           <div 
             className="relative max-w-6xl mx-auto"
             style={{
-              transform: `translateZ(50px) rotateY(${getParallax(0.005).x * 0.05}deg) rotateX(${-getParallax(0.005).y * 0.05}deg)`,
+              transform: `translateZ(50px) rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`,
               transformStyle: 'preserve-3d'
             }}
           >
@@ -719,35 +681,29 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section 
-        id="philosophy" 
-        className={`relative py-56 bg-gradient-to-br from-gray-50 to-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
-      >
-        <div className="container max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-24 items-center">
-            <div className="space-y-12">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-px bg-[#d4af37]"></div>
-                <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
-              </div>
-              
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.3] tracking-tight">
-                "続く売上"が生まれる<br />
-                ブランド体験をつくる
-              </h2>
-              
-              <p className="text-xl text-gray-600 leading-relaxed font-light">
-                私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
-              </p>
+      <section id="philosophy" className="relative py-20 md:py-40 bg-white overflow-hidden">
+        <div className="container grid md:grid-cols-2 gap-20 items-center">
+          <div className="space-y-12">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-px bg-[#d4af37]"></div>
+              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
             </div>
             
-            <div className="relative">
-              <img 
-                src="/architecture-2.jpg" 
-                alt="Philosophy" 
-                className="w-full h-[600px] object-cover shadow-2xl hover-lift"
-              />
-            </div>
+            <h2 className="text-6xl md:text-7xl font-light leading-[1.3] tracking-tight whitespace-nowrap">
+              "続く売上"が生まれるブランド体験をつくる
+            </h2>
+            
+            <p className="text-xl text-gray-600 leading-relaxed font-light">
+              私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
+            </p>
+          </div>
+          
+          <div className="relative ml-auto" style={{ maxWidth: '800px' }}>
+            <img 
+              src="/architecture-2.jpg" 
+              alt="Philosophy" 
+              className="w-full h-[600px] object-cover shadow-2xl hover-lift"
+            />
           </div>
         </div>
       </section>
@@ -798,7 +754,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="absolute bottom-0 left-0 right-0 p-8">
                     <div className="text-xs tracking-[0.3em] text-[#d4af37] mb-2">{project.category}</div>
-                    <h3 className="text-2xl font-light">{project.title}</h3>
+                    <h3 className="text-3xl font-light">{project.title}</h3>
                   </div>
                 </div>
               </div>
@@ -879,31 +835,29 @@ export default function Home() {
                 style={{ 
                   transitionDelay: `${index * 0.1}s`,
                   transformStyle: 'preserve-3d',
-                  transform: `translateZ(${index * 10}px) rotateY(${getParallax(0.002).x * 0.1}deg)`
+                  transform: `translateZ(${index * 10}px) rotateY(${0 * 0.1}deg)`
                 }}
               >
-                {/* Top Border Animation */}
-                <div className="absolute top-0 left-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
+                {/* Left and Bottom Border Animation */}
+                <div className="absolute left-0 bottom-0 h-0 w-2 bg-gradient-to-t from-[#d4af37] to-[#f4e5c3] group-hover:h-full transition-all duration-1000"></div>
+                <div className="absolute left-0 bottom-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
                 
                 {/* Background Shimmer */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
                 
-                <div className="mb-16 relative">
+                <div className="mb-8 md:mb-16 relative">
                   <span 
-                    className="text-9xl font-light text-gray-100 group-hover:gold-gradient transition-all duration-1000 inline-block"
-                    style={{
-                      transform: `scale(${1 + Math.sin(scrollY * 0.01 + index) * 0.05})`
-                    }}
+                    className="text-6xl md:text-8xl lg:text-9xl font-light text-gray-300 group-hover:text-[#d4af37] transition-all duration-700 inline-block"
                   >
                     {value.num}
                   </span>
                 </div>
                 
-                <h3 className="text-4xl font-light mb-10 tracking-tight group-hover:tracking-wide transition-all duration-700 relative z-10">
+                <h3 className="text-2xl md:text-4xl font-light mb-6 md:mb-10 tracking-tight group-hover:tracking-wide transition-all duration-700 relative z-10">
                   {value.title}
                 </h3>
                 
-                <p className="text-2xl mb-10 text-gray-600 font-light leading-relaxed relative z-10">
+                <p className="text-base md:text-2xl mb-6 md:mb-10 text-gray-600 font-light leading-relaxed relative z-10">
                   {value.desc}
                 </p>
                 
@@ -955,7 +909,7 @@ export default function Home() {
           <div 
             className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-700"
             style={{
-              transform: `translateZ(40px) rotateY(${getParallax(0.003).x * 0.05}deg) rotateX(${-getParallax(0.003).y * 0.05}deg)`,
+              transform: `translateZ(40px) rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`,
               transformStyle: 'preserve-3d'
             }}
           >
@@ -1033,34 +987,125 @@ export default function Home() {
           ></div>
         </div>
         
-        <div className="container max-w-6xl relative z-10 text-center">
-          <h2 className="text-8xl font-light mb-20 tracking-tight leading-[1.3]">
-            次世代の<br />
-            ブランド体験を、<br />
-            共に創造しません<br />
-            か。
-          </h2>
-          
-          <p className="text-3xl md:text-4xl text-gray-600 mb-24 font-light max-w-4xl mx-auto leading-relaxed">
-            LSは、あなたの情熱と専門性を求めています。
-          </p>
-          
-          <a href="/careers">
-            <Button 
-              size="lg"
-              className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-24 py-12 text-2xl tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
-              style={{
-                transform: `translateZ(50px) translate(${getParallax(0.01).x * 0.1}px, ${getParallax(0.01).y * 0.1}px)`
-              }}
-            >
-              JOIN US
-            </Button>
-          </a>
+        <div className="container max-w-7xl relative z-10">
+          <div className="text-center mb-32">
+            <div className="flex items-center justify-center gap-6 mb-12">
+              <div className="w-24 h-px bg-[#d4af37]"></div>
+              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">CAREERS</span>
+              <div className="w-24 h-px bg-[#d4af37]"></div>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl lg:text-8xl font-light mb-20 tracking-tight leading-[1.3]">
+              次世代の<br />
+              ブランド体験を、<br />
+              共に創造しませんか。
+            </h2>
+            
+            <p className="text-3xl md:text-4xl text-gray-600 mb-16 font-light max-w-4xl mx-auto leading-relaxed">
+              LSは、あなたの情熱と専門性を求めています。
+            </p>
+          </div>
+
+          {/* 募集職種 */}
+          <div className="mb-32">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light mb-20 text-center">募集職種</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {[
+                {
+                  title: '空間デザイナー',
+                  desc: 'ブランド体験を空間に落とし込む設計者',
+                  requirements: ['建築・インテリアデザイン経験3年以上', 'CAD/3Dソフト使用経験', 'ブランド理解力'],
+                  type: '正社員'
+                },
+                {
+                  title: 'プロジェクトマネージャー',
+                  desc: '設計から施工まで一気通貫で管理',
+                  requirements: ['PM経験2年以上', '建築・内装業界知識', 'コミュニケーション能力'],
+                  type: '正社員'
+                },
+                {
+                  title: 'ブランドストラテジスト',
+                  desc: '事業戦略とブランド体験を設計',
+                  requirements: ['ブランディング経験', '事業企画・戦略立案経験', 'データ分析スキル'],
+                  type: '正社員'
+                },
+                {
+                  title: '施工管理',
+                  desc: '高品質な施工を実現する現場責任者',
+                  requirements: ['施工管理経験3年以上', '建築士または施工管理技士資格歓迎', '品質管理能力'],
+                  type: '正社員'
+                }
+              ].map((job, index) => (
+                <div 
+                  key={index}
+                  className="group relative bg-white p-6 md:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-700 cursor-pointer"
+                >
+                  <div className="absolute top-8 right-8">
+                    <span className="text-sm text-[#d4af37] border border-[#d4af37] px-4 py-2">{job.type}</span>
+                  </div>
+                  
+                  <h4 className="text-2xl md:text-4xl font-light mb-4 md:mb-6 group-hover:text-[#d4af37] transition-colors duration-500">{job.title}</h4>
+                  <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-10 font-light">{job.desc}</p>
+                  
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-400 tracking-wider">必要スキル・経験</p>
+                    <ul className="space-y-3">
+                      {job.requirements.map((req, i) => (
+                        <li key={i} className="flex items-start gap-3 text-gray-700">
+                          <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
+                          <span>{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <div className="absolute left-0 bottom-0 w-0 h-1 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-700"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 福利厚生・働く環境 */}
+          <div className="mb-32">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light mb-20 text-center">福利厚生・働く環境</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              {[
+                { icon: '💰', title: '競争力のある報酬', desc: '業界トップクラスの給与水準と成果連動型ボーナス' },
+                { icon: '📈', title: '成長機会', desc: '最新技術・トレンドに触れる機会、外部研修支援' },
+                { icon: '⚖️', title: 'ワークライフバランス', desc: 'フレックスタイム制、リモートワーク可' },
+                { icon: '🏥', title: '充実の保険', desc: '各種社会保険完備、健康診断サポート' },
+                { icon: '🎯', title: '裁量権', desc: 'フラットな組織で意思決定に参画' },
+                { icon: '🌏', title: '多様性', desc: '年齢・国籍問わず、実力主義の評価' }
+              ].map((benefit, index) => (
+                <div key={index} className="text-center p-6 md:p-10 bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-[#d4af37] transition-all duration-500">
+                  <div className="text-4xl md:text-6xl mb-4 md:mb-6">{benefit.icon}</div>
+                  <h4 className="text-xl md:text-2xl font-light mb-3 md:mb-4">{benefit.title}</h4>
+                  <p className="text-gray-600 font-light leading-relaxed">{benefit.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <p className="text-2xl text-gray-600 mb-12 font-light">まずはカジュアル面談から。あなたのキャリアについてお聞かせください。</p>
+            <a href="/careers">
+              <Button 
+                size="lg"
+                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-12 md:px-24 py-6 md:py-12 text-lg md:text-2xl tracking-[0.2em] md:tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
+                style={{
+                  transform: `translateZ(50px) translate(${0 * 0.1}px, ${0 * 0.1}px)`
+                }}
+              >
+                JOIN US
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Footer - 3D Depth */}
-      <footer id="contact" className="relative py-40 bg-black border-t-2 border-[#d4af37]/20">
+      <footer id="contact" className="relative py-20 md:py-40 bg-black border-t-2 border-[#d4af37]/20">
         <div className="container max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-24 mb-32">
             <div className="md:col-span-2 space-y-10">

@@ -1,3 +1,6 @@
+/* Premium Typography - Cormorant Garamond + Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
 @import "tailwindcss";
 
 @layer base {
@@ -59,13 +62,22 @@
 
 @layer utilities {
   .container {
-    @apply mx-auto px-6 md:px-8 lg:px-12;
+    @apply mx-auto px-4 md:px-8 lg:px-12;
     max-width: 1400px;
   }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    body {
+      overflow-x: hidden;
+    }
+    
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
 }
-
-/* Premium Typography - Cormorant Garamond + Montserrat */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 body {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -370,11 +382,5 @@ button {
 .stagger-item:nth-child(5) { animation-delay: 0.5s; }
 
 
-/* Scale down entire layout to 90% */
-body > div#root {
-  transform: scale(0.9);
-  transform-origin: top center;
-  width: 111.11%; /* 100% / 0.9 to compensate for scale */
-  margin-left: -5.56%; /* Center the scaled content */
-}
+/* Scale removed to fix cursor offset issue */
 

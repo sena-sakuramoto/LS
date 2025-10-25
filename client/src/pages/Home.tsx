@@ -502,8 +502,8 @@ export default function Home() {
                   }}
                 >
                   <img 
-                    src="/project-01.jpg" 
-                    alt="Vision Project 01" 
+                    src="/project-03.jpg" 
+                    alt="Vision Project 03" 
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -732,8 +732,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { img: '/project-02.jpg', title: 'プロジェクト 01', category: '店舗内装' },
-              { img: '/project-03.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
+              { img: '/project-03.jpg', title: 'プロジェクト 01', category: 'オフィス設計' },
+              { img: '/project-02.jpg', title: 'プロジェクト 02', category: '店舗内装' },
               { img: '/project-04.jpg', title: 'プロジェクト 03', category: '商業施設' },
               { img: '/project-05.jpg', title: 'プロジェクト 04', category: '飲食店' },
               { img: '/project-06.jpg', title: 'プロジェクト 05', category: 'ホテル' },

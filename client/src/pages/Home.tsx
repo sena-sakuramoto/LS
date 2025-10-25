@@ -502,8 +502,8 @@ export default function Home() {
                   }}
                 >
                   <img 
-                    src="/vision-bg.jpg" 
-                    alt="Vision Space" 
+                    src="/project-01.jpg" 
+                    alt="Vision Project 01" 
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -518,8 +518,8 @@ export default function Home() {
                 
                 {/* Small Images with 3D Stagger */}
                 {[
-                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02", depth: 20 },
-                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03", depth: 40 }
+                  { src: "/project-09.jpg", alt: "Vision Project 09", num: "02", depth: 20 },
+                  { src: "/project-15.jpg", alt: "Vision Project 15", num: "03", depth: 40 }
                 ].map((img, index) => (
                   <div 
                     key={index}
@@ -732,15 +732,36 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { img: '/architecture-1.jpg', title: 'プロジェクト 01', category: '店舗内装' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 03', category: '商業施設' },
-              { img: '/architecture-1.jpg', title: 'プロジェクト 04', category: '飲食店' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 05', category: 'ホテル' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 06', category: '小売店舗' },
-              { img: '/architecture-1.jpg', title: 'プロジェクト 07', category: 'サロン' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 08', category: 'ショールーム' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 09', category: '複合施設' },
+              { img: '/project-02.jpg', title: 'プロジェクト 01', category: '店舗内装' },
+              { img: '/project-03.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
+              { img: '/project-04.jpg', title: 'プロジェクト 03', category: '商業施設' },
+              { img: '/project-05.jpg', title: 'プロジェクト 04', category: '飲食店' },
+              { img: '/project-06.jpg', title: 'プロジェクト 05', category: 'ホテル' },
+              { img: '/project-07.jpg', title: 'プロジェクト 06', category: '小売店舗' },
+              { img: '/project-08.jpg', title: 'プロジェクト 07', category: 'サロン' },
+              { img: '/project-10.jpg', title: 'プロジェクト 08', category: 'ショールーム' },
+              { img: '/project-11.jpg', title: 'プロジェクト 09', category: '複合施設' },
+              { img: '/project-12.jpg', title: 'プロジェクト 10', category: 'レストラン' },
+              { img: '/project-13.jpg', title: 'プロジェクト 11', category: 'カフェ' },
+              { img: '/project-14.jpg', title: 'プロジェクト 12', category: 'ブティック' },
+              { img: '/project-16.jpg', title: 'プロジェクト 13', category: 'ラウンジ' },
+              { img: '/project-17.jpg', title: 'プロジェクト 14', category: 'バー' },
+              { img: '/project-18.jpg', title: 'プロジェクト 15', category: 'ナイトクラブ' },
+              { img: '/project-19.jpg', title: 'プロジェクト 16', category: 'スパ' },
+              { img: '/project-20.jpg', title: 'プロジェクト 17', category: 'ジム' },
+              { img: '/project-21.jpg', title: 'プロジェクト 18', category: 'ホテルロビー' },
+              { img: '/project-22.jpg', title: 'プロジェクト 19', category: 'コンファレンス' },
+              { img: '/project-23.jpg', title: 'プロジェクト 20', category: 'ショップ' },
+              { img: '/project-24.jpg', title: 'プロジェクト 21', category: 'ギャラリー' },
+              { img: '/project-25.jpg', title: 'プロジェクト 22', category: 'スタジオ' },
+              { img: '/project-26.jpg', title: 'プロジェクト 23', category: 'アトリエ' },
+              { img: '/project-27.jpg', title: 'プロジェクト 24', category: 'ショーケース' },
+              { img: '/project-28.jpg', title: 'プロジェクト 25', category: 'エントランス' },
+              { img: '/project-29.jpg', title: 'プロジェクト 26', category: 'ロビー' },
+              { img: '/project-30.jpg', title: 'プロジェクト 27', category: 'ラウンジ' },
+              { img: '/project-31.jpg', title: 'プロジェクト 28', category: 'バー' },
+              { img: '/project-32.jpg', title: 'プロジェクト 29', category: 'レストラン' },
+              { img: '/project-33.jpg', title: 'プロジェクト 30', category: 'カフェ' },
             ].map((project, i) => (
               <div 
                 key={i}

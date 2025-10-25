@@ -415,8 +415,8 @@ export default function Home() {
                 {/* Main Image with 3D Tilt */}
                 <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
                   <img 
-                    src="/luxury-1.webp" 
-                    alt="Premium Interior Design" 
+                    src="/mission-bg.jpg" 
+                    alt="Mission Space" 
                     className="w-full h-full object-cover"
                     style={{
                       transform: `scale(${1 + Math.abs(0) * 0.0001})`
@@ -502,8 +502,8 @@ export default function Home() {
                   }}
                 >
                   <img 
-                    src="/luxury-3.jpg" 
-                    alt="Luxury Space Design" 
+                    src="/vision-bg.jpg" 
+                    alt="Vision Space" 
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>

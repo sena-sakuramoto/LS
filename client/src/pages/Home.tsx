@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
-  // マウス追従機能を削除
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [scrollY, setScrollY] = useState(0);
@@ -47,7 +46,7 @@ export default function Home() {
     };
   }, []);
 
-  // Canvas particle system
+  // Enhanced Canvas particle system
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -67,29 +66,33 @@ export default function Home() {
       alpha: number;
     }> = [];
 
-    for (let i = 0; i < 50; i++) {
+    // Increase particle count for more connections
+    const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 15000), 120);
+    for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        alpha: Math.random() * 0.5 + 0.2
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 2.5 + 1,
+        alpha: Math.random() * 0.4 + 0.3
       });
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw connections
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.1)';
-      ctx.lineWidth = 0.5;
+      // Draw connections with gradient
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 150) {
+
+          if (distance < 180) {
+            const opacity = (1 - distance / 180) * 0.2;
+            ctx.strokeStyle = `rgba(212, 175, 55, ${opacity})`;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -98,8 +101,15 @@ export default function Home() {
         }
       }
 
-      // Draw and update particles
+      // Draw and update particles with glow
       particles.forEach((p) => {
+        // Outer glow
+        ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inner particle
         ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -108,6 +118,7 @@ export default function Home() {
         p.x += p.vx;
         p.y += p.vy;
 
+        // Bounce off edges
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
       });
@@ -151,12 +162,7 @@ export default function Home() {
       {/* Hero Section - 3D Parallax */}
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
         {/* 3D Parallax Layers */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            transform: `translateZ(-100px) scale(1.1) translate(${0}px, ${0}px)`
-          }}
-        >
+        <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
           <div 
             className="absolute inset-0 opacity-20"
@@ -174,12 +180,12 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-black"></div>
         </div>
         
-        {/* Animated Mesh Gradient Orbs with 3D */}
+        {/* Animated Mesh Gradient Orbs */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {[
-            { size: 600, top: '10%', left: '5%', delay: 0, depth: 0.03 },
-            { size: 500, bottom: '15%', right: '10%', delay: 2, depth: 0.04 },
-            { size: 400, top: '50%', left: '50%', delay: 4, depth: 0.05 }
+            { size: 500, top: '10%', left: '5%', delay: 0 },
+            { size: 400, bottom: '15%', right: '10%', delay: 2 },
+            { size: 350, top: '50%', left: '50%', delay: 4 }
           ].map((orb, i) => (
             <div
               key={i}
@@ -191,36 +197,28 @@ export default function Home() {
                 bottom: orb.bottom,
                 left: orb.left,
                 right: orb.right,
-                background: `radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)`,
-                animationDelay: `${orb.delay}s`,
-                transform: `translate(${0}px, ${0}px) translateZ(${orb.delay * 20}px)`,
-                transition: 'transform 0.3s ease-out'
+                background: `radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%)`,
+                animationDelay: `${orb.delay}s`
               }}
             ></div>
           ))}
         </div>
-        
-        {/* Content with 3D Transform */}
-        <div 
-          className="relative z-10 text-center space-y-16 px-4 max-w-7xl mx-auto"
-          style={{
-            transform: `translateZ(50px) translate(${0}px, ${0}px)`,
-            transition: 'transform 0.3s ease-out'
-          }}
-        >
-          <div className="mb-20 animate-fade-in-up">
-            <img 
-              src="/ls-logo.png" 
-              alt="株式会社LS" 
-              className="w-56 h-56 mx-auto drop-shadow-2xl transition-all duration-700"
+
+        {/* Content */}
+        <div className="relative z-10 text-center space-y-12 px-4 max-w-6xl mx-auto">
+          <div className="mb-12 md:mb-20 animate-fade-in-up">
+            <img
+              src="/ls-logo.png"
+              alt="株式会社LS"
+              className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
                 transform: `rotate(0deg) scale(1)`
               }}
             />
           </div>
-          
-          <div className="space-y-12">
-            <h1 className="text-8xl md:text-[10rem] lg:text-[14rem] font-light tracking-[0.15em] leading-none drop-shadow-2xl">
+
+          <div className="space-y-6 md:space-y-8">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-[0.15em] leading-none drop-shadow-2xl">
               {['L', 'S'].map((letter, i) => (
                 <span 
                   key={i}
@@ -236,49 +234,44 @@ export default function Home() {
               ))}
             </h1>
             
-            <div className="flex items-center justify-center gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
-              <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-              <div 
-                className="w-3 h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"
+            <div className="flex items-center justify-center gap-6 md:gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
+              <div className="h-px w-20 md:w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+              <div
+                className="w-2 h-2 md:w-3 md:h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"
                 style={{
                   transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.3})`
                 }}
               ></div>
-              <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+              <div className="h-px w-20 md:w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
             </div>
-            
-            <p 
-              className="text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.1em] leading-[1.3] animate-fade-in-up" 
+
+            <p
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.1em] leading-[1.4] animate-fade-in-up px-4"
               style={{
-                animationDelay: '0.7s',
-                transform: `translateZ(30px)`
+                animationDelay: '0.7s'
               }}
             >
-              空間を超え、<br />ブランドを創造する。
+              空間を超え、
+              <br className="sm:hidden" />
+              ブランドを創造する。
             </p>
           </div>
-          
-          <div className="flex flex-col md:flex-row gap-8 justify-center items-center pt-16 animate-fade-in-up" style={{animationDelay: '0.9s'}}>
-            <a href="#vision">
-              <Button 
-                variant="outline" 
+
+          <div className="flex flex-col md:flex-row gap-5 md:gap-6 justify-center items-center pt-10 md:pt-12 animate-fade-in-up px-4" style={{animationDelay: '0.9s'}}>
+            <a href="#vision" className="w-full md:w-auto">
+              <Button
+                variant="outline"
                 size="lg"
-                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] border-0 px-16 py-8 text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-2"
-                style={{
-                  transform: `translateZ(40px)`
-                }}
+                className="bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] border-0 w-full md:w-auto px-8 md:px-12 py-5 md:py-6 text-sm md:text-base tracking-[0.15em] font-light transition-all duration-500 hover:scale-105"
               >
                 OUR VISION
               </Button>
             </a>
-            <a href="#contact">
-              <Button 
-                variant="outline" 
+            <a href="#contact" className="w-full md:w-auto">
+              <Button
+                variant="outline"
                 size="lg"
-                className="magnetic-button bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] px-16 py-8 text-lg tracking-[0.2em] font-light backdrop-blur-sm transition-all duration-700 hover:scale-110 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
-                style={{
-                  transform: `translateZ(40px)`
-                }}
+                className="bg-transparent text-white hover:bg-white/10 border-2 border-[#d4af37] w-full md:w-auto px-8 md:px-12 py-5 md:py-6 text-sm md:text-base tracking-[0.15em] font-light backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(212,175,55,0.3)]"
               >
                 CONTACT US
               </Button>
@@ -313,26 +306,23 @@ export default function Home() {
               { value: "5", unit: "年", label: "TO STANDARD", delay: "0.4s", color: "from-[#d4af37] to-[#f4e5c3]" },
               { value: "AI", unit: "×", label: "INNOVATION", delay: "0.6s", color: "from-[#f4e5c3] to-[#d4af37]" }
             ].map((stat, index) => (
-              <div 
-                key={index} 
-                className="text-center space-y-6 group cursor-pointer stagger-item" 
+              <div
+                key={index}
+                className="text-center space-y-4 group cursor-pointer stagger-item"
                 style={{
-                  animationDelay: stat.delay,
-                  transformStyle: 'preserve-3d',
-                  transform: `translateZ(${20 + index * 10}px) rotateY(${0 * 0.1}deg)`
+                  animationDelay: stat.delay
                 }}
               >
-                <div 
-                  className={`text-7xl md:text-8xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-125 transition-all duration-700`}
+                <div
+                  className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-110 transition-all duration-500`}
                   style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 5}px)`,
-                    textShadow: '0 0 30px rgba(212,175,55,0.5)'
+                    transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 5}px)`
                   }}
                 >
-                  {stat.value}<span className="text-5xl">{stat.unit}</span>
+                  {stat.value}<span className="text-2xl sm:text-3xl md:text-4xl">{stat.unit}</span>
                 </div>
-                <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-32 transition-all duration-500"></div>
-                <p className="text-xs tracking-[0.3em] text-gray-400 font-light group-hover:text-[#d4af37] transition-colors">{stat.label}</p>
+                <div className="h-px w-12 md:w-16 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-16 md:group-hover:w-24 transition-all duration-400"></div>
+                <p className="text-xs tracking-[0.2em] md:tracking-[0.25em] text-gray-400 font-light group-hover:text-[#d4af37] transition-colors">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -340,9 +330,9 @@ export default function Home() {
       </section>
 
       {/* Mission Section - Tilt on Hover */}
-      <section 
-        id="mission" 
-        className={`relative py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
+      <section
+        id="mission"
+        className={`relative py-20 md:py-40 lg:py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Decorative Elements with Scroll Animation */}
@@ -350,10 +340,10 @@ export default function Home() {
           className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-50 to-transparent opacity-50 transition-transform duration-1000"
           style={{ transform: isVisible.mission ? 'translateX(0)' : 'translateX(100px)' }}
         ></div>
-        <div 
-          className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
-          style={{ 
-            transform: isVisible.mission ? `scale(1) translate(${0}px, ${0}px)` : 'scale(0.5)'
+        <div
+          className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
+          style={{
+            transform: isVisible.mission ? 'scale(1)' : 'scale(0.5)'
           }}
         ></div>
         <div 
@@ -375,14 +365,13 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
                 </div>
                 
-                <h2 className="text-4xl md:text-6xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] tracking-tight mb-8 md:mb-12">
                   {['空間を超え、', 'ブランドを創造する。'].map((text, i) => (
-                    <span 
+                    <span
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
                       style={{
-                        transitionDelay: `${i * 0.1}s`,
-                        transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
+                        transitionDelay: `${i * 0.1}s`
                       }}
                     >
                       {text}
@@ -390,13 +379,13 @@ export default function Home() {
                   ))}
                 </h2>
               </div>
-              
-              <div className="space-y-10">
-                <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 leading-relaxed font-light md:whitespace-nowrap">
+
+              <div className="space-y-6 md:space-y-8">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed font-light">
                   私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
-                
-                <p className="text-base md:text-lg text-gray-500 leading-relaxed font-light md:whitespace-nowrap">
+
+                <p className="text-sm md:text-base lg:text-lg text-gray-500 leading-relaxed font-light">
                   立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
                 </p>
               </div>
@@ -405,13 +394,7 @@ export default function Home() {
             <div 
               className={`lg:col-span-7 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
             >
-              <div 
-                className="relative h-[800px] group"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: `rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`
-                }}
-              >
+              <div className="relative h-[350px] md:h-[500px] lg:h-[650px] group">
                 {/* Main Image with 3D Tilt */}
                 <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
                   <img 
@@ -434,13 +417,8 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Floating Card with 3D */}
-                <div 
-                  className="absolute -bottom-16 -right-16 glass p-10 shadow-2xl max-w-md backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer"
-                  style={{
-                    transform: `translateZ(60px) translate(${0}px, ${0}px)`
-                  }}
-                >
+                {/* Floating Card */}
+                <div className="absolute -bottom-12 -right-12 glass p-8 shadow-2xl max-w-sm backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
                     <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
@@ -470,9 +448,9 @@ export default function Home() {
       </section>
 
       {/* Vision Section - Morphing Grid */}
-      <section 
-        id="vision" 
-        className={`relative py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
+      <section
+        id="vision"
+        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
       >
         {/* Animated Morphing Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -493,14 +471,9 @@ export default function Home() {
               className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="grid grid-cols-2 gap-8">
-                {/* Large Image with 3D Depth */}
-                <div 
-                  className="col-span-2 relative h-[600px] group overflow-hidden image-overlay"
-                  style={{
-                    transform: `translateZ(30px) rotateY(${0 * 0.1}deg)`
-                  }}
-                >
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
+                {/* Large Image */}
+                <div className="col-span-2 relative h-[250px] md:h-[400px] lg:h-[500px] group overflow-hidden image-overlay">
                   <img 
                     src="/vision-bg.jpg" 
                     alt="Vision Space" 
@@ -516,17 +489,14 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Small Images with 3D Stagger */}
+                {/* Small Images */}
                 {[
-                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02", depth: 20 },
-                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03", depth: 40 }
+                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02" },
+                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03" }
                 ].map((img, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className={`relative h-72 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-                    style={{
-                      transform: `translateZ(${img.depth}px) rotateY(${0 * 0.1}deg)`
-                    }}
+                    className={`relative h-36 md:h-48 lg:h-60 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
                   >
                     <img 
                       src={img.src} 
@@ -550,14 +520,13 @@ export default function Home() {
                   <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
                 </div>
                 
-                <h2 className="text-4xl md:text-6xl lg:text-8xl font-light leading-[1.3] tracking-tight mb-16">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] tracking-tight mb-8 md:mb-12">
                   {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
-                    <span 
+                    <span
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
                       style={{
-                        transitionDelay: `${i * 0.1}s`,
-                        transform: `translateX(${Math.sin(scrollY * 0.01 + i) * 10}px)`
+                        transitionDelay: `${i * 0.1}s`
                       }}
                     >
                       {text}
@@ -565,8 +534,8 @@ export default function Home() {
                   ))}
                 </h2>
               </div>
-              
-              <p className="text-2xl md:text-3xl text-gray-300 leading-[1.6] font-light">
+
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-[1.6] font-light">
                 内装＝コストという常識を変え、<br />
                 <span className="gold-gradient font-normal">内装＝投資</span>へ。
               </p>
@@ -591,8 +560,8 @@ export default function Home() {
                       <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                     </div>
                     <div className="flex-1 pt-2">
-                      <h4 className="text-2xl font-light mb-3 group-hover:gold-gradient transition-colors duration-500">{item.title}</h4>
-                      <p className="text-gray-400 text-sm font-light leading-relaxed">{item.desc}</p>
+                      <h4 className="text-base md:text-lg lg:text-xl font-light mb-2 group-hover:gold-gradient transition-colors duration-500">{item.title}</h4>
+                      <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -603,35 +572,29 @@ export default function Home() {
       </section>
 
       {/* Film Section - 3D Frame */}
-      <section 
-        id="film" 
-        className={`relative py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+      <section
+        id="film"
+        className={`relative py-20 md:py-40 lg:py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="container max-w-7xl">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">BRAND FILM</span>
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+        <div className="container max-w-7xl px-4">
+          <div className="text-center mb-16 md:mb-24 lg:mb-32">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">BRAND FILM</span>
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
-            
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-16 tracking-tight leading-tight">
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight leading-tight px-4">
               ブランドが<br />動き出す瞬間
             </h2>
-            
-            <p className="text-2xl md:text-3xl text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
+
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed px-4">
               LSが手がける空間とブランド体験の哲学を、短編映像に凝縮しました。
             </p>
           </div>
           
-          <div 
-            className="relative max-w-6xl mx-auto"
-            style={{
-              transform: `translateZ(50px) rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`,
-              transformStyle: 'preserve-3d'
-            }}
-          >
+          <div className="relative max-w-5xl mx-auto">
             {/* Decorative Multi-Layer Frame with 3D Depth */}
             {[-12, -20, -28].map((inset, i) => (
               <div 
@@ -681,56 +644,56 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section id="philosophy" className="relative py-20 md:py-40 bg-white overflow-hidden">
-        <div className="container grid md:grid-cols-2 gap-20 items-center">
-          <div className="space-y-12">
-            <div className="flex items-center gap-6">
-              <div className="w-16 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
+      <section id="philosophy" className="relative py-16 md:py-32 lg:py-40 bg-white text-black overflow-hidden">
+        <div className="container grid md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center px-4">
+          <div className="space-y-8 md:space-y-10 lg:space-y-12">
+            <div className="flex items-center gap-4 md:gap-6">
+              <div className="w-12 md:w-16 h-px bg-[#d4af37]"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
             </div>
-            
-            <h2 className="text-6xl md:text-7xl font-light leading-[1.3] tracking-tight whitespace-nowrap">
+
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.3] tracking-tight">
               "続く売上"が生まれるブランド体験をつくる
             </h2>
-            
-            <p className="text-xl text-gray-600 leading-relaxed font-light">
+
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
               私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
             </p>
           </div>
-          
-          <div className="relative ml-auto" style={{ maxWidth: '800px' }}>
-            <img 
-              src="/architecture-2.jpg" 
-              alt="Philosophy" 
-              className="w-full h-[600px] object-cover shadow-2xl hover-lift"
+
+          <div className="relative ml-auto w-full" style={{ maxWidth: '800px' }}>
+            <img
+              src="/architecture-2.jpg"
+              alt="Philosophy"
+              className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover shadow-2xl hover-lift"
             />
           </div>
         </div>
       </section>
 
       {/* Projects Gallery Section */}
-      <section 
-        id="projects" 
-        className="relative py-56 bg-black text-white"
+      <section
+        id="projects"
+        className="relative py-20 md:py-40 lg:py-56 bg-black text-white"
       >
-        <div className="container max-w-7xl">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">PROJECTS</span>
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+        <div className="container max-w-7xl px-4">
+          <div className="text-center mb-16 md:mb-24 lg:mb-32">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">PROJECTS</span>
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
-            
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight gold-gradient">
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight gold-gradient">
               実績
             </h2>
-            
-            <p className="text-2xl text-gray-400 font-light">
+
+            <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light px-4">
               私たちが手掛けたブランド空間
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {[
               { img: '/architecture-1.jpg', title: 'プロジェクト 01', category: '店舗内装' },
               { img: '/architecture-2.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
@@ -761,11 +724,11 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="text-center mt-24">
-            <Button 
-              variant="outline" 
+          <div className="text-center mt-16 md:mt-20 lg:mt-24">
+            <Button
+              variant="outline"
               size="lg"
-              className="magnetic-button border-2 border-white text-white hover:bg-white hover:text-black px-16 py-8 text-sm tracking-[0.3em] font-light transition-all duration-700"
+              className="magnetic-button border-2 border-white text-white hover:bg-white hover:text-black w-full md:w-auto px-10 md:px-16 py-6 md:py-8 text-xs md:text-sm tracking-[0.25em] md:tracking-[0.3em] font-light transition-all duration-700"
             >
               VIEW ALL PROJECTS
             </Button>
@@ -774,29 +737,29 @@ export default function Home() {
       </section>
 
       {/* Values Section - 3D Card Flip */}
-      <section 
-        id="values" 
-        className={`relative py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
+      <section
+        id="values"
+        className={`relative py-20 md:py-40 lg:py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="container max-w-7xl">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VALUES</span>
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+        <div className="container max-w-7xl px-4">
+          <div className="text-center mb-16 md:mb-24 lg:mb-32">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">VALUES</span>
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
-            
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight">
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight">
               バリュー
             </h2>
-            
-            <p className="text-5xl md:text-6xl text-gray-600 font-light tracking-wide">
+
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-600 font-light tracking-wide px-4">
               "超"で貫く5つの基準
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
             {[
               {
                 num: "01",
@@ -829,13 +792,11 @@ export default function Home() {
                 points: ["最短48時間で3案提示", "新技術を積極採用", "失敗を学びに変換"]
               }
             ].map((value, index) => (
-              <div 
-                key={index} 
-                className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-14 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-1000 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-                style={{ 
-                  transitionDelay: `${index * 0.1}s`,
-                  transformStyle: 'preserve-3d',
-                  transform: `translateZ(${index * 10}px) rotateY(${0 * 0.1}deg)`
+              <div
+                key={index}
+                className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-10 md:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-xl transition-all duration-700 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+                style={{
+                  transitionDelay: `${index * 0.1}s`
                 }}
               >
                 {/* Left and Bottom Border Animation */}
@@ -845,26 +806,26 @@ export default function Home() {
                 {/* Background Shimmer */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
                 
-                <div className="mb-8 md:mb-16 relative">
-                  <span 
-                    className="text-6xl md:text-8xl lg:text-9xl font-light text-gray-300 group-hover:text-[#d4af37] transition-all duration-700 inline-block"
+                <div className="mb-6 md:mb-10 relative">
+                  <span
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-300 group-hover:text-[#d4af37] transition-all duration-500 inline-block"
                   >
                     {value.num}
                   </span>
                 </div>
-                
-                <h3 className="text-2xl md:text-4xl font-light mb-6 md:mb-10 tracking-tight group-hover:tracking-wide transition-all duration-700 relative z-10">
+
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-4 md:mb-6 tracking-tight group-hover:tracking-wide transition-all duration-500 relative z-10">
                   {value.title}
                 </h3>
-                
-                <p className="text-base md:text-2xl mb-6 md:mb-10 text-gray-600 font-light leading-relaxed relative z-10">
+
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-600 font-light leading-relaxed relative z-10">
                   {value.desc}
                 </p>
-                
-                <ul className="space-y-5 text-base text-gray-500 font-light relative z-10">
+
+                <ul className="space-y-3 md:space-y-4 lg:space-y-5 text-sm md:text-base text-gray-500 font-light relative z-10">
                   {value.points.map((point, i) => (
-                    <li key={i} className="flex items-start gap-4 group/item">
-                      <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-2 flex-shrink-0 group-hover/item:scale-150 transition-transform"></div>
+                    <li key={i} className="flex items-start gap-3 md:gap-4 group/item">
+                      <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0 group-hover/item:scale-150 transition-transform"></div>
                       <span className="group-hover/item:text-black transition-colors">{point}</span>
                     </li>
                   ))}
@@ -876,9 +837,9 @@ export default function Home() {
       </section>
 
       {/* Company Section - 3D Glass Box */}
-      <section 
-        id="company" 
-        className={`relative py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+      <section
+        id="company"
+        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Background Pattern with 3D Rotation */}
@@ -893,26 +854,20 @@ export default function Home() {
           ></div>
         </div>
         
-        <div className="container max-w-6xl relative z-10">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">COMPANY</span>
-              <div className="w-24 h-px bg-[#d4af37]/30"></div>
+        <div className="container max-w-6xl relative z-10 px-4">
+          <div className="text-center mb-16 md:mb-24 lg:mb-32">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">COMPANY</span>
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
-            
-            <h2 className="text-7xl md:text-8xl lg:text-9xl font-light mb-12 tracking-tight">
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight">
               会社概要
             </h2>
           </div>
-          
-          <div 
-            className="relative glass p-20 md:p-24 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-700"
-            style={{
-              transform: `translateZ(40px) rotateY(${0 * 0.05}deg) rotateX(${-0 * 0.05}deg)`,
-              transformStyle: 'preserve-3d'
-            }}
-          >
+
+          <div className="relative glass p-8 md:p-14 lg:p-16 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-500">
             {/* Decorative Corners with 3D */}
             {[
               { top: '0', left: '0', borderTop: true, borderLeft: true, rotateVal: 0 },
@@ -948,18 +903,18 @@ export default function Home() {
                 { label: "建設業許可", value: "東京都知事 許可（般-7）第159994号" },
                 { label: "従業員数", value: "コアメンバー5名" }
               ].map((item, index) => (
-                <div 
-                  key={index} 
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
-                  style={{ 
+                <div
+                  key={index}
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-10 pb-8 md:pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+                  style={{
                     transitionDelay: `${index * 0.05}s`,
                     transform: `translateZ(${5 + index * 2}px)`
                   }}
                 >
-                  <div className="text-sm tracking-[0.3em] text-gray-400 font-light uppercase">
+                  <div className="text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] text-gray-400 font-light uppercase">
                     {item.label}
                   </div>
-                  <div className="md:col-span-3 text-2xl font-light group-hover:gold-gradient transition-all duration-500">
+                  <div className="md:col-span-3 text-base sm:text-lg md:text-xl lg:text-2xl font-light group-hover:gold-gradient transition-all duration-500">
                     {item.value}
                   </div>
                 </div>
@@ -970,9 +925,9 @@ export default function Home() {
       </section>
 
       {/* CTA Section - Magnetic Pull Effect */}
-      <section 
+      <section
         id="cta"
-        className={`relative py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`relative py-20 md:py-32 lg:py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
       >
         {/* Animated Background Grid with Morph */}
         <div className="absolute inset-0 opacity-5">
@@ -987,29 +942,29 @@ export default function Home() {
           ></div>
         </div>
         
-        <div className="container max-w-7xl relative z-10">
-          <div className="text-center mb-32">
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <div className="w-24 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">CAREERS</span>
-              <div className="w-24 h-px bg-[#d4af37]"></div>
+        <div className="container max-w-7xl relative z-10 px-4">
+          <div className="text-center mb-16 md:mb-24 lg:mb-32">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">CAREERS</span>
+              <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
             </div>
-            
-            <h2 className="text-4xl md:text-6xl lg:text-8xl font-light mb-20 tracking-tight leading-[1.3]">
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-10 md:mb-14 tracking-tight leading-[1.3]">
               次世代の<br />
               ブランド体験を、<br />
               共に創造しませんか。
             </h2>
-            
-            <p className="text-3xl md:text-4xl text-gray-600 mb-16 font-light max-w-4xl mx-auto leading-relaxed">
+
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-10 md:mb-12 font-light max-w-3xl mx-auto leading-relaxed">
               LSは、あなたの情熱と専門性を求めています。
             </p>
           </div>
 
           {/* 募集職種 */}
-          <div className="mb-32">
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light mb-20 text-center">募集職種</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="mb-16 md:mb-20 lg:mb-24">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">募集職種</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
               {[
                 {
                   title: '空間デザイナー',
@@ -1038,21 +993,21 @@ export default function Home() {
               ].map((job, index) => (
                 <div 
                   key={index}
-                  className="group relative bg-white p-6 md:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-700 cursor-pointer"
+                  className="group relative bg-white p-6 md:p-8 lg:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-700 cursor-pointer"
                 >
-                  <div className="absolute top-8 right-8">
-                    <span className="text-sm text-[#d4af37] border border-[#d4af37] px-4 py-2">{job.type}</span>
+                  <div className="absolute top-4 right-4 md:top-6 md:right-6 lg:top-8 lg:right-8">
+                    <span className="text-xs md:text-sm text-[#d4af37] border border-[#d4af37] px-3 py-1.5 md:px-4 md:py-2">{job.type}</span>
                   </div>
-                  
-                  <h4 className="text-2xl md:text-4xl font-light mb-4 md:mb-6 group-hover:text-[#d4af37] transition-colors duration-500">{job.title}</h4>
-                  <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-10 font-light">{job.desc}</p>
-                  
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-400 tracking-wider">必要スキル・経験</p>
-                    <ul className="space-y-3">
+
+                  <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-3 md:mb-4 lg:mb-6 group-hover:text-[#d4af37] transition-colors duration-500 pr-20">{job.title}</h4>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 md:mb-8 lg:mb-10 font-light">{job.desc}</p>
+
+                  <div className="space-y-3 md:space-y-4">
+                    <p className="text-xs md:text-sm text-gray-400 tracking-wider">必要スキル・経験</p>
+                    <ul className="space-y-2 md:space-y-3">
                       {job.requirements.map((req, i) => (
-                        <li key={i} className="flex items-start gap-3 text-gray-700">
-                          <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
+                        <li key={i} className="flex items-start gap-2 md:gap-3 text-sm md:text-base text-gray-700">
+                          <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0"></div>
                           <span>{req}</span>
                         </li>
                       ))}
@@ -1066,21 +1021,87 @@ export default function Home() {
           </div>
 
           {/* 福利厚生・働く環境 */}
-          <div className="mb-32">
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light mb-20 text-center">福利厚生・働く環境</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="mb-16 md:mb-20">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">福利厚生・働く環境</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
               {[
-                { icon: '💰', title: '競争力のある報酬', desc: '業界トップクラスの給与水準と成果連動型ボーナス' },
-                { icon: '📈', title: '成長機会', desc: '最新技術・トレンドに触れる機会、外部研修支援' },
-                { icon: '⚖️', title: 'ワークライフバランス', desc: 'フレックスタイム制、リモートワーク可' },
-                { icon: '🏥', title: '充実の保険', desc: '各種社会保険完備、健康診断サポート' },
-                { icon: '🎯', title: '裁量権', desc: 'フラットな組織で意思決定に参画' },
-                { icon: '🌏', title: '多様性', desc: '年齢・国籍問わず、実力主義の評価' }
+                {
+                  title: '競争力のある報酬',
+                  desc: '業界トップクラスの給与水準と成果連動型ボーナス',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <rect x="10" y="21" width="28" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <rect x="14" y="30" width="20" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <rect x="18" y="12" width="12" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    </svg>
+                  )
+                },
+                {
+                  title: '成長機会',
+                  desc: '最新技術・トレンドに触れる機会、外部研修支援',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <polyline points="12,30 20,22 28,26 36,14" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="30,12 37,12 37,19" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )
+                },
+                {
+                  title: 'ワークライフバランス',
+                  desc: 'フレックスタイム制、リモートワーク可',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <line x1="24" y1="12" x2="24" y2="34" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                      <path d="M10 34h28" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                      <path d="M24 20l-10 4c0 4 3 7 6.5 7S28 28 28 24l-4-4z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M24 20l10 4c0 4-3 7-6.5 7S20 28 20 24l4-4z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )
+                },
+                {
+                  title: '充実の保険',
+                  desc: '各種社会保険完備、健康診断サポート',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <path d="M24 10l13 5v9c0 9-6 15-13 19-7-4-13-10-13-19v-9z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinejoin="round" />
+                      <line x1="24" y1="18" x2="24" y2="28" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                      <line x1="19" y1="23" x2="29" y2="23" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                    </svg>
+                  )
+                },
+                {
+                  title: '裁量権',
+                  desc: 'フラットな組織で意思決定に参画',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <circle cx="24" cy="24" r="12" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <line x1="24" y1="16" x2="24" y2="24" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                      <line x1="24" y1="24" x2="31" y2="27" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                      <circle cx="24" cy="24" r="3" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    </svg>
+                  )
+                },
+                {
+                  title: '多様性',
+                  desc: '年齢・国籍問わず、実力主義の評価',
+                  icon: (
+                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
+                      <circle cx="16" cy="18" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <circle cx="32" cy="18" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <circle cx="16" cy="34" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                      <circle cx="32" cy="34" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    </svg>
+                  )
+                }
               ].map((benefit, index) => (
-                <div key={index} className="text-center p-6 md:p-10 bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-[#d4af37] transition-all duration-500">
-                  <div className="text-4xl md:text-6xl mb-4 md:mb-6">{benefit.icon}</div>
-                  <h4 className="text-xl md:text-2xl font-light mb-3 md:mb-4">{benefit.title}</h4>
-                  <p className="text-gray-600 font-light leading-relaxed">{benefit.desc}</p>
+                <div key={index} className="text-center p-5 md:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-[#d4af37] transition-all duration-400">
+                  <div className="mb-3 md:mb-4 flex justify-center">
+                    <span className="inline-flex items-center justify-center w-14 h-14 rounded-full border border-[#d4af37]/30 bg-white text-[#d4af37]">
+                      {benefit.icon}
+                    </span>
+                  </div>
+                  <h4 className="text-base sm:text-lg md:text-xl font-light mb-2 md:mb-3">{benefit.title}</h4>
+                  <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">{benefit.desc}</p>
                 </div>
               ))}
             </div>
@@ -1088,14 +1109,11 @@ export default function Home() {
 
           {/* CTA */}
           <div className="text-center">
-            <p className="text-2xl text-gray-600 mb-12 font-light">まずはカジュアル面談から。あなたのキャリアについてお聞かせください。</p>
-            <a href="/careers">
-              <Button 
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 md:mb-12 font-light px-4">まずはカジュアル面談から。あなたのキャリアについてお聞かせください。</p>
+            <a href="/careers" className="inline-block w-full md:w-auto">
+              <Button
                 size="lg"
-                className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_60px_rgba(212,175,55,0.8)] px-12 md:px-24 py-6 md:py-12 text-lg md:text-2xl tracking-[0.2em] md:tracking-[0.3em] font-light transition-all duration-700 hover:scale-110 hover:-translate-y-3 border-0"
-                style={{
-                  transform: `translateZ(50px) translate(${0 * 0.1}px, ${0 * 0.1}px)`
-                }}
+                className="bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] w-full md:w-auto px-8 sm:px-12 md:px-16 py-5 md:py-8 lg:py-10 text-base sm:text-lg md:text-xl tracking-[0.15em] sm:tracking-[0.2em] font-light transition-all duration-500 hover:scale-105 border-0"
               >
                 JOIN US
               </Button>
@@ -1105,43 +1123,43 @@ export default function Home() {
       </section>
 
       {/* Footer - 3D Depth */}
-      <footer id="contact" className="relative py-20 md:py-40 bg-black border-t-2 border-[#d4af37]/20">
-        <div className="container max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-24 mb-32">
-            <div className="md:col-span-2 space-y-10">
-              <img 
-                src="/ls-logo.png" 
-                alt="株式会社LS" 
-                className="w-48 h-48 opacity-80 transition-all duration-700"
+      <footer id="contact" className="relative py-12 md:py-20 lg:py-40 bg-black border-t-2 border-[#d4af37]/20">
+        <div className="container max-w-7xl px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 lg:gap-24 mb-16 md:mb-24 lg:mb-32">
+            <div className="md:col-span-2 space-y-6 md:space-y-8 lg:space-y-10">
+              <img
+                src="/ls-logo.png"
+                alt="株式会社LS"
+                className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 opacity-80 transition-all duration-700"
                 style={{
                   transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
                 }}
               />
-              <p className="text-3xl text-gray-300 font-light leading-relaxed max-w-md">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。
               </p>
             </div>
-            
-            <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-10 tracking-[0.4em]">COMPANY</h4>
-              <div className="space-y-5 text-gray-400 text-base font-light leading-relaxed">
+
+            <div className="space-y-4 md:space-y-6 lg:space-y-8">
+              <h4 className="text-white text-xs md:text-sm font-light mb-6 md:mb-8 lg:mb-10 tracking-[0.3em] md:tracking-[0.4em]">COMPANY</h4>
+              <div className="space-y-3 md:space-y-4 lg:space-y-5 text-gray-400 text-sm md:text-base font-light leading-relaxed">
                 <p>株式会社LS</p>
                 <p>東京都渋谷区渋谷1-12-2<br />クロスオフィス渋谷505</p>
               </div>
             </div>
-            
-            <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-10 tracking-[0.4em]">CONTACT</h4>
-              <Button 
-                variant="outline" 
-                className="magnetic-button bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 px-10 py-7 text-sm tracking-[0.3em] font-light hover:scale-105 hover:-translate-y-2"
+
+            <div className="space-y-4 md:space-y-6 lg:space-y-8">
+              <h4 className="text-white text-xs md:text-sm font-light mb-6 md:mb-8 lg:mb-10 tracking-[0.3em] md:tracking-[0.4em]">CONTACT</h4>
+              <Button
+                variant="outline"
+                className="magnetic-button bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 w-full md:w-auto px-8 md:px-10 py-5 md:py-7 text-xs md:text-sm tracking-[0.25em] md:tracking-[0.3em] font-light hover:scale-105 hover:-translate-y-2"
               >
                 お問い合わせ
               </Button>
             </div>
           </div>
-          
-          <div className="text-center text-gray-500 text-xs border-t border-[#d4af37]/20 pt-20 tracking-[0.3em] font-light">
+
+          <div className="text-center text-gray-500 text-xs border-t border-[#d4af37]/20 pt-12 md:pt-16 lg:pt-20 tracking-[0.2em] md:tracking-[0.3em] font-light">
             <p>&copy; 2025 株式会社LS. All rights reserved.</p>
           </div>
         </div>

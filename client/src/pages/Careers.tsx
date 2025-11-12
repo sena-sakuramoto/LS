@@ -540,8 +540,8 @@ export default function Careers() {
             LSで、次世代のブランド体験を共に創造しませんか。
           </p>
           
-          <a href="#application-form">
-            <Button 
+          <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer">
+            <Button
               size="lg"
               className="magnetic-button bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] px-10 sm:px-12 md:px-16 py-5 md:py-6 text-base sm:text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2 border-0"
             >
@@ -551,144 +551,85 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Application Form */}
-      <section 
-        id="application-form"
-        className={`relative py-20 md:py-32 lg:py-40 bg-white text-black transition-all duration-1000 ${isVisible['application-form'] ? 'opacity-100' : 'opacity-0'}`}
+      {/* Learn More Section */}
+      <section
+        id="learn-more"
+        className={`relative py-20 md:py-32 lg:py-40 bg-white text-black transition-all duration-1000 ${isVisible['learn-more'] ? 'opacity-100' : 'opacity-0'}`}
       >
-        <div className="container max-w-5xl">
+        <div className="container max-w-7xl">
           <div className="text-center mb-16 md:mb-24">
             <div className="flex items-center justify-center gap-6 mb-8">
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">APPLICATION</span>
+              <span className="text-xs tracking-[0.5em] text-gray-400 font-light">LEARN MORE</span>
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
-            
+
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
-              応募フォーム
+              もっと詳しく知る
             </h2>
             <p className="text-base sm:text-lg text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
-              以下のフォームに必要事項をご記入の上、送信してください。<br />
-              担当者より3営業日以内にご連絡いたします。
+              LSについてさらに詳しく知りたい方は、<br />
+              以下から詳細をご覧ください。
             </p>
           </div>
 
-          <form 
-            action="mailto:t.homma@lsgroup-co.jp"
-            method="post"
-            encType="text/plain"
-            className="space-y-8 md:space-y-10"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <div className="space-y-3">
-                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                  お名前 <span className="text-[#d4af37]">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  name="name"
-                  required
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light"
-                  placeholder="山田 太郎"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                  メールアドレス <span className="text-[#d4af37]">*</span>
-                </label>
-                <input 
-                  type="email" 
-                  name="email"
-                  required
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light"
-                  placeholder="example@email.com"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <div className="space-y-3">
-                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                  電話番号 <span className="text-[#d4af37]">*</span>
-                </label>
-                <input 
-                  type="tel" 
-                  name="phone"
-                  required
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light"
-                  placeholder="090-1234-5678"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                  応募職種 <span className="text-[#d4af37]">*</span>
-                </label>
-                <select 
-                  name="position"
-                  required
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light"
-                >
-                  <option value="">選択してください</option>
-                  <option value="営業コンサルタント職（PM職）">営業コンサルタント職（PM職）</option>
-                  <option value="店舗設計デザイナー職">店舗設計デザイナー職</option>
-                  <option value="施工管理職（幹部候補）">施工管理職（幹部候補）</option>
-                  <option value="その他">その他</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                志望動機 <span className="text-[#d4af37]">*</span>
-              </label>
-              <textarea 
-                name="motivation"
-                required
-                rows={8}
-                className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light resize-none"
-                placeholder="LSへの志望動機をお聞かせください"
-              ></textarea>
-            </div>
-
-            <div className="space-y-3">
-              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                職務経歴・スキル
-              </label>
-              <textarea 
-                name="experience"
-                rows={8}
-                className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light resize-none"
-                placeholder="これまでの職務経歴や保有スキルをご記入ください"
-              ></textarea>
-            </div>
-
-            <div className="space-y-3">
-              <label className="block text-sm tracking-[0.2em] text-gray-600 font-light uppercase">
-                その他・ご質問
-              </label>
-              <textarea 
-                name="other"
-                rows={6}
-                className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all duration-500 text-base font-light resize-none"
-                placeholder="その他、ご質問やお伝えしたいことがあればご記入ください"
-              ></textarea>
-            </div>
-
-            <div className="text-center pt-8">
-              <Button 
-                type="submit"
-                size="lg"
-                className="bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] px-10 sm:px-12 md:px-16 py-5 md:py-6 text-base sm:text-lg tracking-[0.2em] font-light transition-all duration-700 hover:scale-105 hover:-translate-y-2 border-0"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {[
+              {
+                title: '会社情報',
+                description: 'LSの企業概要、所在地、事業内容をご覧いただけます',
+                link: '/#company'
+              },
+              {
+                title: 'ミッション・ビジョン',
+                description: '私たちが目指す未来と、大切にしている価値観',
+                link: '/#philosophy'
+              },
+              {
+                title: '実績紹介',
+                description: 'これまでに手掛けたプロジェクトをご覧いただけます',
+                link: '/#projects'
+              },
+              {
+                title: 'コアバリュー',
+                description: 'LSが大切にしている5つの行動指針',
+                link: '/#values'
+              },
+              {
+                title: 'お問い合わせ',
+                description: 'ご質問やご相談はこちらからお気軽にどうぞ',
+                link: '/#contact'
+              },
+              {
+                title: 'Herp採用ページ',
+                description: '詳細な募集要項と応募フォームはこちら',
+                link: 'https://herp.careers/v1/lscompany',
+                external: true
+              }
+            ].map((item, index) => (
+              <a
+                key={index}
+                href={item.link}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                className={`group relative p-8 md:p-10 border-2 border-gray-200 hover:border-[#d4af37] transition-all duration-700 hover:shadow-2xl cursor-pointer ${isVisible['learn-more'] ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                style={{ transitionDelay: `${index * 0.1}s` }}
               >
-                送信する
-              </Button>
-              <p className="text-sm text-gray-400 mt-8 font-light">
-                ※ 送信ボタンを押すと、メールアプリが起動します
-              </p>
-            </div>
-          </form>
+                <div className="absolute left-0 bottom-0 w-0 h-1 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-700"></div>
+
+                <h3 className="text-xl md:text-2xl font-light mb-4 group-hover:text-[#d4af37] transition-colors duration-500">
+                  {item.title}
+                  {item.external && (
+                    <span className="ml-2 text-sm align-top">↗</span>
+                  )}
+                </h3>
+
+                <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed">
+                  {item.description}
+                </p>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 

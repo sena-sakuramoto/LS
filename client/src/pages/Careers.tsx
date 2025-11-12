@@ -68,8 +68,7 @@ export default function Careers() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.3] animate-fade-in-up">
               次世代の<br />
               ブランド体験を、<br />
-              共に創造しません<br />
-              か。
+              共に創造しませんか。
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto animate-fade-in" style={{animationDelay: '0.3s'}}>

@@ -65,14 +65,14 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.3] animate-fade-in-up">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.3] animate-fade-in-up">
               次世代の<br />
               ブランド体験を、<br />
               共に創造しません<br />
               か。
             </h1>
-            
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto animate-fade-in" style={{animationDelay: '0.3s'}}>
+
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto animate-fade-in" style={{animationDelay: '0.3s'}}>
               空間を超え、ブランドを創造する。<br />
               LSで、あなたの情熱と専門性を解き放ちませんか。
             </p>
@@ -98,7 +98,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               会社概要
             </h2>
           </div>
@@ -142,7 +142,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               経営理念・ビジョン
             </h2>
           </div>
@@ -174,7 +174,7 @@ export default function Careers() {
                   <h3 className="text-sm tracking-[0.5em] text-[#d4af37] font-light">{item.title}</h3>
                   <p className="text-base tracking-[0.3em] text-gray-400 font-light">{item.subtitle}</p>
                 </div>
-                <p className="text-2xl md:text-3xl lg:text-4xl font-light leading-[1.6] max-w-4xl mx-auto whitespace-pre-line">
+                <p className="text-xl md:text-2xl lg:text-3xl font-light leading-[1.6] max-w-4xl mx-auto whitespace-pre-line">
                   {item.content}
                 </p>
                 <div className="h-px w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto"></div>
@@ -197,7 +197,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               事業フェーズ
             </h2>
           </div>
@@ -239,11 +239,11 @@ export default function Careers() {
                   
                   <div className="flex-1 space-y-6">
                     <div className="flex items-center gap-6">
-                      <h3 className="text-2xl font-light">{item.phase}</h3>
-                      <span className="text-base text-gray-400 font-light">{item.period}</span>
+                      <h3 className="text-xl font-light">{item.phase}</h3>
+                      <span className="text-sm text-gray-400 font-light">{item.period}</span>
                     </div>
-                    <h4 className="text-2xl md:text-3xl font-light leading-tight">{item.title}</h4>
-                    <p className="text-base md:text-lg text-gray-600 font-light leading-relaxed">{item.desc}</p>
+                    <h4 className="text-xl md:text-2xl font-light leading-tight">{item.title}</h4>
+                    <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               </div>
@@ -265,7 +265,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               組織文化
             </h2>
           </div>
@@ -286,7 +286,7 @@ export default function Careers() {
                 <div className="flex-shrink-0 w-10 h-10 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700 group-hover:rotate-180">
                   <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
                 </div>
-                <p className="flex-1 text-xl font-light leading-relaxed pt-1 group-hover:text-[#d4af37] transition-colors">
+                <p className="flex-1 text-base md:text-lg font-light leading-relaxed pt-1 group-hover:text-[#d4af37] transition-colors">
                   {text}
                 </p>
               </div>
@@ -308,7 +308,7 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               募集職種
             </h2>
           </div>
@@ -322,8 +322,8 @@ export default function Careers() {
               
               <div className="space-y-8 md:space-y-10">
                 <div>
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 tracking-tight">営業コンサルタント職（PM職）</h3>
-                  <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-light mb-6 tracking-tight">営業コンサルタント職（PM職）</h3>
+                  <p className="text-base md:text-lg text-gray-600 font-light leading-relaxed">
                     店舗内装事業の中心を担うポジションです。単なる営業ではなく、プロジェクト全体の推進役として、顧客・設計・施工チームをつなぎ、案件の成功をリードします。
                   </p>
                 </div>
@@ -376,7 +376,7 @@ export default function Careers() {
                   </div>
 
                   <div className="pt-6 border-t-2 border-gray-200">
-                    <p className="text-2xl font-light gold-gradient">
+                    <p className="text-xl font-light gold-gradient">
                       月給35〜70万円（年収420〜900万円）＋業績賞与
                     </p>
                   </div>
@@ -393,8 +393,8 @@ export default function Careers() {
               
               <div className="space-y-8 md:space-y-10">
                 <div>
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 tracking-tight">店舗設計デザイナー職</h3>
-                  <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-light mb-6 tracking-tight">店舗設計デザイナー職</h3>
+                  <p className="text-base md:text-lg text-gray-600 font-light leading-relaxed">
                     ブランドの世界観を空間で具現化し、事業価値を高める店舗設計デザイナーを募集します。単なる設計ではなく、事業やブランド戦略を理解した上での"ブランド設計"を担うポジションです。
                   </p>
                 </div>
@@ -447,7 +447,7 @@ export default function Careers() {
                   </div>
 
                   <div className="pt-6 border-t-2 border-gray-200">
-                    <p className="text-2xl font-light gold-gradient">
+                    <p className="text-xl font-light gold-gradient">
                       月給30〜100万円（年収390〜1000万円）＋業績賞与
                     </p>
                   </div>
@@ -464,8 +464,8 @@ export default function Careers() {
               
               <div className="space-y-8 md:space-y-10">
                 <div>
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 tracking-tight">施工管理職（幹部候補）</h3>
-                  <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-light mb-6 tracking-tight">施工管理職（幹部候補）</h3>
+                  <p className="text-base md:text-lg text-gray-600 font-light leading-relaxed">
                     ブランド空間を形にする"最後の要"として、品質・スピード・コストの最適化を担います。今後の施工チームを牽引できる幹部候補の採用を想定しています。
                   </p>
                 </div>
@@ -518,7 +518,7 @@ export default function Careers() {
                   </div>
 
                   <div className="pt-6 border-t-2 border-gray-200">
-                    <p className="text-2xl font-light gold-gradient">
+                    <p className="text-xl font-light gold-gradient">
                       月給30〜70万円（年収390〜910万円）＋業績賞与
                     </p>
                   </div>
@@ -532,12 +532,12 @@ export default function Careers() {
       {/* CTA */}
       <section className="relative py-20 md:py-32 lg:py-40 bg-gradient-to-b from-gray-900 to-black text-white">
         <div className="container max-w-6xl text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-10 md:mb-12 tracking-tight leading-[1.2]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-10 md:mb-12 tracking-tight leading-[1.2]">
             あなたの挑戦を、<br />
             お待ちしています。
           </h2>
-          
-          <p className="text-xl md:text-2xl text-gray-300 mb-10 md:mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+
+          <p className="text-lg md:text-xl text-gray-300 mb-10 md:mb-12 font-light max-w-3xl mx-auto leading-relaxed">
             LSで、次世代のブランド体験を共に創造しませんか。
           </p>
           
@@ -565,10 +565,10 @@ export default function Careers() {
               <div className="w-24 h-px bg-[#d4af37]/30"></div>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-8 tracking-tight">
               応募フォーム
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
               以下のフォームに必要事項をご記入の上、送信してください。<br />
               担当者より3営業日以内にご連絡いたします。
             </p>
@@ -703,7 +703,7 @@ export default function Careers() {
                 alt="株式会社LS" 
                 className="w-32 h-32 md:w-40 md:h-40 opacity-80"
               />
-              <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-md">
+              <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。
               </p>
             </div>

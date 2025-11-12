@@ -153,10 +153,10 @@ export default function Careers() {
                 subtitle: "ミッション",
                 content: "空間を超え、\nブランドを創造する" 
               },
-              { 
-                title: "VISION", 
+              {
+                title: "VISION",
                 subtitle: "ビジョン",
-                content: "業界を変革し、\nブランドカンパニーに\nなる" 
+                content: "業界を変革し、\nブランドカンパニーになる"
               },
               { 
                 title: "VALUES", 

@@ -522,7 +522,7 @@ export default function Home() {
                 </div>
                 
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] tracking-tight mb-8 md:mb-12">
-                  {['業界を変革し、', 'ブランドカンパニーに', 'なる。'].map((text, i) => (
+                  {['業界を変革し、', 'ブランドカンパニーになる。'].map((text, i) => (
                     <span
                       key={i}
                       className="block hover:gold-gradient transition-all duration-500 cursor-pointer"

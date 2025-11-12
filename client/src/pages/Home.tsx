@@ -397,9 +397,9 @@ export default function Home() {
               <div className="relative h-[350px] md:h-[500px] lg:h-[650px] group">
                 {/* Main Image with 3D Tilt */}
                 <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
-                  <img 
-                    src="/mission-bg.jpg" 
-                    alt="Mission Space" 
+                  <img
+                    src="/mission.JPG"
+                    alt="Mission Space"
                     className="w-full h-full object-cover"
                     style={{
                       transform: `scale(${1 + Math.abs(0) * 0.0001})`
@@ -474,9 +474,9 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-4 md:gap-6">
                 {/* Large Image */}
                 <div className="col-span-2 relative h-[250px] md:h-[400px] lg:h-[500px] group overflow-hidden image-overlay">
-                  <img 
-                    src="/vision-bg.jpg" 
-                    alt="Vision Space" 
+                  <img
+                    src="/vision1.JPG"
+                    alt="Vision Space"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -491,8 +491,8 @@ export default function Home() {
                 
                 {/* Small Images */}
                 {[
-                  { src: "/luxury-4.png", alt: "Interior Detail", num: "02" },
-                  { src: "/luxury-5.jpg", alt: "Design Detail", num: "03" }
+                  { src: "/vision2.JPG", alt: "Interior Detail", num: "02" },
+                  { src: "/vision3.JPG", alt: "Design Detail", num: "03" }
                 ].map((img, index) => (
                   <div
                     key={index}
@@ -699,15 +699,15 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {[
-              { img: '/architecture-1.jpg', title: 'プロジェクト 01', category: '店舗内装' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 02', category: 'オフィス設計' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 03', category: '商業施設' },
-              { img: '/architecture-1.jpg', title: 'プロジェクト 04', category: '飲食店' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 05', category: 'ホテル' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 06', category: '小売店舗' },
-              { img: '/architecture-1.jpg', title: 'プロジェクト 07', category: 'サロン' },
-              { img: '/architecture-2.jpg', title: 'プロジェクト 08', category: 'ショールーム' },
-              { img: '/architecture-3.jpg', title: 'プロジェクト 09', category: '複合施設' },
+              { img: '/IMG_1206.JPG', title: 'プロジェクト 01', category: '店舗内装' },
+              { img: '/IMG_6273.JPG', title: 'プロジェクト 02', category: 'オフィス設計' },
+              { img: '/IMG_6274.JPG', title: 'プロジェクト 03', category: '商業施設' },
+              { img: '/IMG_6278.JPG', title: 'プロジェクト 04', category: '飲食店' },
+              { img: '/IMG_6279.JPG', title: 'プロジェクト 05', category: 'ホテル' },
+              { img: '/IMG_6280.JPG', title: 'プロジェクト 06', category: '小売店舗' },
+              { img: '/IMG_6281.JPG', title: 'プロジェクト 07', category: 'サロン' },
+              { img: '/IMG_6282.JPG', title: 'プロジェクト 08', category: 'ショールーム' },
+              { img: '/IMG_6284.JPG', title: 'プロジェクト 09', category: '複合施設' },
             ].map((project, i) => (
               <div 
                 key={i}

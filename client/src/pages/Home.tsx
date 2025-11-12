@@ -652,12 +652,16 @@ export default function Home() {
               <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.3] tracking-tight">
-              "続く売上"が生まれるブランド体験をつくる
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.4] tracking-tight text-black">
+              "続く売上"が生まれる
+              <br className="sm:hidden" />
+              ブランド体験をつくる
             </h2>
 
             <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
-              私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
+              私たちLSは、内装という「箱」を作るだけではなく、
+              <br className="sm:hidden" />
+              事業の世界観と収益モデルまで設計します。
             </p>
           </div>
 

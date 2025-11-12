@@ -525,6 +525,10 @@ export default function Careers() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative py-20 md:py-32 lg:py-40 bg-gradient-to-b from-gray-900 to-black text-white">
         <div className="container max-w-6xl text-center">

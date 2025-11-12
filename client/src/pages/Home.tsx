@@ -6,6 +6,7 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [scrollY, setScrollY] = useState(0);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -708,7 +709,33 @@ export default function Home() {
               { img: '/IMG_6281.JPG', title: 'プロジェクト 07', category: 'サロン' },
               { img: '/IMG_6282.JPG', title: 'プロジェクト 08', category: 'ショールーム' },
               { img: '/IMG_6284.JPG', title: 'プロジェクト 09', category: '複合施設' },
-            ].map((project, i) => (
+              { img: '/IMG_6285.JPG', title: 'プロジェクト 10', category: '店舗内装' },
+              { img: '/IMG_6286.JPG', title: 'プロジェクト 11', category: 'オフィス設計' },
+              { img: '/IMG_6287.JPG', title: 'プロジェクト 12', category: '商業施設' },
+              { img: '/IMG_6288.JPG', title: 'プロジェクト 13', category: '飲食店' },
+              { img: '/IMG_6290.JPG', title: 'プロジェクト 14', category: 'ホテル' },
+              { img: '/IMG_6291.JPG', title: 'プロジェクト 15', category: '小売店舗' },
+              { img: '/IMG_6292.JPG', title: 'プロジェクト 16', category: 'サロン' },
+              { img: '/IMG_6293.JPG', title: 'プロジェクト 17', category: 'ショールーム' },
+              { img: '/IMG_6294.JPG', title: 'プロジェクト 18', category: '複合施設' },
+              { img: '/IMG_6295.JPG', title: 'プロジェクト 19', category: '店舗内装' },
+              { img: '/IMG_6297.JPG', title: 'プロジェクト 20', category: 'オフィス設計' },
+              { img: '/IMG_6298.JPG', title: 'プロジェクト 21', category: '商業施設' },
+              { img: '/IMG_6299.JPG', title: 'プロジェクト 22', category: '飲食店' },
+              { img: '/IMG_6300.JPG', title: 'プロジェクト 23', category: 'ホテル' },
+              { img: '/IMG_6301.JPG', title: 'プロジェクト 24', category: '小売店舗' },
+              { img: '/IMG_6302.JPG', title: 'プロジェクト 25', category: 'サロン' },
+              { img: '/IMG_6303.JPG', title: 'プロジェクト 26', category: 'ショールーム' },
+              { img: '/IMG_6304.JPG', title: 'プロジェクト 27', category: '複合施設' },
+              { img: '/IMG_6305.JPG', title: 'プロジェクト 28', category: '店舗内装' },
+              { img: '/IMG_6306.JPG', title: 'プロジェクト 29', category: 'オフィス設計' },
+              { img: '/IMG_6307.JPG', title: 'プロジェクト 30', category: '商業施設' },
+              { img: '/IMG_6310.JPG', title: 'プロジェクト 31', category: '飲食店' },
+              { img: '/IMG_6311.JPG', title: 'プロジェクト 32', category: 'ホテル' },
+              { img: '/IMG_6312.JPG', title: 'プロジェクト 33', category: '小売店舗' },
+              { img: '/IMG_6313.JPG', title: 'プロジェクト 34', category: 'サロン' },
+              { img: '/IMG_6314.JPG', title: 'プロジェクト 35', category: 'ショールーム' },
+            ].slice(0, showAllProjects ? undefined : 9).map((project, i) => (
               <div 
                 key={i}
                 className="group relative overflow-hidden bg-gray-900 aspect-[4/3] hover-lift cursor-pointer"
@@ -732,9 +759,10 @@ export default function Home() {
             <Button
               variant="outline"
               size="lg"
+              onClick={() => setShowAllProjects(!showAllProjects)}
               className="magnetic-button border-2 border-white text-white hover:bg-white hover:text-black w-full md:w-auto px-10 md:px-16 py-6 md:py-8 text-xs md:text-sm tracking-[0.25em] md:tracking-[0.3em] font-light transition-all duration-700"
             >
-              VIEW ALL PROJECTS
+              {showAllProjects ? 'SHOW LESS' : 'VIEW ALL PROJECTS'}
             </Button>
           </div>
         </div>

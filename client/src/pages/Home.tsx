@@ -172,9 +172,11 @@ export default function Home() {
               filter: `blur(${scrollProgress * 0.05}px)`
             }}
           >
-            <img 
-              src="/luxury-2.jpeg" 
-              alt="LS Premium Space" 
+            <img
+              src="/luxury-2.jpeg"
+              alt="株式会社LSのプレミアム内装デザイン空間 - 高級感あふれるラグジュアリーな店舗デザイン施工事例"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover mix-blend-luminosity"
             />
           </div>
@@ -211,6 +213,8 @@ export default function Home() {
             <img
               src="/ls-logo.png"
               alt="株式会社LS"
+              width="224"
+              height="224"
               className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
                 transform: `rotate(0deg) scale(1)`
@@ -400,7 +404,9 @@ export default function Home() {
                 <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
                   <img
                     src="/mission.JPG"
-                    alt="Mission Space"
+                    alt="LSの高級内装デザイン - 店舗ブランディングと空間設計の融合による上質な内装事例"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                     style={{
                       transform: `scale(${1 + Math.abs(0) * 0.0001})`
@@ -477,7 +483,9 @@ export default function Home() {
                 <div className="col-span-2 relative h-[250px] md:h-[400px] lg:h-[500px] group overflow-hidden image-overlay">
                   <img
                     src="/vision1.JPG"
-                    alt="Vision Space"
+                    alt="ラグジュアリー空間デザイン - LSが提案する洗練された店舗内装と事業成功をサポートする空間設計"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -492,16 +500,18 @@ export default function Home() {
                 
                 {/* Small Images */}
                 {[
-                  { src: "/vision2.JPG", alt: "Interior Detail", num: "02" },
-                  { src: "/vision3.JPG", alt: "Design Detail", num: "03" }
+                  { src: "/vision2.JPG", alt: "内装デザインのディテール - 細部まで追求した高品質な店舗内装の仕上がり", num: "02" },
+                  { src: "/vision3.JPG", alt: "デザインディテール - LSのこだわりが詰まった空間設計の細部", num: "03" }
                 ].map((img, index) => (
                   <div
                     key={index}
                     className={`relative h-36 md:h-48 lg:h-60 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
                   >
-                    <img 
-                      src={img.src} 
-                      alt={img.alt} 
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-6 left-6 glass px-4 py-2 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
@@ -669,7 +679,9 @@ export default function Home() {
           <div className="relative ml-auto w-full" style={{ maxWidth: '800px' }}>
             <img
               src="/architecture-2.jpg"
-              alt="Philosophy"
+              alt="LSの事業哲学 - 続く売上が生まれるブランド体験を創造する内装デザインコンセプト"
+              loading="lazy"
+              decoding="async"
               className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover shadow-2xl hover-lift"
             />
           </div>
@@ -1162,6 +1174,10 @@ export default function Home() {
               <img
                 src="/ls-logo.png"
                 alt="株式会社LS"
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
                 className="w-32 h-32 md:w-40 md:h-40 opacity-80 transition-all duration-700"
                 style={{
                   transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`

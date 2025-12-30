@@ -2827,43 +2827,104 @@ export default function Careers() {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-16 md:py-24 lg:py-32 bg-black border-t-2 border-[#d4af37]/20">
-        <div className="container max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-20">
-            <div className="md:col-span-2 space-y-6 md:space-y-8">
+      <footer id="contact" className="relative py-12 md:py-20 lg:py-40 bg-black border-t-2 border-[#d4af37]/20">
+        <div className="container max-w-7xl px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 md:gap-16 mb-16 md:mb-24">
+            <div className="lg:col-span-2 space-y-6 md:space-y-8">
               <img
                 src="/ls-logo.png"
                 alt="株式会社LS"
-                className="w-32 h-32 md:w-40 md:h-40 opacity-80"
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+                className="w-32 h-32 md:w-40 md:h-40 opacity-80 transition-all duration-700"
+                style={{
+                  transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
+                }}
               />
               <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-md">
                 空間を超え、<br />ブランドを創造する。
               </p>
+              <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md">
+                店舗内装のデザイン設計施工から、ブランド空間プロデュースまで。LSは、"続く売上"が生まれるブランド体験を創造します。
+              </p>
             </div>
 
-            <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-6 tracking-[0.4em]">COMPANY</h4>
-              <div className="space-y-4 text-gray-400 text-sm md:text-base font-light leading-relaxed">
-                <p>株式会社LS</p>
-                <p>東京都渋谷区渋谷1-12-2<br />クロスオフィス渋谷505</p>
+            <div className="space-y-4 md:space-y-6">
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">NAVIGATION</h4>
+              <div className="space-y-3 md:space-y-4">
+                <a href="/#about" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                  About
+                </a>
+                <a href="/#philosophy" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                  Philosophy
+                </a>
+                <a href="/#projects" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                  Projects
+                </a>
+                <a href="/#values" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                  Values
+                </a>
+                <a href="/careers" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                  Careers
+                </a>
               </div>
             </div>
 
-            <div className="space-y-8">
-              <h4 className="text-white text-sm font-light mb-6 tracking-[0.4em]">LINKS</h4>
+            <div className="space-y-4 md:space-y-6">
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">COMPANY</h4>
+              <div className="space-y-3 md:space-y-4 text-gray-400 text-sm md:text-base font-light leading-relaxed">
+                <p>株式会社LS</p>
+                <p className="text-xs md:text-sm">
+                  東京都渋谷区渋谷1-12-2<br />
+                  クロスオフィス渋谷505
+                </p>
+                <p className="text-xs md:text-sm pt-2">
+                  設立：2023年10月<br />
+                  事業規模：案件単価 100〜2000万円
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4 md:space-y-6">
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">RECRUIT</h4>
               <div className="space-y-4">
-                <a href="/" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
-                  ホーム
+                <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
+                  一緒に働く仲間を募集しています
+                </p>
+                <a href="/careers" className="block">
+                  <Button
+                    variant="outline"
+                    className="bg-transparent text-white border-2 border-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-700 w-full px-6 py-4 text-xs tracking-[0.25em] font-light hover:scale-105"
+                  >
+                    採用情報
+                  </Button>
                 </a>
-                <a href="https://forms.gle/unMs8pv4spw5eU137" target="_blank" rel="noopener noreferrer" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
-                  応募フォーム
+                <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer" className="block">
+                  <Button
+                    variant="outline"
+                    className="bg-transparent text-white border-2 border-white/30 hover:border-[#d4af37] hover:text-[#d4af37] transition-all duration-700 w-full px-6 py-4 text-xs tracking-[0.25em] font-light"
+                  >
+                    応募する ↗
+                  </Button>
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="text-center text-gray-500 text-xs border-t border-[#d4af37]/20 pt-10 tracking-[0.3em] font-light">
-            <p>&copy; 2025 株式会社LS. All rights reserved.</p>
+          <div className="border-t border-[#d4af37]/20 pt-8 md:pt-12">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-xs font-light">
+              <p className="tracking-[0.2em]">&copy; 2025 株式会社LS. All rights reserved.</p>
+              <div className="flex gap-6">
+                <a href="/#about" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
+                  会社情報
+                </a>
+                <a href="/#contact" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
+                  お問い合わせ
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

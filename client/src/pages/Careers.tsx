@@ -1847,17 +1847,17 @@ export default function Careers() {
 
           {/* Benefits & Welfare */}
           <div
-            className={`relative p-10 md:p-12 bg-white/5 border border-white/10 transition-all duration-1000 ${isVisible['working-style'] ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+            className={`relative p-10 md:p-12 bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 transition-all duration-1000 ${isVisible['working-style'] ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
             style={{ transitionDelay: '0.6s' }}
           >
-            <h3 className="text-2xl md:text-3xl font-light mb-10 text-center tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-light mb-10 text-center tracking-tight text-black">
               福利厚生・待遇
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <h4 className="text-lg font-light text-[#d4af37] mb-6">給与・評価</h4>
-                <div className="space-y-3 text-sm md:text-base text-gray-300 font-light">
+                <div className="space-y-3 text-sm md:text-base text-gray-700 font-light">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
                     <span>実力・成果に応じた柔軟な給与体系（年齢・社歴不問）</span>
@@ -1883,7 +1883,7 @@ export default function Careers() {
 
               <div className="space-y-4">
                 <h4 className="text-lg font-light text-[#d4af37] mb-6">働く環境</h4>
-                <div className="space-y-3 text-sm md:text-base text-gray-300 font-light">
+                <div className="space-y-3 text-sm md:text-base text-gray-700 font-light">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
                     <span>渋谷駅徒歩5分の好立地オフィス</span>
@@ -1909,7 +1909,7 @@ export default function Careers() {
 
               <div className="space-y-4">
                 <h4 className="text-lg font-light text-[#d4af37] mb-6">成長支援</h4>
-                <div className="space-y-3 text-sm md:text-base text-gray-300 font-light">
+                <div className="space-y-3 text-sm md:text-base text-gray-700 font-light">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
                     <span>経営層による直接指導・メンタリング</span>
@@ -1935,7 +1935,7 @@ export default function Careers() {
 
               <div className="space-y-4">
                 <h4 className="text-lg font-light text-[#d4af37] mb-6">ワークライフバランス</h4>
-                <div className="space-y-3 text-sm md:text-base text-gray-300 font-light">
+                <div className="space-y-3 text-sm md:text-base text-gray-700 font-light">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full mt-2 flex-shrink-0"></div>
                     <span>週休2日制（土日祝）</span>

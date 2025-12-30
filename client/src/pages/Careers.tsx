@@ -1204,12 +1204,12 @@ export default function Careers() {
             </p>
           </div>
 
-          {/* 営業コンサルタントの一日 */}
+          {/* プロジェクトマネージャーの一日 */}
           <div className={`mb-20 md:mb-24 transition-all duration-1000 ${isVisible['day-in-life'] ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
             {/* Photo Hero Section */}
             <div className="relative mb-16 rounded-3xl overflow-hidden border-2 border-[#d4af37]/30 group hover:border-[#d4af37] transition-all duration-700">
-              <div className="relative h-96 bg-gradient-to-br from-blue-600 to-cyan-500">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-500 opacity-90">
+              <div className="relative h-96 bg-gradient-to-br from-gray-700 to-gray-900">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 opacity-90">
                   <div className="absolute inset-0 flex items-center justify-center">
                     {/* Briefcase Icon */}
                     <svg className="w-40 h-40 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1222,8 +1222,8 @@ export default function Careers() {
 
                 {/* Text Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                  <h3 className="text-3xl md:text-4xl font-light mb-3 text-white">営業コンサルタント（PM職）の一日</h3>
-                  <p className="text-sm md:text-base text-white/90">佐藤 健太 / 入社2年目 / 27歳</p>
+                  <h3 className="text-3xl md:text-4xl font-light mb-3 text-white">プロジェクトマネージャーの一日</h3>
+                  <p className="text-sm md:text-base text-white/90">K.H. / 2023年入社 / 20代</p>
                 </div>
 
                 {/* Decorative elements */}
@@ -1243,20 +1243,20 @@ export default function Careers() {
                     <svg viewBox="0 0 200 200" className="transform -rotate-90 w-72 h-72">
                       <defs>
                         <linearGradient id="time-gradient-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#3b82f6" />
-                          <stop offset="100%" stopColor="#60a5fa" />
+                          <stop offset="0%" stopColor="#64748b" />
+                          <stop offset="100%" stopColor="#475569" />
                         </linearGradient>
                         <linearGradient id="time-gradient-2" x1="0%" y1="0%" x2="100%" y2="100%">
                           <stop offset="0%" stopColor="#d4af37" />
                           <stop offset="100%" stopColor="#f4e5c3" />
                         </linearGradient>
                         <linearGradient id="time-gradient-3" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#10b981" />
-                          <stop offset="100%" stopColor="#34d399" />
+                          <stop offset="0%" stopColor="#6b7280" />
+                          <stop offset="100%" stopColor="#4b5563" />
                         </linearGradient>
                         <linearGradient id="time-gradient-4" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#f59e0b" />
-                          <stop offset="100%" stopColor="#fbbf24" />
+                          <stop offset="0%" stopColor="#71717a" />
+                          <stop offset="100%" stopColor="#52525b" />
                         </linearGradient>
                       </defs>
 
@@ -1271,7 +1271,7 @@ export default function Careers() {
                         style={{
                           strokeDashoffset: isVisible['day-in-life'] ? 352 : 502,
                           transitionDelay: '0.3s',
-                          filter: 'drop-shadow(0 0 6px rgba(59, 130, 246, 0.3))'
+                          filter: 'drop-shadow(0 0 6px rgba(100, 116, 139, 0.3))'
                         }}
                       />
 
@@ -1302,7 +1302,7 @@ export default function Careers() {
                         style={{
                           strokeDashoffset: isVisible['day-in-life'] ? 377 : 502,
                           transitionDelay: '0.9s',
-                          filter: 'drop-shadow(0 0 6px rgba(16, 185, 129, 0.3))'
+                          filter: 'drop-shadow(0 0 6px rgba(107, 114, 128, 0.3))'
                         }}
                         strokeDashoffset="101"
                       />
@@ -1318,7 +1318,7 @@ export default function Careers() {
                         style={{
                           strokeDashoffset: isVisible['day-in-life'] ? 402 : 502,
                           transitionDelay: '1.2s',
-                          filter: 'drop-shadow(0 0 6px rgba(245, 158, 11, 0.3))'
+                          filter: 'drop-shadow(0 0 6px rgba(113, 113, 122, 0.3))'
                         }}
                         strokeDashoffset="0"
                       />
@@ -1339,7 +1339,7 @@ export default function Careers() {
                       label: "クライアント商談・訪問",
                       percent: 30,
                       hours: "3.0h",
-                      color: "from-blue-500 to-blue-400",
+                      color: "from-slate-500 to-slate-600",
                       description: "提案プレゼン、要件ヒアリング"
                     },
                     {
@@ -1353,14 +1353,14 @@ export default function Careers() {
                       label: "資料作成・事務作業",
                       percent: 25,
                       hours: "2.5h",
-                      color: "from-green-500 to-green-400",
+                      color: "from-gray-500 to-gray-600",
                       description: "見積作成、契約書確認"
                     },
                     {
                       label: "ランチ・休憩・1on1",
                       percent: 20,
                       hours: "2.5h",
-                      color: "from-amber-500 to-yellow-400",
+                      color: "from-zinc-500 to-zinc-600",
                       description: "リフレッシュ、経営陣との対話"
                     }
                   ].map((item, index) => (

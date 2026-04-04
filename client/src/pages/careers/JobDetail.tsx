@@ -99,8 +99,8 @@ export default function JobDetailContent({ job }: JobDetailProps) {
         <div className="container">
           <SectionHeading
             eyebrow="FLOW OF WORK"
-            title="業務内容を、ステップで可視化する。"
-            description="担当範囲は広くても、案件の進め方は明確です。各フェーズで求められる役割を整理しています。"
+            title="日々の仕事を、流れで知る。"
+            description="案件がどのように進み、その中でどんな役割を担うのか。仕事の流れに沿って具体的に紹介します。"
           />
           <motion.div
             className="mt-14 space-y-8"
@@ -166,8 +166,8 @@ export default function JobDetailContent({ job }: JobDetailProps) {
         <div className="container">
           <SectionHeading
             eyebrow="SCENES"
-            title="現場の解像度を、写真でも伝える。"
-            description="仕事の空気感が伝わるように、近いトーンの実写を挿入しています。"
+            title="現場の空気に、実際の仕事を重ねる。"
+            description="LSが向き合う空間や現場の雰囲気を、写真を通して感じてください。"
             align="center"
           />
           <motion.div
@@ -180,6 +180,7 @@ export default function JobDetailContent({ job }: JobDetailProps) {
             {job.sceneImages.map((image) => (
               <motion.div
                 key={image.src}
+                data-scroll-glow
                 className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5"
                 variants={fadeInUp}
               >
@@ -187,7 +188,7 @@ export default function JobDetailContent({ job }: JobDetailProps) {
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                    className="scroll-glow-image h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                   />
                 </div>
               </motion.div>

@@ -31,7 +31,7 @@ export default function Flow() {
           <SectionHeading
             eyebrow="PROCESS"
             title="選考フロー"
-            description="所要時間と連絡目安も含めて、指示書どおりの流れをそのまま可視化しています。"
+            description="各ステップの内容と連絡目安をまとめています。応募前に、選考の進み方を一通り確認できます。"
             align="center"
           />
           <motion.div

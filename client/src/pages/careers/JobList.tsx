@@ -35,7 +35,7 @@ export default function JobList() {
           <SectionHeading
             eyebrow="POSITIONS"
             title="現在募集中の3ポジション"
-            description="写真、役割、求める強みをまとめて比較できます。気になる職種から詳細へ進んでください。"
+            description="それぞれの役割、求められる強み、仕事の魅力を一覧で確認できます。気になる職種から詳細をご覧ください。"
             align="center"
           />
           <motion.div
@@ -49,13 +49,14 @@ export default function JobList() {
               <motion.div key={job.id} variants={fadeInUp}>
                 <Link
                   href={job.href}
+                  data-scroll-glow
                   className="group block overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5"
                 >
                   <div className="aspect-[4/3] overflow-hidden">
                     <img
                       src={job.image}
                       alt={job.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="scroll-glow-image h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                   <div className="space-y-5 p-7">
@@ -63,12 +64,12 @@ export default function JobList() {
                       <p className="font-heading-en text-xs tracking-[0.3em] text-[#d4af37]">
                         {job.sub}
                       </p>
-                      <h2 className="mt-3 text-2xl font-light">{job.title}</h2>
+                      <h2 className="scroll-glow-accent title-balance mt-3 text-2xl font-light">{job.title}</h2>
                     </div>
-                    <p className="text-sm leading-7 text-gray-300">
+                    <p className="copy-balance text-sm leading-7 text-gray-300">
                       {job.tagline}
                     </p>
-                    <p className="text-sm leading-7 text-gray-400">
+                    <p className="copy-balance text-sm leading-7 text-gray-400">
                       {job.listingDescription}
                     </p>
                     <div className="flex items-center justify-between border-t border-white/10 pt-5 text-sm">
@@ -104,7 +105,7 @@ export default function JobList() {
             </div>
             <div className="space-y-4 rounded-[1.5rem] border border-[#d4af37]/20 bg-black/40 p-6">
               <p className="text-sm leading-7 text-gray-300">
-                職種別の詳細ページでは、業務フロー、求める経験、仕事のやりがいを具体的に整理しています。
+                各職種の詳細ページでは、仕事の進め方、求める経験、この仕事ならではのやりがいを具体的に紹介しています。
               </p>
               <div className="flex flex-col gap-3">
                 <Link

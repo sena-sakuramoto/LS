@@ -50,7 +50,7 @@ export default function Benefits() {
           <SectionHeading
             eyebrow="OVERVIEW"
             title="待遇の全体像"
-            description="指示書にある条件をそのまま反映しつつ、ページとして読みやすい密度に整理しています。"
+            description="報酬、制度、評価の考え方をまとめて確認できます。働く前に知っておきたい条件を、全体像からご覧ください。"
           />
           <StatStrip items={benefitsHeroStats} className="mt-12" />
           <motion.div

@@ -142,7 +142,7 @@ export default function Entry() {
             </p>
             <h1 className="text-3xl font-light md:text-5xl">エントリーフォーム</h1>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-gray-400 md:text-base">
-              氏名、連絡先、希望職種、簡単な自己PR・志望動機をご入力ください。スマホでも入力しやすい1列レイアウトです。
+              氏名、連絡先、希望職種、簡単な自己PR・志望動機をご入力ください。内容を確認のうえ、採用担当よりご連絡します。
             </p>
           </div>
 
@@ -263,4 +263,3 @@ export default function Entry() {
     </CareersLayout>
   );
 }
-

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { ArrowRight, MoveRight } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -26,7 +27,7 @@ export const viewportOnce = { once: true, amount: 0.2 as const };
 
 interface SectionHeadingProps {
   eyebrow: string;
-  title: string;
+  title: ReactNode;
   description?: string;
   align?: "left" | "center";
   className?: string;
@@ -44,7 +45,7 @@ export function SectionHeading({
       className={cn(
         "space-y-5",
         align === "center" ? "mx-auto max-w-5xl text-center" : "max-w-4xl",
-        className,
+        className
       )}
       initial="hidden"
       whileInView="visible"
@@ -55,14 +56,23 @@ export function SectionHeading({
         {eyebrow}
       </p>
       <div className="space-y-4">
-        <h2 className="title-balance text-3xl font-light leading-[1.15] md:text-[clamp(2.75rem,4vw,4.5rem)]">
+        <h2
+          className={cn(
+            "title-balance text-3xl font-light leading-[1.15]",
+            align === "center"
+              ? "mx-auto max-w-[14em] text-[clamp(2.4rem,8vw,4.2rem)] sm:max-w-[16em] md:max-w-[22ch]"
+              : "max-w-[15ch] md:max-w-[18ch] md:text-[clamp(2.75rem,4vw,4.5rem)]"
+          )}
+        >
           {title}
         </h2>
         {description ? (
           <p
             className={cn(
               "copy-balance text-sm leading-7 text-gray-300 md:text-base",
-              align === "center" ? "mx-auto max-w-3xl" : "max-w-3xl",
+              align === "center"
+                ? "mx-auto max-w-[24rem] sm:max-w-3xl"
+                : "max-w-3xl"
             )}
           >
             {description}
@@ -79,6 +89,9 @@ interface CareersHeroProps {
   description: string;
   image: string;
   imageClassName?: string;
+  backgroundImageClassName?: string;
+  imageFrameClassName?: string;
+  imageMode?: "cover" | "contain";
   children?: React.ReactNode;
   minHeightClassName?: string;
   align?: "left" | "center";
@@ -90,6 +103,9 @@ export function CareersHero({
   description,
   image,
   imageClassName,
+  backgroundImageClassName,
+  imageFrameClassName,
+  imageMode = "cover",
   children,
   minHeightClassName = "min-h-[78vh]",
   align = "left",
@@ -99,24 +115,50 @@ export function CareersHero({
       className={cn(
         "relative isolate flex overflow-hidden bg-black",
         minHeightClassName,
-        align === "center" ? "items-center" : "items-end",
+        align === "center" ? "items-center" : "items-end"
       )}
     >
-      <img
-        src={image}
-        alt={title}
-        className={cn(
-          "absolute inset-0 h-full w-full object-cover",
-          imageClassName,
-        )}
-      />
+      {imageMode === "contain" ? (
+        <>
+          <img
+            src={image}
+            alt=""
+            aria-hidden="true"
+            className={cn(
+              "absolute inset-0 h-full w-full object-cover blur-[2px]",
+              backgroundImageClassName
+            )}
+          />
+          <div
+            className={cn(
+              "absolute inset-0 flex items-center justify-center px-4 pt-20 md:px-8",
+              imageFrameClassName
+            )}
+          >
+            <img
+              src={image}
+              alt={title}
+              className={cn("h-full w-full object-contain", imageClassName)}
+            />
+          </div>
+        </>
+      ) : (
+        <img
+          src={image}
+          alt={title}
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover",
+            imageClassName
+          )}
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_30%)]" />
-      <div className="container relative z-10 flex w-full py-28 md:py-36">
+      <div className="container relative z-10 flex w-full pb-16 pt-24 md:py-36">
         <motion.div
           className={cn(
-            "max-w-4xl space-y-8",
-            align === "center" ? "mx-auto text-center" : "",
+            "max-w-4xl space-y-6 md:space-y-8",
+            align === "center" ? "mx-auto text-center" : ""
           )}
           initial="hidden"
           animate="visible"
@@ -129,7 +171,7 @@ export function CareersHero({
             {eyebrow}
           </motion.p>
           <motion.h1
-            className="title-balance max-w-[12ch] text-4xl font-light leading-[1.1] md:max-w-[14ch] md:text-[clamp(3.5rem,5vw,5.75rem)] lg:max-w-[16ch]"
+            className="title-balance max-w-[9.5em] text-4xl font-light leading-[1.1] sm:max-w-[10.5em] md:max-w-[12em] md:text-[clamp(3.5rem,5vw,5.75rem)] lg:max-w-[13em]"
             variants={fadeInUp}
           >
             {title}
@@ -137,13 +179,15 @@ export function CareersHero({
           <motion.p
             className={cn(
               "copy-balance max-w-2xl text-base leading-8 text-gray-200 md:text-lg",
-              align === "center" ? "mx-auto" : "",
+              align === "center" ? "mx-auto" : ""
             )}
             variants={fadeInUp}
           >
             {description}
           </motion.p>
-          {children ? <motion.div variants={fadeInUp}>{children}</motion.div> : null}
+          {children ? (
+            <motion.div variants={fadeInUp}>{children}</motion.div>
+          ) : null}
         </motion.div>
       </div>
     </section>
@@ -247,13 +291,15 @@ export function StatStrip({ items, className }: StatStripProps) {
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      {items.map((item) => (
+      {items.map(item => (
         <motion.div
           key={item.label}
           className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-5 backdrop-blur-sm"
           variants={fadeInUp}
         >
-          <p className="text-xs tracking-[0.18em] text-gray-400">{item.label}</p>
+          <p className="text-xs tracking-[0.18em] text-gray-400">
+            {item.label}
+          </p>
           <p className="mt-2 text-lg font-light text-white">{item.value}</p>
         </motion.div>
       ))}

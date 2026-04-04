@@ -1,18 +1,99 @@
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import { useEffect, useState, useRef } from "react";
+import { useTouchScrollGlow } from "@/hooks/useTouchScrollGlow";
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [scrollY, setScrollY] = useState(0);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [isMobilePresentation, setIsMobilePresentation] = useState(false);
+  const [activeValueIndex, setActiveValueIndex] = useState<number | null>(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  useTouchScrollGlow();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(max-width: 767px), ((hover: none) and (pointer: coarse))"
+    );
+    const syncTouchMode = () => setIsMobilePresentation(mediaQuery.matches);
+
+    syncTouchMode();
+    mediaQuery.addEventListener("change", syncTouchMode);
+    window.addEventListener("resize", syncTouchMode);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncTouchMode);
+      window.removeEventListener("resize", syncTouchMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobilePresentation) {
+      setActiveValueIndex(null);
+      return;
+    }
+
+    let rafId = 0;
+
+    const updateActiveValue = () => {
+      const cards = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-value-card]")
+      );
+
+      if (!cards.length) {
+        setActiveValueIndex(null);
+        return;
+      }
+
+      const viewportCenter = window.innerHeight * 0.5;
+      let nextIndex: number | null = null;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+        const visibleHeight = visibleBottom - visibleTop;
+
+        if (visibleHeight <= Math.min(rect.height * 0.24, 72)) {
+          return;
+        }
+
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          nextIndex = index;
+        }
+      });
+
+      setActiveValueIndex(nextIndex);
+    };
+
+    const handleViewportChange = () => {
+      window.cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(updateActiveValue);
+    };
+
+    updateActiveValue();
+    window.addEventListener("scroll", handleViewportChange, { passive: true });
+    window.addEventListener("resize", handleViewportChange);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleViewportChange);
+      window.removeEventListener("resize", handleViewportChange);
+    };
+  }, [isMobilePresentation]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(progress);
       setScrollY(window.scrollY);
@@ -20,10 +101,10 @@ export default function Home() {
 
     // Intersection Observer for scroll animations
     observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
           }
         });
       },
@@ -31,16 +112,16 @@ export default function Home() {
     );
 
     // Observe all sections
-    document.querySelectorAll('section[id]').forEach((section) => {
+    document.querySelectorAll("section[id]").forEach(section => {
       if (observerRef.current) {
         observerRef.current.observe(section);
       }
     });
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
@@ -52,7 +133,7 @@ export default function Home() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = window.innerWidth;
@@ -68,7 +149,10 @@ export default function Home() {
     }> = [];
 
     // Increase particle count for more connections
-    const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 15000), 120);
+    const particleCount = Math.min(
+      Math.floor((canvas.width * canvas.height) / 15000),
+      120
+    );
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -76,7 +160,7 @@ export default function Home() {
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 2.5 + 1,
-        alpha: Math.random() * 0.4 + 0.3
+        alpha: Math.random() * 0.4 + 0.3,
       });
     }
 
@@ -103,7 +187,7 @@ export default function Home() {
       }
 
       // Draw and update particles with glow
-      particles.forEach((p) => {
+      particles.forEach(p => {
         // Outer glow
         ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha * 0.3})`;
         ctx.beginPath();
@@ -134,14 +218,17 @@ export default function Home() {
       canvas.height = window.innerHeight;
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // マウスパララックスを削除
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ perspective: '1000px' }}>
+    <div
+      className="min-h-screen bg-black text-white overflow-x-hidden"
+      style={{ perspective: "1000px" }}
+    >
       {/* Canvas Particle Network */}
       <canvas
         ref={canvasRef}
@@ -150,7 +237,7 @@ export default function Home() {
 
       {/* Scroll Progress Bar with Glow */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-[100]">
-        <div 
+        <div
           className="h-full bg-gradient-to-r from-[#d4af37] via-[#f4e5c3] to-[#d4af37] transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.8)]"
           style={{ width: `${scrollProgress}%` }}
         ></div>
@@ -159,17 +246,20 @@ export default function Home() {
       {/* カスタムカーソルを削除 */}
 
       <Header />
-      
+
       {/* Hero Section - 3D Parallax */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+      <section
+        id="hero"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
+      >
         {/* 3D Parallax Layers */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-          <div 
+          <div
             className="absolute inset-0 opacity-20"
             style={{
               transform: `translateY(${scrollProgress * 0.5}px) scale(${1 + scrollProgress * 0.001})`,
-              filter: `blur(${scrollProgress * 0.05}px)`
+              filter: `blur(${scrollProgress * 0.05}px)`,
             }}
           >
             <img
@@ -182,13 +272,13 @@ export default function Home() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-black"></div>
         </div>
-        
+
         {/* Animated Mesh Gradient Orbs */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {[
-            { size: 500, top: '10%', left: '5%', delay: 0 },
-            { size: 400, bottom: '15%', right: '10%', delay: 2 },
-            { size: 350, top: '50%', left: '50%', delay: 4 }
+            { size: 500, top: "10%", left: "5%", delay: 0 },
+            { size: 400, bottom: "15%", right: "10%", delay: 2 },
+            { size: 350, top: "50%", left: "50%", delay: 4 },
           ].map((orb, i) => (
             <div
               key={i}
@@ -201,7 +291,7 @@ export default function Home() {
                 left: orb.left,
                 right: orb.right,
                 background: `radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%)`,
-                animationDelay: `${orb.delay}s`
+                animationDelay: `${orb.delay}s`,
               }}
             ></div>
           ))}
@@ -211,40 +301,43 @@ export default function Home() {
         <div className="relative z-10 text-center space-y-12 px-4 max-w-6xl mx-auto">
           <div className="mb-12 md:mb-20 animate-fade-in-up">
             <img
-              src="/ls-logo.png"
+              src="/ls-logo-cropped.png"
               alt="株式会社LS"
               width="224"
               height="224"
-              className="w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto drop-shadow-2xl transition-all duration-700"
+              className="w-36 h-36 md:w-52 md:h-52 lg:w-60 lg:h-60 mx-auto drop-shadow-2xl transition-all duration-700"
               style={{
-                transform: `rotate(0deg) scale(1)`
+                transform: `rotate(0deg) scale(1)`,
               }}
             />
           </div>
 
           <div className="space-y-6 md:space-y-8">
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-[0.15em] leading-none drop-shadow-2xl">
-              {['L', 'S'].map((letter, i) => (
-                <span 
+              {["L", "S"].map((letter, i) => (
+                <span
                   key={i}
-                  className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500" 
+                  className="inline-block animate-fade-in-up hover:gold-gradient transition-all duration-500"
                   style={{
                     animationDelay: `${0.2 + i * 0.1}s`,
                     transform: `translateY(${Math.sin(scrollY * 0.01 + i) * 10}px)`,
-                    transition: 'transform 0.3s ease-out'
+                    transition: "transform 0.3s ease-out",
                   }}
                 >
                   {letter}
                 </span>
               ))}
             </h1>
-            
-            <div className="flex items-center justify-center gap-6 md:gap-12 animate-fade-in" style={{animationDelay: '0.5s'}}>
+
+            <div
+              className="flex items-center justify-center gap-6 md:gap-12 animate-fade-in"
+              style={{ animationDelay: "0.5s" }}
+            >
               <div className="h-px w-20 md:w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
               <div
                 className="w-2 h-2 md:w-3 md:h-3 bg-[#d4af37] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.8)] animate-pulse"
                 style={{
-                  transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.3})`
+                  transform: `scale(${1 + Math.sin(scrollY * 0.05) * 0.3})`,
                 }}
               ></div>
               <div className="h-px w-20 md:w-40 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
@@ -253,7 +346,7 @@ export default function Home() {
             <p
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.1em] leading-[1.4] animate-fade-in-up px-4"
               style={{
-                animationDelay: '0.7s'
+                animationDelay: "0.7s",
               }}
             >
               空間を超え、
@@ -262,7 +355,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-5 md:gap-6 justify-center items-center pt-10 md:pt-12 animate-fade-in-up px-4" style={{animationDelay: '0.9s'}}>
+          <div
+            className="flex flex-col md:flex-row gap-5 md:gap-6 justify-center items-center pt-10 md:pt-12 animate-fade-in-up px-4"
+            style={{ animationDelay: "0.9s" }}
+          >
             <a href="#vision" className="w-full md:w-auto">
               <Button
                 variant="outline"
@@ -272,7 +368,12 @@ export default function Home() {
                 OUR VISION
               </Button>
             </a>
-            <a href="https://career-cloud.asia/" target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+            <a
+              href="https://career-cloud.asia/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full md:w-auto"
+            >
               <Button
                 variant="outline"
                 size="lg"
@@ -282,13 +383,13 @@ export default function Home() {
               </Button>
             </a>
           </div>
-          
+
           {/* Scroll Indicator with Wave Animation */}
-          <div 
+          <div
             className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-[#d4af37]"
             style={{
-              animation: 'bounce 2s infinite',
-              transform: `translateY(${Math.sin(scrollY * 0.1) * 5}px)`
+              animation: "bounce 2s infinite",
+              transform: `translateY(${Math.sin(scrollY * 0.1) * 5}px)`,
             }}
           >
             <span className="text-xs tracking-[0.4em] font-light">SCROLL</span>
@@ -300,46 +401,52 @@ export default function Home() {
       {/* Mission Section - Tilt on Hover */}
       <section
         id="mission"
-        className={`relative py-20 md:py-40 lg:py-56 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? 'opacity-100' : 'opacity-0'}`}
-        style={{ transformStyle: 'preserve-3d' }}
+        className={`relative py-16 md:py-24 lg:py-28 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.mission ? "opacity-100" : "opacity-0"}`}
+        style={{ transformStyle: "preserve-3d" }}
       >
         {/* Decorative Elements with Scroll Animation */}
-        <div 
+        <div
           className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-50 to-transparent opacity-50 transition-transform duration-1000"
-          style={{ transform: isVisible.mission ? 'translateX(0)' : 'translateX(100px)' }}
+          style={{
+            transform: isVisible.mission
+              ? "translateX(0)"
+              : "translateX(100px)",
+          }}
         ></div>
         <div
           className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-3xl transition-transform duration-1000"
           style={{
-            transform: isVisible.mission ? 'scale(1)' : 'scale(0.5)'
+            transform: isVisible.mission ? "scale(1)" : "scale(0.5)",
           }}
         ></div>
-        <div 
+        <div
           className="absolute top-20 right-20 w-[400px] h-[400px] border border-[#d4af37]/10 rounded-full"
           style={{
-            animation: 'spin 20s linear infinite',
-            transform: `rotate(${scrollY * 0.1}deg)`
+            animation: "spin 20s linear infinite",
+            transform: `rotate(${scrollY * 0.1}deg)`,
           }}
         ></div>
-        
+
         <div className="container max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-20 items-center">
-            <div 
-              className={`lg:col-span-6 space-y-14 md:space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+          <div className="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-12 xl:gap-20 items-center">
+            <div
+              className={`lg:col-span-6 space-y-8 md:space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
-                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">MISSION</span>
+                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                    MISSION
+                  </span>
                 </div>
-                
-                <h2 className="title-balance max-w-[12ch] text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(3rem,4.2vw,4.75rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
-                  {['空間を超え、', 'ブランドを創造する。'].map((text, i) => (
+
+                <h2 className="title-balance max-w-[14ch] text-2xl sm:max-w-[16ch] sm:text-3xl md:max-w-[18ch] md:text-4xl lg:text-[clamp(3rem,4.2vw,4.75rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
+                  {["空間を超え、", "ブランドを創造する。"].map((text, i) => (
                     <span
                       key={i}
-                      className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
+                      className="line-keep block hover:gold-gradient transition-all duration-500 cursor-pointer"
                       style={{
-                        transitionDelay: `${i * 0.1}s`
+                        transitionDelay: `${i * 0.1}s`,
                       }}
                     >
                       {text}
@@ -349,22 +456,30 @@ export default function Home() {
               </div>
 
               <div className="space-y-6 md:space-y-8">
-                <p className="copy-balance max-w-[22ch] text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 font-mission">
-                  私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
+                <p className="copy-balance max-w-[27ch] text-base sm:max-w-[30ch] sm:text-lg md:max-w-[34ch] md:text-xl lg:text-2xl text-gray-700 font-mission">
+                  <span className="block sm:line-keep">
+                    私たちLSは、内装という「箱」を作るだけではなく、
+                  </span>
+                  <span className="block sm:line-keep">
+                    <span className="gold-gradient font-normal">
+                      事業の世界観と収益モデル
+                    </span>
+                    まで設計します。
+                  </span>
                 </p>
 
-                <p className="copy-balance max-w-[40rem] text-sm md:text-base lg:text-lg text-gray-500 leading-relaxed font-light">
+                <p className="copy-balance max-w-[42rem] text-sm md:text-base lg:text-lg text-gray-500 leading-relaxed font-light">
                   立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
                 </p>
               </div>
             </div>
-            
-            <div 
-              className={`lg:col-span-6 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+
+            <div
+              className={`lg:col-span-6 relative transition-all duration-1000 delay-400 ${isVisible.mission ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
             >
-              <div className="relative h-[350px] md:h-[500px] lg:h-[650px] group">
+              <div className="group relative pt-[320px] md:h-[500px] md:pt-0 lg:h-[650px]">
                 {/* Main Image with 3D Tilt */}
-                <div className="absolute inset-0 overflow-hidden shadow-2xl image-overlay">
+                <div className="absolute inset-x-0 top-0 h-[320px] overflow-hidden shadow-2xl image-overlay md:inset-0 md:h-auto">
                   <img
                     src="/mission.JPG"
                     alt="LSの高級内装デザイン - 店舗ブランディングと空間設計の融合による上質な内装事例"
@@ -372,43 +487,48 @@ export default function Home() {
                     decoding="async"
                     className="w-full h-full object-cover"
                     style={{
-                      transform: `scale(${1 + Math.abs(0) * 0.0001})`
+                      transform: `scale(${1 + Math.abs(0) * 0.0001})`,
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                  
+
                   {/* Hover Overlay Info with Fade */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10">
                     <div className="text-center text-white space-y-4">
                       <div className="w-20 h-px bg-white mx-auto mb-6 group-hover:w-32 transition-all duration-500"></div>
-                      <p className="text-2xl font-light tracking-[0.2em]">PREMIUM DESIGN</p>
+                      <p className="text-2xl font-light tracking-[0.2em]">
+                        PREMIUM DESIGN
+                      </p>
                       <div className="w-20 h-px bg-white mx-auto mt-6 group-hover:w-32 transition-all duration-500"></div>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Floating Card */}
-                <div className="absolute -bottom-12 -right-12 glass p-8 shadow-2xl max-w-sm backdrop-blur-xl border border-[#d4af37]/20 hover-lift group/card cursor-pointer">
+                <div className="relative z-10 mx-4 mt-3 glass p-5 shadow-2xl backdrop-blur-xl border border-[#d4af37]/20 group/card cursor-pointer md:absolute md:-bottom-12 md:-right-12 md:mx-0 md:mt-0 md:max-w-sm md:p-8 hover-lift">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
-                    <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
+                    <p className="text-xs tracking-[0.3em] text-gray-600 font-light">
+                      PHILOSOPHY
+                    </p>
                   </div>
-                  <p className="title-balance max-w-[13ch] text-2xl text-black font-light leading-[1.45] group-hover/card:gold-gradient transition-all duration-500">
-                    "続く売上"が生まれるブランド体験をつくる
+                  <p className="title-balance max-w-[14ch] text-2xl text-black font-light leading-[1.45] group-hover/card:gold-gradient transition-all duration-500">
+                    <span className="line-keep">"続く売上"が生まれる</span>
+                    <span className="line-keep">ブランド体験をつくる</span>
                   </p>
                 </div>
-                
+
                 {/* Decorative Frame with Rotation */}
-                <div 
+                <div
                   className="absolute -top-8 -right-8 w-32 h-32 border-t-2 border-r-2 border-[#d4af37]/30 transition-all duration-700"
                   style={{
-                    transform: `rotate(${scrollY * 0.05}deg)`
+                    transform: `rotate(${scrollY * 0.05}deg)`,
                   }}
                 ></div>
-                <div 
+                <div
                   className="absolute -bottom-8 -left-8 w-32 h-32 border-b-2 border-l-2 border-[#d4af37]/30 transition-all duration-700"
                   style={{
-                    transform: `rotate(${-scrollY * 0.05}deg)`
+                    transform: `rotate(${-scrollY * 0.05}deg)`,
                   }}
                 ></div>
               </div>
@@ -420,26 +540,27 @@ export default function Home() {
       {/* Vision Section - Morphing Grid */}
       <section
         id="vision"
-        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? 'opacity-100' : 'opacity-0'}`}
+        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden grid-bg transition-all duration-1000 ${isVisible.vision ? "opacity-100" : "opacity-0"}`}
       >
         {/* Animated Morphing Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div 
-            className="absolute inset-0 transition-all duration-1000" 
+          <div
+            className="absolute inset-0 transition-all duration-1000"
             style={{
-              backgroundImage: 'radial-gradient(circle at 3px 3px, #d4af37 2px, transparent 0)',
-              backgroundSize: '60px 60px',
+              backgroundImage:
+                "radial-gradient(circle at 3px 3px, #d4af37 2px, transparent 0)",
+              backgroundSize: "60px 60px",
               transform: `scale(${1 + Math.sin(scrollY * 0.01) * 0.1}) rotate(${scrollY * 0.05}deg)`,
-              backgroundPosition: `${scrollY * 0.5}px ${scrollY * 0.3}px`
+              backgroundPosition: `${scrollY * 0.5}px ${scrollY * 0.3}px`,
             }}
           ></div>
         </div>
-        
+
         <div className="container max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-            <div 
-              className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
-              style={{ transformStyle: 'preserve-3d' }}
+            <div
+              className={`lg:col-span-7 relative order-2 lg:order-1 transition-all duration-1000 delay-200 ${isVisible.vision ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
+              style={{ transformStyle: "preserve-3d" }}
             >
               <div className="grid grid-cols-2 gap-4 md:gap-6">
                 {/* Large Image */}
@@ -452,23 +573,31 @@ export default function Home() {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  
+
                   {/* Image Number Badge with Pulse */}
-                  <div 
-                    className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500"
-                  >
-                    <span className="text-sm tracking-[0.3em] font-light">01</span>
+                  <div className="absolute top-8 left-8 glass px-6 py-3 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
+                    <span className="text-sm tracking-[0.3em] font-light">
+                      01
+                    </span>
                   </div>
                 </div>
-                
+
                 {/* Small Images */}
                 {[
-                  { src: "/vision2.JPG", alt: "内装デザインのディテール - 細部まで追求した高品質な店舗内装の仕上がり", num: "02" },
-                  { src: "/vision3.JPG", alt: "デザインディテール - LSのこだわりが詰まった空間設計の細部", num: "03" }
+                  {
+                    src: "/vision2.JPG",
+                    alt: "内装デザインのディテール - 細部まで追求した高品質な店舗内装の仕上がり",
+                    num: "02",
+                  },
+                  {
+                    src: "/vision3.JPG",
+                    alt: "デザインディテール - LSのこだわりが詰まった空間設計の細部",
+                    num: "03",
+                  },
                 ].map((img, index) => (
                   <div
                     key={index}
-                    className={`relative h-36 md:h-48 lg:h-60 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                    className={`relative h-36 md:h-48 lg:h-60 group overflow-hidden image-overlay transition-all duration-700 delay-${(index + 1) * 200} ${isVisible.vision ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
                   >
                     <img
                       src={img.src}
@@ -477,65 +606,88 @@ export default function Home() {
                       decoding="async"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-6 left-6 glass px-4 py-2 border border-white/20 group-hover:scale-110 group-hover:bg-[#d4af37] transition-all duration-500">
-                      <span className="text-xs tracking-[0.3em] font-light">{img.num}</span>
+                    <div className="absolute left-4 top-4 hidden border border-white/18 bg-black/22 px-3 py-1.5 text-white/88 shadow-[0_8px_30px_rgba(0,0,0,0.2)] backdrop-blur-md transition-all duration-500 group-hover:scale-105 group-hover:border-[#d4af37]/35 group-hover:bg-black/38 sm:block md:left-6 md:top-6 md:px-4 md:py-2">
+                      <span className="text-[10px] tracking-[0.26em] font-light md:text-xs">
+                        {img.num}
+                      </span>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            
-            <div 
-              className={`lg:col-span-5 space-y-14 md:space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+
+            <div
+              className={`lg:col-span-5 space-y-14 md:space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
-                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">VISION</span>
+                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                    VISION
+                  </span>
                 </div>
-                
-                <h2 className="title-balance max-w-[13ch] text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(3rem,4vw,4.5rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
-                  {['業界を変革し、', 'ブランドカンパニーになる。'].map((text, i) => (
-                    <span
-                      key={i}
-                      className="block hover:gold-gradient transition-all duration-500 cursor-pointer"
-                      style={{
-                        transitionDelay: `${i * 0.1}s`
-                      }}
-                    >
-                      {text}
-                    </span>
-                  ))}
+
+                <h2 className="title-balance max-w-[15ch] text-2xl sm:max-w-[16ch] sm:text-3xl md:max-w-[18ch] md:text-4xl lg:text-[clamp(3rem,4vw,4.5rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
+                  {["業界を変革し、", "ブランドカンパニーに", "なる。"].map(
+                    (text, i) => (
+                      <span
+                        key={i}
+                        className="line-keep block hover:gold-gradient transition-all duration-500 cursor-pointer"
+                        style={{
+                          transitionDelay: `${i * 0.1}s`,
+                        }}
+                      >
+                        {text}
+                      </span>
+                    )
+                  )}
                 </h2>
               </div>
 
-              <p className="copy-balance max-w-[18ch] text-lg sm:text-xl md:text-2xl text-gray-300 leading-[1.6] font-light">
-                内装＝コストという常識を変え、
-                <span className="gold-gradient font-normal">内装＝投資</span>へ。
+              <p className="copy-balance max-w-[22ch] text-lg sm:max-w-[24ch] sm:text-xl md:max-w-[28ch] md:text-2xl text-gray-300 leading-[1.6] font-light">
+                <span className="line-keep">内装＝コストという</span>
+                <span className="line-keep">
+                  常識を変え、
+                  <span className="gold-gradient font-normal">内装＝投資</span>
+                  へ。
+                </span>
               </p>
-              
+
               <div className="space-y-10 pt-12">
                 {[
-                  { title: "事業づくり視点の内装", desc: "成果に直結する店舗を増やす" },
-                  { title: "全国展開の実現", desc: "同品質・同スピードで全国へ" },
+                  {
+                    title: "事業づくり視点の内装",
+                    desc: "成果に直結する店舗を増やす",
+                  },
+                  {
+                    title: "全国展開の実現",
+                    desc: "同品質・同スピードで全国へ",
+                  },
                   { title: "建築 × AI", desc: "意思決定と設計を高度化" },
-                  { title: "5年でスタンダードへ", desc: "ブランドカンパニーとしての地位確立" }
+                  {
+                    title: "5年でスタンダードへ",
+                    desc: "ブランドカンパニーとしての地位確立",
+                  },
                 ].map((item, index) => (
-                  <div 
-                    key={index} 
-                    className={`flex items-start gap-8 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+                  <div
+                    key={index}
+                    className={`flex items-start gap-8 group cursor-pointer transition-all duration-700 delay-${index * 100} ${isVisible.vision ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"}`}
                     style={{
-                      transform: `translateZ(${10 + index * 5}px)`
+                      transform: `translateZ(${10 + index * 5}px)`,
                     }}
                   >
-                    <div 
-                      className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700"
-                    >
-                      <span className="text-sm font-light group-hover:text-black">{String(index + 1).padStart(2, '0')}</span>
+                    <div className="flex-shrink-0 w-16 h-16 border-2 border-[#d4af37]/30 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:border-[#d4af37] transition-all duration-700">
+                      <span className="text-sm font-light group-hover:text-black">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
                     </div>
                     <div className="flex-1 pt-2">
-                      <h4 className="text-base md:text-lg lg:text-xl font-light mb-2 group-hover:gold-gradient transition-colors duration-500">{item.title}</h4>
-                      <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">{item.desc}</p>
+                      <h4 className="text-base md:text-lg lg:text-xl font-light mb-2 group-hover:gold-gradient transition-colors duration-500">
+                        {item.title}
+                      </h4>
+                      <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
+                        {item.desc}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -548,49 +700,52 @@ export default function Home() {
       {/* Film Section - 3D Frame */}
       <section
         id="film"
-        className={`relative py-20 md:py-40 lg:py-56 bg-black transition-all duration-1000 ${isVisible.film ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-        style={{ transformStyle: 'preserve-3d' }}
+        className={`relative py-20 md:py-40 lg:py-56 bg-black transition-all duration-1000 ${isVisible.film ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+        style={{ transformStyle: "preserve-3d" }}
       >
         <div className="container max-w-7xl px-4">
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">BRAND FILM</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                BRAND FILM
+              </span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
-            <h2 className="title-balance mx-auto max-w-[10ch] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight leading-tight px-4">
-              ブランドが動き出す瞬間
+            <h2 className="title-balance mx-auto max-w-[12ch] text-3xl sm:max-w-[14ch] sm:text-4xl md:max-w-[16ch] md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight leading-[1.22] px-4">
+              <span className="line-keep mx-auto">ブランドが</span>
+              <span className="line-keep mx-auto">動き出す瞬間</span>
             </h2>
 
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed px-4">
+            <p className="copy-balance text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed px-4">
               LSが手がける空間とブランド体験の哲学を、短編映像に凝縮しました。
             </p>
           </div>
-          
+
           <div className="relative max-w-5xl mx-auto">
             {/* Decorative Multi-Layer Frame with 3D Depth */}
             {[-12, -20, -28].map((inset, i) => (
-              <div 
+              <div
                 key={i}
                 className="absolute border border-[#d4af37] pointer-events-none animate-pulse"
                 style={{
                   inset: `${inset}px`,
                   opacity: 0.2 - i * 0.05,
                   animationDelay: `${i * 0.5}s`,
-                  transform: `translateZ(${-i * 10}px)`
+                  transform: `translateZ(${-i * 10}px)`,
                 }}
               ></div>
             ))}
-            
+
             {/* Corner Decorations with Rotation */}
             {[
-              { top: '-16px', left: '-16px', rotateVal: 0 },
-              { top: '-16px', right: '-16px', rotateVal: 90 },
-              { bottom: '-16px', left: '-16px', rotateVal: 270 },
-              { bottom: '-16px', right: '-16px', rotateVal: 180 }
+              { top: "-16px", left: "-16px", rotateVal: 0 },
+              { top: "-16px", right: "-16px", rotateVal: 90 },
+              { bottom: "-16px", left: "-16px", rotateVal: 270 },
+              { bottom: "-16px", right: "-16px", rotateVal: 180 },
             ].map((corner, i) => (
-              <div 
+              <div
                 key={i}
                 className="absolute w-24 h-24 border-t-2 border-l-2 border-[#d4af37] hover:w-32 hover:h-32 transition-all duration-500"
                 style={{
@@ -598,11 +753,11 @@ export default function Home() {
                   left: corner.left,
                   right: corner.right,
                   bottom: corner.bottom,
-                  transform: `rotate(${corner.rotateVal + scrollY * 0.1}deg) translateZ(20px)`
+                  transform: `rotate(${corner.rotateVal + scrollY * 0.1}deg) translateZ(20px)`,
                 }}
               ></div>
             ))}
-            
+
             <div className="relative aspect-video bg-black shadow-2xl overflow-hidden group hover-lift">
               <iframe
                 src="https://www.youtube.com/embed/GjfqIFZ2SPg?si=AZ8gf3B0byRfezB7"
@@ -618,24 +773,38 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section id="philosophy" className="relative py-16 md:py-32 lg:py-40 bg-white text-black overflow-hidden">
+      <section
+        id="philosophy"
+        className="relative py-16 md:py-32 lg:py-40 bg-white text-black overflow-hidden"
+      >
         <div className="container grid md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center px-4">
           <div className="space-y-8 md:space-y-10 lg:space-y-12">
             <div className="flex items-center gap-4 md:gap-6">
               <div className="w-12 md:w-16 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">PHILOSOPHY</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                PHILOSOPHY
+              </span>
             </div>
 
-            <h2 className="title-balance max-w-[12ch] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.35] tracking-tight text-black">
-              "続く売上"が生まれるブランド体験をつくる
+            <h2 className="title-balance max-w-[14ch] text-xl sm:max-w-[16ch] sm:text-2xl md:max-w-[18ch] md:text-3xl lg:text-4xl font-light leading-[1.35] tracking-tight text-black">
+              <span className="line-keep">"続く売上"が生まれる</span>
+              <span className="line-keep">ブランド体験をつくる</span>
             </h2>
 
-            <p className="copy-balance max-w-[28rem] text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
-              私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
+            <p className="copy-balance max-w-[30rem] text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
+              <span className="line-keep">
+                私たちLSは、内装という「箱」を作るだけではなく、
+              </span>
+              <span className="line-keep">
+                事業の世界観と収益モデルまで設計します。
+              </span>
             </p>
           </div>
 
-          <div className="relative ml-auto w-full" style={{ maxWidth: '800px' }}>
+          <div
+            className="relative ml-auto w-full"
+            style={{ maxWidth: "800px" }}
+          >
             <img
               src="/architecture-2.jpg"
               alt="LSの事業哲学 - 続く売上が生まれるブランド体験を創造する内装デザインコンセプト"
@@ -656,7 +825,9 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">PROJECTS</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                PROJECTS
+              </span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -671,61 +842,205 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {[
-              { img: '/IMG_1206.JPG', title: 'プロジェクト 01', category: '店舗内装' },
-              { img: '/IMG_6273.JPG', title: 'プロジェクト 02', category: 'オフィス設計' },
-              { img: '/IMG_6274.JPG', title: 'プロジェクト 03', category: '商業施設' },
-              { img: '/IMG_6278.JPG', title: 'プロジェクト 04', category: '飲食店' },
-              { img: '/IMG_6279.JPG', title: 'プロジェクト 05', category: 'ホテル' },
-              { img: '/IMG_6280.JPG', title: 'プロジェクト 06', category: '小売店舗' },
-              { img: '/IMG_6281.JPG', title: 'プロジェクト 07', category: 'サロン' },
-              { img: '/IMG_6282.JPG', title: 'プロジェクト 08', category: 'ショールーム' },
-              { img: '/IMG_6284.JPG', title: 'プロジェクト 09', category: '複合施設' },
-              { img: '/IMG_6285.JPG', title: 'プロジェクト 10', category: '店舗内装' },
-              { img: '/IMG_6286.JPG', title: 'プロジェクト 11', category: 'オフィス設計' },
-              { img: '/IMG_6287.JPG', title: 'プロジェクト 12', category: '商業施設' },
-              { img: '/IMG_6288.JPG', title: 'プロジェクト 13', category: '飲食店' },
-              { img: '/IMG_6290.JPG', title: 'プロジェクト 14', category: 'ホテル' },
-              { img: '/IMG_6291.JPG', title: 'プロジェクト 15', category: '小売店舗' },
-              { img: '/IMG_6292.JPG', title: 'プロジェクト 16', category: 'サロン' },
-              { img: '/IMG_6293.JPG', title: 'プロジェクト 17', category: 'ショールーム' },
-              { img: '/IMG_6294.JPG', title: 'プロジェクト 18', category: '複合施設' },
-              { img: '/IMG_6295.JPG', title: 'プロジェクト 19', category: '店舗内装' },
-              { img: '/IMG_6297.JPG', title: 'プロジェクト 20', category: 'オフィス設計' },
-              { img: '/IMG_6298.JPG', title: 'プロジェクト 21', category: '商業施設' },
-              { img: '/IMG_6299.JPG', title: 'プロジェクト 22', category: '飲食店' },
-              { img: '/IMG_6300.JPG', title: 'プロジェクト 23', category: 'ホテル' },
-              { img: '/IMG_6301.JPG', title: 'プロジェクト 24', category: '小売店舗' },
-              { img: '/IMG_6302.JPG', title: 'プロジェクト 25', category: 'サロン' },
-              { img: '/IMG_6303.JPG', title: 'プロジェクト 26', category: 'ショールーム' },
-              { img: '/IMG_6304.JPG', title: 'プロジェクト 27', category: '複合施設' },
-              { img: '/IMG_6305.JPG', title: 'プロジェクト 28', category: '店舗内装' },
-              { img: '/IMG_6306.JPG', title: 'プロジェクト 29', category: 'オフィス設計' },
-              { img: '/IMG_6307.JPG', title: 'プロジェクト 30', category: '商業施設' },
-              { img: '/IMG_6310.JPG', title: 'プロジェクト 31', category: '飲食店' },
-              { img: '/IMG_6311.JPG', title: 'プロジェクト 32', category: 'ホテル' },
-              { img: '/IMG_6312.JPG', title: 'プロジェクト 33', category: '小売店舗' },
-              { img: '/IMG_6313.JPG', title: 'プロジェクト 34', category: 'サロン' },
-              { img: '/IMG_6314.JPG', title: 'プロジェクト 35', category: 'ショールーム' },
-            ].slice(0, showAllProjects ? undefined : 9).map((project, i) => (
-              <div 
-                key={i}
-                className="group relative overflow-hidden bg-gray-900 aspect-[4/3] hover-lift cursor-pointer"
-              >
-                <img 
-                  src={project.img} 
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <div className="text-xs tracking-[0.3em] text-[#d4af37] mb-2">{project.category}</div>
-                    <h3 className="text-3xl font-light">{project.title}</h3>
+              {
+                img: "/IMG_1206.JPG",
+                title: "プロジェクト 01",
+                category: "店舗内装",
+              },
+              {
+                img: "/IMG_6273.JPG",
+                title: "プロジェクト 02",
+                category: "オフィス設計",
+              },
+              {
+                img: "/IMG_6274.JPG",
+                title: "プロジェクト 03",
+                category: "商業施設",
+              },
+              {
+                img: "/IMG_6278.JPG",
+                title: "プロジェクト 04",
+                category: "飲食店",
+              },
+              {
+                img: "/IMG_6279.JPG",
+                title: "プロジェクト 05",
+                category: "ホテル",
+              },
+              {
+                img: "/IMG_6280.JPG",
+                title: "プロジェクト 06",
+                category: "小売店舗",
+              },
+              {
+                img: "/IMG_6281.JPG",
+                title: "プロジェクト 07",
+                category: "サロン",
+              },
+              {
+                img: "/IMG_6282.JPG",
+                title: "プロジェクト 08",
+                category: "ショールーム",
+              },
+              {
+                img: "/IMG_6284.JPG",
+                title: "プロジェクト 09",
+                category: "複合施設",
+              },
+              {
+                img: "/IMG_6285.JPG",
+                title: "プロジェクト 10",
+                category: "店舗内装",
+              },
+              {
+                img: "/IMG_6286.JPG",
+                title: "プロジェクト 11",
+                category: "オフィス設計",
+              },
+              {
+                img: "/IMG_6287.JPG",
+                title: "プロジェクト 12",
+                category: "商業施設",
+              },
+              {
+                img: "/IMG_6288.JPG",
+                title: "プロジェクト 13",
+                category: "飲食店",
+              },
+              {
+                img: "/IMG_6290.JPG",
+                title: "プロジェクト 14",
+                category: "ホテル",
+              },
+              {
+                img: "/IMG_6291.JPG",
+                title: "プロジェクト 15",
+                category: "小売店舗",
+              },
+              {
+                img: "/IMG_6292.JPG",
+                title: "プロジェクト 16",
+                category: "サロン",
+              },
+              {
+                img: "/IMG_6293.JPG",
+                title: "プロジェクト 17",
+                category: "ショールーム",
+              },
+              {
+                img: "/IMG_6294.JPG",
+                title: "プロジェクト 18",
+                category: "複合施設",
+              },
+              {
+                img: "/IMG_6295.JPG",
+                title: "プロジェクト 19",
+                category: "店舗内装",
+              },
+              {
+                img: "/IMG_6297.JPG",
+                title: "プロジェクト 20",
+                category: "オフィス設計",
+              },
+              {
+                img: "/IMG_6298.JPG",
+                title: "プロジェクト 21",
+                category: "商業施設",
+              },
+              {
+                img: "/IMG_6299.JPG",
+                title: "プロジェクト 22",
+                category: "飲食店",
+              },
+              {
+                img: "/IMG_6300.JPG",
+                title: "プロジェクト 23",
+                category: "ホテル",
+              },
+              {
+                img: "/IMG_6301.JPG",
+                title: "プロジェクト 24",
+                category: "小売店舗",
+              },
+              {
+                img: "/IMG_6302.JPG",
+                title: "プロジェクト 25",
+                category: "サロン",
+              },
+              {
+                img: "/IMG_6303.JPG",
+                title: "プロジェクト 26",
+                category: "ショールーム",
+              },
+              {
+                img: "/IMG_6304.JPG",
+                title: "プロジェクト 27",
+                category: "複合施設",
+              },
+              {
+                img: "/IMG_6305.JPG",
+                title: "プロジェクト 28",
+                category: "店舗内装",
+              },
+              {
+                img: "/IMG_6306.JPG",
+                title: "プロジェクト 29",
+                category: "オフィス設計",
+              },
+              {
+                img: "/IMG_6307.JPG",
+                title: "プロジェクト 30",
+                category: "商業施設",
+              },
+              {
+                img: "/IMG_6310.JPG",
+                title: "プロジェクト 31",
+                category: "飲食店",
+              },
+              {
+                img: "/IMG_6311.JPG",
+                title: "プロジェクト 32",
+                category: "ホテル",
+              },
+              {
+                img: "/IMG_6312.JPG",
+                title: "プロジェクト 33",
+                category: "小売店舗",
+              },
+              {
+                img: "/IMG_6313.JPG",
+                title: "プロジェクト 34",
+                category: "サロン",
+              },
+              {
+                img: "/IMG_6314.JPG",
+                title: "プロジェクト 35",
+                category: "ショールーム",
+              },
+            ]
+              .slice(0, showAllProjects ? undefined : 9)
+              .map((project, i) => (
+                <div
+                  key={i}
+                  className="group relative overflow-hidden bg-gray-900 aspect-[4/3] hover-lift cursor-pointer"
+                >
+                  <img
+                    src={project.img}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute bottom-0 left-0 right-0 p-8">
+                      <div className="text-xs tracking-[0.3em] text-[#d4af37] mb-2">
+                        {project.category}
+                      </div>
+                      <h3 className="text-3xl font-light">{project.title}</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
-          
+
           <div className="text-center mt-16 md:mt-20 lg:mt-24">
             <Button
               variant="outline"
@@ -733,7 +1048,7 @@ export default function Home() {
               onClick={() => setShowAllProjects(!showAllProjects)}
               className="magnetic-button border-2 border-white text-white hover:bg-white hover:text-black w-full md:w-auto px-10 md:px-16 py-6 md:py-8 text-xs md:text-sm tracking-[0.25em] md:tracking-[0.3em] font-light transition-all duration-700"
             >
-              {showAllProjects ? 'SHOW LESS' : 'VIEW ALL PROJECTS'}
+              {showAllProjects ? "SHOW LESS" : "VIEW ALL PROJECTS"}
             </Button>
           </div>
         </div>
@@ -742,14 +1057,16 @@ export default function Home() {
       {/* Values Section - 3D Card Flip */}
       <section
         id="values"
-        className={`relative py-20 md:py-40 lg:py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? 'opacity-100' : 'opacity-0'}`}
-        style={{ transformStyle: 'preserve-3d' }}
+        className={`relative py-20 md:py-40 lg:py-56 bg-white text-black transition-all duration-1000 ${isVisible.values ? "opacity-100" : "opacity-0"}`}
+        style={{ transformStyle: "preserve-3d" }}
       >
         <div className="container max-w-7xl px-4">
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">VALUES</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                VALUES
+              </span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -768,68 +1085,92 @@ export default function Home() {
                 num: "01",
                 title: "超顧客思考",
                 desc: "成果から逆算して設計・工事・運用まで伴走。",
-                points: ["売上・粗利を初回提案に数値化", "費用対効果の低い装飾を排除", "引渡し後30日レビュー実施"]
+                points: [
+                  "売上・粗利を初回提案に数値化",
+                  "費用対効果の低い装飾を排除",
+                  "引渡し後30日レビュー実施",
+                ],
               },
               {
                 num: "02",
                 title: "超徹底",
                 desc: "約束・基準・手順を守り切る。",
-                points: ["チェックリスト運用の徹底", "記録主義で全て保管", "リスクは\"はじめに言う\""]
+                points: [
+                  "チェックリスト運用の徹底",
+                  "記録主義で全て保管",
+                  'リスクは"はじめに言う"',
+                ],
               },
               {
                 num: "03",
                 title: "超追求",
                 desc: "品質と再現性に貪欲。",
-                points: ["ディテールまで設計検証", "最適点を比較提示", "学びを標準化して反映"]
+                points: [
+                  "ディテールまで設計検証",
+                  "最適点を比較提示",
+                  "学びを標準化して反映",
+                ],
               },
               {
                 num: "04",
                 title: "超連携",
                 desc: "全てのステークホルダーが一体。",
-                points: ["情報の一元管理", "三者合意ルール", "トラブル時の即共有"]
+                points: [
+                  "情報の一元管理",
+                  "三者合意ルール",
+                  "トラブル時の即共有",
+                ],
               },
               {
                 num: "05",
                 title: "超挑戦",
                 desc: "スピードと挑戦で業界を前進。",
-                points: ["最短48時間で3案提示", "新技術を積極採用", "失敗を学びに変換"]
-              }
+                points: [
+                  "最短48時間で3案提示",
+                  "新技術を積極採用",
+                  "失敗を学びに変換",
+                ],
+              },
             ].map((value, index) => (
               <div
                 key={index}
-                className={`group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-10 md:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-xl transition-all duration-700 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+                data-value-card
+                className={`value-glow-card ${isMobilePresentation && activeValueIndex === index ? "value-glow-active" : ""} group relative bg-gradient-to-br from-gray-50 via-white to-gray-50 p-10 md:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-xl transition-all duration-700 cursor-pointer overflow-hidden ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""} ${isVisible.values ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
                 style={{
-                  transitionDelay: `${index * 0.1}s`
+                  transitionDelay: `${index * 0.1}s`,
                 }}
               >
                 {/* Left and Bottom Border Animation */}
-                <div className="absolute left-0 bottom-0 h-0 w-2 bg-gradient-to-t from-[#d4af37] to-[#f4e5c3] group-hover:h-full transition-all duration-1000"></div>
-                <div className="absolute left-0 bottom-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
-                
+                <div className="scroll-glow-rail-y absolute left-0 bottom-0 h-0 w-2 bg-gradient-to-t from-[#d4af37] to-[#f4e5c3] group-hover:h-full transition-all duration-1000"></div>
+                <div className="scroll-glow-rail-x absolute left-0 bottom-0 w-0 h-2 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-1000"></div>
+
                 {/* Background Shimmer */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
-                
+                <div className="scroll-glow-shimmer absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shimmer"></div>
+
                 <div className="mb-6 md:mb-10 relative">
-                  <span
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-300 group-hover:text-[#d4af37] transition-all duration-500 inline-block"
-                  >
+                  <span className="scroll-glow-accent text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-300 group-hover:text-[#d4af37] transition-all duration-500 inline-block">
                     {value.num}
                   </span>
                 </div>
 
-                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-4 md:mb-6 tracking-tight group-hover:tracking-wide transition-all duration-500 relative z-10">
+                <h3 className="title-balance text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-4 md:mb-6 tracking-tight group-hover:tracking-wide transition-all duration-500 relative z-10">
                   {value.title}
                 </h3>
 
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-600 font-light leading-relaxed relative z-10">
+                <p className="copy-balance text-sm sm:text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-600 font-light leading-relaxed relative z-10">
                   {value.desc}
                 </p>
 
                 <ul className="space-y-3 md:space-y-4 lg:space-y-5 text-sm md:text-base text-gray-500 font-light relative z-10">
                   {value.points.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 md:gap-4 group/item">
-                      <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0 group-hover/item:scale-150 transition-transform"></div>
-                      <span className="group-hover/item:text-black transition-colors">{point}</span>
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 md:gap-4 group/item"
+                    >
+                      <div className="scroll-glow-dot w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0 group-hover/item:scale-150 transition-transform"></div>
+                      <span className="group-hover/item:text-black transition-colors">
+                        {point}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -842,26 +1183,29 @@ export default function Home() {
       {/* Company Section - 3D Glass Box */}
       <section
         id="company"
-        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-        style={{ transformStyle: 'preserve-3d' }}
+        className={`relative py-20 md:py-40 lg:py-56 bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden transition-all duration-1000 ${isVisible.company ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+        style={{ transformStyle: "preserve-3d" }}
       >
         {/* Background Pattern with 3D Rotation */}
         <div className="absolute inset-0 opacity-5">
-          <div 
-            className="absolute inset-0 transition-transform duration-1000" 
+          <div
+            className="absolute inset-0 transition-transform duration-1000"
             style={{
-              backgroundImage: 'linear-gradient(30deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37), linear-gradient(150deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37)',
-              backgroundSize: '80px 140px',
-              transform: `rotate(${scrollY * 0.05}deg) scale(${1 + Math.sin(scrollY * 0.01) * 0.1})`
+              backgroundImage:
+                "linear-gradient(30deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37), linear-gradient(150deg, #d4af37 12%, transparent 12.5%, transparent 87%, #d4af37 87.5%, #d4af37)",
+              backgroundSize: "80px 140px",
+              transform: `rotate(${scrollY * 0.05}deg) scale(${1 + Math.sin(scrollY * 0.01) * 0.1})`,
             }}
           ></div>
         </div>
-        
+
         <div className="container max-w-6xl relative z-10 px-4">
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">COMPANY</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                COMPANY
+              </span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -873,12 +1217,36 @@ export default function Home() {
           <div className="relative glass p-8 md:p-14 lg:p-16 border-2 border-[#d4af37]/20 hover:border-[#d4af37]/40 transition-all duration-500">
             {/* Decorative Corners with 3D */}
             {[
-              { top: '0', left: '0', borderTop: true, borderLeft: true, rotateVal: 0 },
-              { top: '0', right: '0', borderTop: true, borderRight: true, rotateVal: 90 },
-              { bottom: '0', left: '0', borderBottom: true, borderLeft: true, rotateVal: 270 },
-              { bottom: '0', right: '0', borderBottom: true, borderRight: true, rotateVal: 180 }
+              {
+                top: "0",
+                left: "0",
+                borderTop: true,
+                borderLeft: true,
+                rotateVal: 0,
+              },
+              {
+                top: "0",
+                right: "0",
+                borderTop: true,
+                borderRight: true,
+                rotateVal: 90,
+              },
+              {
+                bottom: "0",
+                left: "0",
+                borderBottom: true,
+                borderLeft: true,
+                rotateVal: 270,
+              },
+              {
+                bottom: "0",
+                right: "0",
+                borderBottom: true,
+                borderRight: true,
+                rotateVal: 180,
+              },
             ].map((corner, i) => (
-              <div 
+              <div
                 key={i}
                 className="absolute w-32 h-32 border-[#d4af37] hover:w-40 hover:h-40 transition-all duration-500"
                 style={{
@@ -886,37 +1254,48 @@ export default function Home() {
                   left: corner.left,
                   right: corner.right,
                   bottom: corner.bottom,
-                  borderTopWidth: corner.borderTop ? '4px' : '0',
-                  borderBottomWidth: corner.borderBottom ? '4px' : '0',
-                  borderLeftWidth: corner.borderLeft ? '4px' : '0',
-                  borderRightWidth: corner.borderRight ? '4px' : '0',
-                  transform: `rotate(${corner.rotateVal + scrollY * 0.02}deg) translateZ(10px)`
+                  borderTopWidth: corner.borderTop ? "4px" : "0",
+                  borderBottomWidth: corner.borderBottom ? "4px" : "0",
+                  borderLeftWidth: corner.borderLeft ? "4px" : "0",
+                  borderRightWidth: corner.borderRight ? "4px" : "0",
+                  transform: `rotate(${corner.rotateVal + scrollY * 0.02}deg) translateZ(10px)`,
                 }}
               ></div>
             ))}
-            
+
             <div className="space-y-12">
               {[
                 { label: "会社名", value: "株式会社LS" },
                 { label: "設立", value: "2023年10月" },
-                { label: "所在地", value: "東京都渋谷区渋谷1-12-2 クロスオフィス渋谷505" },
+                {
+                  label: "所在地",
+                  value: "東京都渋谷区渋谷1-12-2 クロスオフィス渋谷505",
+                },
                 { label: "代表者", value: "本間 拓彌" },
                 { label: "資本金", value: "1,000,000円" },
-                { label: "事業内容", value: "店舗内装のコンサルティング／設計デザイン／施工・PM／ブランド展開支援" },
-                { label: "建設業許可", value: "東京都知事 許可（般-7）第159994号" }
+                {
+                  label: "事業内容",
+                  value:
+                    "店舗内装のコンサルティング／設計デザイン／施工・PM／ブランド展開支援",
+                },
+                {
+                  label: "建設業許可",
+                  value: "東京都知事 許可（般-7）第159994号",
+                },
               ].map((item, index) => (
                 <div
                   key={index}
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-10 pb-8 md:pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+                  data-scroll-glow
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-10 pb-8 md:pb-12 border-b border-[#d4af37]/20 last:border-0 group hover:border-[#d4af37]/50 transition-all duration-500 ${isVisible.company ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"}`}
                   style={{
                     transitionDelay: `${index * 0.05}s`,
-                    transform: `translateZ(${5 + index * 2}px)`
+                    transform: `translateZ(${5 + index * 2}px)`,
                   }}
                 >
                   <div className="text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] text-gray-400 font-light uppercase">
                     {item.label}
                   </div>
-                  <div className="md:col-span-3 text-base sm:text-lg md:text-xl lg:text-2xl font-light group-hover:gold-gradient transition-all duration-500">
+                  <div className="scroll-glow-accent copy-balance md:col-span-3 text-base sm:text-lg md:text-xl lg:text-2xl font-light group-hover:gold-gradient transition-all duration-500">
                     {item.value}
                   </div>
                 </div>
@@ -929,92 +1308,125 @@ export default function Home() {
       {/* CTA Section - Magnetic Pull Effect */}
       <section
         id="cta"
-        className={`relative py-20 md:py-32 lg:py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
+        className={`relative py-20 md:py-32 lg:py-48 bg-white text-black overflow-hidden transition-all duration-1000 ${isVisible.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
       >
         {/* Animated Background Grid with Morph */}
         <div className="absolute inset-0 opacity-5">
-          <div 
-            className="absolute inset-0" 
+          <div
+            className="absolute inset-0"
             style={{
-              backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent)',
-              backgroundSize: '80px 80px',
+              backgroundImage:
+                "linear-gradient(0deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(212,175,55,.1) 25%, rgba(212,175,55,.1) 26%, transparent 27%, transparent 74%, rgba(212,175,55,.1) 75%, rgba(212,175,55,.1) 76%, transparent 77%, transparent)",
+              backgroundSize: "80px 80px",
               transform: `scale(${1 + Math.sin(scrollY * 0.01) * 0.05})`,
-              backgroundPosition: `${Math.sin(scrollY * 0.01) * 20}px ${Math.cos(scrollY * 0.01) * 20}px`
+              backgroundPosition: `${Math.sin(scrollY * 0.01) * 20}px ${Math.cos(scrollY * 0.01) * 20}px`,
             }}
           ></div>
         </div>
-        
+
         <div className="container max-w-7xl relative z-10 px-4">
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">CAREERS</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">
+                CAREERS
+              </span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
             </div>
 
-            <h2 className="title-balance mx-auto max-w-[13ch] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-10 md:mb-14 tracking-tight leading-[1.2]">
+            <h2 className="title-balance mx-auto max-w-[11em] text-center text-2xl sm:max-w-[15ch] sm:text-3xl md:max-w-none md:text-4xl lg:text-5xl font-light mb-10 md:mb-14 tracking-tight leading-[1.2]">
               次世代のブランド体験を、共に創造しませんか。
             </h2>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-10 md:mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="copy-balance text-center text-lg sm:text-xl md:text-2xl text-gray-600 mb-10 md:mb-12 font-light max-w-[18em] sm:max-w-3xl md:max-w-none mx-auto leading-relaxed">
               LSは、あなたの情熱と専門性を求めています。
             </p>
           </div>
 
           {/* 募集職種 */}
           <div className="mb-16 md:mb-20 lg:mb-24">
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">募集職種</h3>
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">
+              募集職種
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
               {[
                 {
-                  title: '空間デザイナー',
-                  desc: 'ブランド体験を空間に落とし込む設計者',
-                  requirements: ['建築・インテリアデザイン経験3年以上', 'CAD/3Dソフト使用経験', 'ブランド理解力'],
-                  type: '正社員'
+                  title: "空間デザイナー",
+                  desc: "ブランド体験を空間に落とし込む設計者",
+                  requirements: [
+                    "建築・インテリアデザイン経験3年以上",
+                    "CAD/3Dソフト使用経験",
+                    "ブランド理解力",
+                  ],
+                  type: "正社員",
                 },
                 {
-                  title: '営業コンサルタント',
-                  desc: 'クライアントの想いを受け取り、最適な空間提案でビジネスを動かす',
-                  requirements: ['法人営業経験 / 提案営業経験', '建築・内装業界知識', 'コミュニケーション能力'],
-                  type: '正社員'
+                  title: "営業コンサルタント",
+                  desc: "クライアントの想いを受け取り、最適な空間提案でビジネスを動かす",
+                  requirements: [
+                    "法人営業経験 / 提案営業経験",
+                    "建築・内装業界知識",
+                    "コミュニケーション能力",
+                  ],
+                  type: "正社員",
                 },
                 {
-                  title: 'ブランドストラテジスト',
-                  desc: '事業戦略とブランド体験を設計',
-                  requirements: ['ブランディング経験', '事業企画・戦略立案経験', 'データ分析スキル'],
-                  type: '正社員'
+                  title: "ブランドストラテジスト",
+                  desc: "事業戦略とブランド体験を設計",
+                  requirements: [
+                    "ブランディング経験",
+                    "事業企画・戦略立案経験",
+                    "データ分析スキル",
+                  ],
+                  type: "正社員",
                 },
                 {
-                  title: '施工管理',
-                  desc: '高品質な施工を実現する現場責任者',
-                  requirements: ['施工管理経験3年以上', '建築士または施工管理技士資格歓迎', '品質管理能力'],
-                  type: '正社員'
-                }
+                  title: "施工管理",
+                  desc: "高品質な施工を実現する現場責任者",
+                  requirements: [
+                    "施工管理経験3年以上",
+                    "建築士または施工管理技士資格歓迎",
+                    "品質管理能力",
+                  ],
+                  type: "正社員",
+                },
               ].map((job, index) => (
-                <div 
+                <div
                   key={index}
+                  data-scroll-glow
                   className="group relative bg-white p-6 md:p-8 lg:p-12 border-2 border-gray-200 hover:border-[#d4af37] hover:shadow-2xl transition-all duration-700 cursor-pointer"
                 >
                   <div className="absolute top-4 right-4 md:top-6 md:right-6 lg:top-8 lg:right-8">
-                    <span className="text-xs md:text-sm text-[#d4af37] border border-[#d4af37] px-3 py-1.5 md:px-4 md:py-2">{job.type}</span>
+                    <span className="text-xs md:text-sm text-[#d4af37] border border-[#d4af37] px-3 py-1.5 md:px-4 md:py-2">
+                      {job.type}
+                    </span>
                   </div>
 
-                  <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-3 md:mb-4 lg:mb-6 group-hover:text-[#d4af37] transition-colors duration-500 pr-20">{job.title}</h4>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 md:mb-8 lg:mb-10 font-light">{job.desc}</p>
+                  <h4 className="scroll-glow-accent title-balance text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-3 md:mb-4 lg:mb-6 group-hover:text-[#d4af37] transition-colors duration-500 pr-20">
+                    {job.title}
+                  </h4>
+                  <p className="copy-balance text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 md:mb-8 lg:mb-10 font-light">
+                    {job.desc}
+                  </p>
 
                   <div className="space-y-3 md:space-y-4">
-                    <p className="text-xs md:text-sm text-gray-400 tracking-wider">必要スキル・経験</p>
+                    <p className="text-xs md:text-sm text-gray-400 tracking-wider">
+                      必要スキル・経験
+                    </p>
                     <ul className="space-y-2 md:space-y-3">
                       {job.requirements.map((req, i) => (
-                        <li key={i} className="flex items-start gap-2 md:gap-3 text-sm md:text-base text-gray-700">
-                          <div className="w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0"></div>
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 md:gap-3 text-sm md:text-base text-gray-700"
+                        >
+                          <div className="scroll-glow-dot w-2 h-2 bg-[#d4af37] rounded-full mt-1.5 md:mt-2 flex-shrink-0"></div>
                           <span>{req}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  
-                  <div className="absolute left-0 bottom-0 w-0 h-1 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-700"></div>
+
+                  <div className="scroll-glow-rail-x absolute left-0 bottom-0 w-0 h-1 bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] group-hover:w-full transition-all duration-700"></div>
                 </div>
               ))}
             </div>
@@ -1022,86 +1434,267 @@ export default function Home() {
 
           {/* 福利厚生・働く環境 */}
           <div className="mb-16 md:mb-20">
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">福利厚生・働く環境</h3>
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-10 md:mb-12 text-center">
+              福利厚生・働く環境
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
               {[
                 {
-                  title: '競争力のある報酬',
-                  desc: '業界トップクラスの給与水準と成果連動型ボーナス',
+                  title: "競争力のある報酬",
+                  desc: "業界トップクラスの給与水準と成果連動型ボーナス",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <rect x="10" y="21" width="28" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <rect x="14" y="30" width="20" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <rect x="18" y="12" width="12" height="7" rx="3.5" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <rect
+                        x="10"
+                        y="21"
+                        width="28"
+                        height="7"
+                        rx="3.5"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <rect
+                        x="14"
+                        y="30"
+                        width="20"
+                        height="7"
+                        rx="3.5"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <rect
+                        x="18"
+                        y="12"
+                        width="12"
+                        height="7"
+                        rx="3.5"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
-                  title: '成長機会',
-                  desc: '最新技術・トレンドに触れる機会、外部研修支援',
+                  title: "成長機会",
+                  desc: "最新技術・トレンドに触れる機会、外部研修支援",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <polyline points="12,30 20,22 28,26 36,14" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      <polyline points="30,12 37,12 37,19" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <polyline
+                        points="12,30 20,22 28,26 36,14"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <polyline
+                        points="30,12 37,12 37,19"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
-                  title: 'ワークライフバランス',
-                  desc: 'フレックスタイム制、リモートワーク可',
+                  title: "ワークライフバランス",
+                  desc: "フレックスタイム制、リモートワーク可",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <line x1="24" y1="12" x2="24" y2="34" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
-                      <path d="M10 34h28" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
-                      <path d="M24 20l-10 4c0 4 3 7 6.5 7S28 28 28 24l-4-4z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M24 20l10 4c0 4-3 7-6.5 7S20 28 20 24l4-4z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <line
+                        x1="24"
+                        y1="12"
+                        x2="24"
+                        y2="34"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M10 34h28"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M24 20l-10 4c0 4 3 7 6.5 7S28 28 28 24l-4-4z"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M24 20l10 4c0 4-3 7-6.5 7S20 28 20 24l4-4z"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
-                  title: '充実の保険',
-                  desc: '各種社会保険完備、健康診断サポート',
+                  title: "充実の保険",
+                  desc: "各種社会保険完備、健康診断サポート",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <path d="M24 10l13 5v9c0 9-6 15-13 19-7-4-13-10-13-19v-9z" fill="none" stroke="#d4af37" strokeWidth="1.8" strokeLinejoin="round" />
-                      <line x1="24" y1="18" x2="24" y2="28" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
-                      <line x1="19" y1="23" x2="29" y2="23" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M24 10l13 5v9c0 9-6 15-13 19-7-4-13-10-13-19v-9z"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                      <line
+                        x1="24"
+                        y1="18"
+                        x2="24"
+                        y2="28"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1="19"
+                        y1="23"
+                        x2="29"
+                        y2="23"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
-                  title: '裁量権',
-                  desc: 'フラットな組織で意思決定に参画',
+                  title: "裁量権",
+                  desc: "フラットな組織で意思決定に参画",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <circle cx="24" cy="24" r="12" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <line x1="24" y1="16" x2="24" y2="24" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
-                      <line x1="24" y1="24" x2="31" y2="27" stroke="#d4af37" strokeWidth="1.8" strokeLinecap="round" />
-                      <circle cx="24" cy="24" r="3" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="24"
+                        cy="24"
+                        r="12"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <line
+                        x1="24"
+                        y1="16"
+                        x2="24"
+                        y2="24"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1="24"
+                        y1="24"
+                        x2="31"
+                        y2="27"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                      <circle
+                        cx="24"
+                        cy="24"
+                        r="3"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
-                  title: '多様性',
-                  desc: '年齢・国籍問わず、実力主義の評価',
+                  title: "多様性",
+                  desc: "年齢・国籍問わず、実力主義の評価",
                   icon: (
-                    <svg viewBox="0 0 48 48" className="w-8 h-8" aria-hidden="true">
-                      <circle cx="16" cy="18" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <circle cx="32" cy="18" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <circle cx="16" cy="34" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
-                      <circle cx="32" cy="34" r="4" fill="none" stroke="#d4af37" strokeWidth="1.8" />
+                    <svg
+                      viewBox="0 0 48 48"
+                      className="w-8 h-8"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="16"
+                        cy="18"
+                        r="4"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <circle
+                        cx="32"
+                        cy="18"
+                        r="4"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <circle
+                        cx="16"
+                        cy="34"
+                        r="4"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
+                      <circle
+                        cx="32"
+                        cy="34"
+                        r="4"
+                        fill="none"
+                        stroke="#d4af37"
+                        strokeWidth="1.8"
+                      />
                     </svg>
-                  )
-                }
+                  ),
+                },
               ].map((benefit, index) => (
-                <div key={index} className="text-center p-5 md:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-[#d4af37] transition-all duration-400">
+                <div
+                  key={index}
+                  className="text-center p-5 md:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-[#d4af37] transition-all duration-400"
+                >
                   <div className="mb-3 md:mb-4 flex justify-center">
                     <span className="inline-flex items-center justify-center w-14 h-14 rounded-full border border-[#d4af37]/30 bg-white text-[#d4af37]">
                       {benefit.icon}
                     </span>
                   </div>
-                  <h4 className="text-base sm:text-lg md:text-xl font-light mb-2 md:mb-3">{benefit.title}</h4>
-                  <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">{benefit.desc}</p>
+                  <h4 className="text-base sm:text-lg md:text-xl font-light mb-2 md:mb-3">
+                    {benefit.title}
+                  </h4>
+                  <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">
+                    {benefit.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -1109,7 +1702,9 @@ export default function Home() {
 
           {/* CTA */}
           <div className="text-center">
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 md:mb-12 font-light px-4">まずはカジュアル面談から。あなたのキャリアについてお聞かせください。</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 md:mb-12 font-light px-4">
+              まずはカジュアル面談から。あなたのキャリアについてお聞かせください。
+            </p>
             <a href="/careers/entry/" className="inline-block w-full md:w-auto">
               <Button
                 size="lg"
@@ -1123,12 +1718,15 @@ export default function Home() {
       </section>
 
       {/* Footer - 3D Depth */}
-      <footer id="contact" className="relative py-12 md:py-20 lg:py-40 bg-black border-t-2 border-[#d4af37]/20">
+      <footer
+        id="contact"
+        className="relative py-12 md:py-20 lg:py-40 bg-black border-t-2 border-[#d4af37]/20"
+      >
         <div className="container max-w-7xl px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 md:gap-16 mb-16 md:mb-24">
             <div className="lg:col-span-2 space-y-6 md:space-y-8">
               <img
-                src="/ls-logo.png"
+                src="/ls-logo-cropped.png"
                 alt="株式会社LS"
                 width="160"
                 height="160"
@@ -1136,11 +1734,13 @@ export default function Home() {
                 decoding="async"
                 className="w-32 h-32 md:w-40 md:h-40 opacity-80 transition-all duration-700"
                 style={{
-                  transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`
+                  transform: `rotate(${Math.sin(scrollY * 0.01) * 5}deg) scale(${1 + Math.abs(Math.sin(scrollY * 0.01)) * 0.1})`,
                 }}
               />
               <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-md">
-                空間を超え、<br />ブランドを創造する。
+                空間を超え、
+                <br />
+                ブランドを創造する。
               </p>
               <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md">
                 店舗内装のデザイン設計施工から、ブランド空間プロデュースまで。LSは、"続く売上"が生まれるブランド体験を創造します。
@@ -1148,43 +1748,66 @@ export default function Home() {
             </div>
 
             <div className="space-y-4 md:space-y-6">
-              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">NAVIGATION</h4>
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">
+                NAVIGATION
+              </h4>
               <div className="space-y-3 md:space-y-4">
-                <a href="/#about" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                <a
+                  href="/#about"
+                  className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light"
+                >
                   About
                 </a>
-                <a href="/#philosophy" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                <a
+                  href="/#philosophy"
+                  className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light"
+                >
                   Philosophy
                 </a>
-                <a href="/#projects" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                <a
+                  href="/#projects"
+                  className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light"
+                >
                   Projects
                 </a>
-                <a href="/#values" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                <a
+                  href="/#values"
+                  className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light"
+                >
                   Values
                 </a>
-                <a href="/careers" className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light">
+                <a
+                  href="/careers"
+                  className="block text-gray-400 hover:text-[#d4af37] transition-colors text-sm md:text-base font-light"
+                >
                   Careers
                 </a>
               </div>
             </div>
 
             <div className="space-y-4 md:space-y-6">
-              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">COMPANY</h4>
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">
+                COMPANY
+              </h4>
               <div className="space-y-3 md:space-y-4 text-gray-400 text-sm md:text-base font-light leading-relaxed">
                 <p>株式会社LS</p>
                 <p className="text-xs md:text-sm">
-                  東京都渋谷区渋谷1-12-2<br />
+                  東京都渋谷区渋谷1-12-2
+                  <br />
                   クロスオフィス渋谷505
                 </p>
                 <p className="text-xs md:text-sm pt-2">
-                  設立：2023年10月<br />
+                  設立：2023年10月
+                  <br />
                   事業規模：案件単価 100〜2000万円
                 </p>
               </div>
             </div>
 
             <div className="space-y-4 md:space-y-6">
-              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">RECRUIT</h4>
+              <h4 className="text-white text-xs md:text-sm font-light mb-4 md:mb-6 tracking-[0.3em] md:tracking-[0.4em]">
+                RECRUIT
+              </h4>
               <div className="space-y-4">
                 <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed">
                   一緒に働く仲間を募集しています
@@ -1211,12 +1834,22 @@ export default function Home() {
 
           <div className="border-t border-[#d4af37]/20 pt-8 md:pt-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-xs font-light">
-              <p className="tracking-[0.2em]">&copy; 2025 株式会社LS. All rights reserved.</p>
+              <p className="tracking-[0.2em]">
+                &copy; 2025 株式会社LS. All rights reserved.
+              </p>
               <div className="flex gap-6">
-                <a href="/#about" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
+                <a
+                  href="/#about"
+                  className="hover:text-[#d4af37] transition-colors tracking-[0.2em]"
+                >
                   会社情報
                 </a>
-                <a href="https://career-cloud.asia/" target="_blank" rel="noopener noreferrer" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
+                <a
+                  href="https://career-cloud.asia/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#d4af37] transition-colors tracking-[0.2em]"
+                >
                   お問い合わせ
                 </a>
               </div>
@@ -1227,4 +1860,3 @@ export default function Home() {
     </div>
   );
 }
-

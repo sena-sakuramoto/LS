@@ -33,16 +33,25 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? "bg-black/95 backdrop-blur-md border-b border-white/10" : "bg-transparent"
+        isScrolled
+          ? "bg-black/95 backdrop-blur-md border-b border-white/10"
+          : "bg-transparent"
       }`}
     >
       <div className="container">
         <div className="flex items-center justify-between h-20">
-          <a href="/" className="font-logo text-3xl tracking-[0.1em] text-white hover:opacity-70 transition-opacity">
-            LS
+          <a
+            href="/"
+            className="inline-flex items-center hover:opacity-85 transition-opacity"
+          >
+            <img
+              src="/ls-logo-cropped.png"
+              alt="LS"
+              className="h-12 w-auto md:h-14"
+            />
           </a>
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <a
                 key={link.href}
                 href={link.href}
@@ -71,11 +80,26 @@ export default function Header() {
             className="tap-bounce md:hidden rounded-full border border-white/10 bg-white/5 p-2 text-white backdrop-blur-sm transition-colors hover:border-[#d4af37]/40"
             aria-label="メニュー"
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -83,16 +107,20 @@ export default function Header() {
 
         <div
           className={cn(
-            "md:hidden overflow-hidden transition-[max-height,opacity,transform] duration-300",
+            "fixed inset-x-0 top-20 bottom-0 z-40 md:hidden transition-[opacity,transform] duration-300",
             isMobileMenuOpen
-              ? "pointer-events-auto max-h-[460px] opacity-100 translate-y-0"
-              : "pointer-events-none max-h-0 opacity-0 -translate-y-2",
+              ? "pointer-events-auto opacity-100 translate-y-0"
+              : "pointer-events-none opacity-0 -translate-y-2"
           )}
         >
-          <div className="flex justify-end pb-4 pt-2">
-            <nav className="w-full max-w-[272px] rounded-[1.5rem] border border-white/10 bg-black/95 p-4 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+          <div
+            className="absolute inset-0 bg-black/72 backdrop-blur-md"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="relative flex h-full justify-end px-4 pb-4 pt-2">
+            <nav className="w-full max-w-[272px] overflow-y-auto rounded-[1.5rem] border border-white/10 bg-black/95 p-4 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl max-h-[min(520px,calc(100dvh-7rem))]">
               <div className="space-y-2">
-                {navLinks.map((link) => (
+                {navLinks.map(link => (
                   <a
                     key={link.href}
                     href={link.href}
@@ -128,4 +156,3 @@ export default function Header() {
     </header>
   );
 }
-

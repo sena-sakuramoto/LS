@@ -338,10 +338,146 @@ html {
   word-break: normal;
   overflow-wrap: normal;
   line-break: strict;
+  hanging-punctuation: allow-end;
 }
 
 .copy-balance {
   text-wrap: pretty;
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+
+.line-keep {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+[data-scroll-glow] {
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.scroll-glow-image,
+.scroll-glow-overlay,
+.scroll-glow-shimmer,
+.scroll-glow-rail-x,
+.scroll-glow-rail-y,
+.scroll-glow-accent,
+.scroll-glow-dot {
+  transition:
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.55s ease,
+    color 0.4s ease,
+    background-color 0.4s ease,
+    width 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.55s ease;
+}
+
+.value-glow-card:hover,
+.value-glow-card.value-glow-active {
+  transform: translateY(-8px);
+  border-color: rgba(212, 175, 55, 0.75);
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 248, 225, 0.98) 0%,
+    rgba(255, 255, 255, 0.98) 30%,
+    rgba(250, 242, 212, 0.98) 100%
+  );
+  box-shadow:
+    0 26px 56px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(212, 175, 55, 0.24),
+    0 0 42px rgba(212, 175, 55, 0.22);
+}
+
+.value-glow-card:hover .scroll-glow-shimmer,
+.value-glow-card.value-glow-active .scroll-glow-shimmer {
+  opacity: 0.78;
+}
+
+.value-glow-card:hover .scroll-glow-rail-x,
+.value-glow-card.value-glow-active .scroll-glow-rail-x {
+  width: 100%;
+}
+
+.value-glow-card:hover .scroll-glow-rail-y,
+.value-glow-card.value-glow-active .scroll-glow-rail-y {
+  height: 100%;
+}
+
+.value-glow-card:hover .scroll-glow-accent,
+.value-glow-card.value-glow-active .scroll-glow-accent {
+  color: #d4af37;
+}
+
+.value-glow-card:hover .scroll-glow-dot,
+.value-glow-card.value-glow-active .scroll-glow-dot {
+  transform: scale(1.35);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.55);
+}
+
+[data-scroll-glow].scroll-glow-active {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.65);
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 248, 225, 0.98) 0%,
+    rgba(255, 255, 255, 0.98) 32%,
+    rgba(250, 242, 212, 0.98) 100%
+  );
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(212, 175, 55, 0.22),
+    0 0 34px rgba(212, 175, 55, 0.18);
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-image {
+  transform: scale(1.04);
+  filter: saturate(1.08);
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-overlay {
+  opacity: 1;
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-shimmer {
+  opacity: 0.72;
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-rail-x {
+  width: 100%;
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-rail-y {
+  height: 100%;
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-accent {
+  color: #d4af37;
+}
+
+[data-scroll-glow].scroll-glow-active .scroll-glow-dot {
+  transform: scale(1.35);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.55);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .magnetic-button:hover {
+    transform: none;
+  }
+
+  .value-glow-card:hover {
+    transform: none;
+    border-color: inherit;
+    background-image: none;
+    box-shadow: none;
+  }
 }
 
 /* Shimmer effect */

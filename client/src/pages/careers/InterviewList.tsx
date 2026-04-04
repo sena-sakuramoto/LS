@@ -35,7 +35,7 @@ export default function InterviewList() {
           <SectionHeading
             eyebrow="PEOPLE"
             title="役割ごとに見える景色は違う。"
-            description="写真とキャッチコピーで、インタビューの空気感が伝わるように整理しています。"
+            description="メンバーごとの役割や価値観に触れながら、LSで働く日々のリアルを知ってください。"
             align="center"
           />
           <motion.div
@@ -49,21 +49,22 @@ export default function InterviewList() {
               <motion.div key={profile.id} variants={fadeInUp}>
                 <Link
                   href={`/careers/interview/${profile.id}/`}
+                  data-scroll-glow
                   className="group block overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={profile.image}
                       alt={profile.displayName}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="scroll-glow-image h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent transition-colors duration-700 group-hover:from-black/85" />
+                    <div className="scroll-glow-overlay absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-100 transition-colors duration-700 group-hover:from-black/85" />
                     <div className="absolute inset-x-0 bottom-0 space-y-3 p-6">
                       <p className="font-heading-en text-xs tracking-[0.3em] text-[#d4af37]">
                         {profile.role}
                       </p>
-                      <h2 className="text-3xl font-light">{profile.displayName}</h2>
-                      <p className="max-w-sm text-sm leading-7 text-gray-200">
+                      <h2 className="title-balance text-3xl font-light">{profile.displayName}</h2>
+                      <p className="copy-balance max-w-sm text-sm leading-7 text-gray-200">
                         {profile.catchCopy}
                       </p>
                     </div>

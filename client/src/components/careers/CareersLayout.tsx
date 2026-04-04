@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 import CareersHeader from './CareersHeader';
 import CareersFooter from './CareersFooter';
+import { useTouchScrollGlow } from "@/hooks/useTouchScrollGlow";
 
 interface CareersLayoutProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface CareersLayoutProps {
 
 export default function CareersLayout({ children }: CareersLayoutProps) {
   const [location] = useLocation();
+  useTouchScrollGlow([location]);
 
   useEffect(() => {
     const resetScroll = () => {

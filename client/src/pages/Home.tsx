@@ -272,7 +272,7 @@ export default function Home() {
                 OUR VISION
               </Button>
             </a>
-            <a href="#contact" className="w-full md:w-auto">
+            <a href="https://career-cloud.asia/" target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
               <Button
                 variant="outline"
                 size="lg"
@@ -293,43 +293,6 @@ export default function Home() {
           >
             <span className="text-xs tracking-[0.4em] font-light">SCROLL</span>
             <div className="w-px h-24 bg-gradient-to-b from-[#d4af37] to-transparent"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section - 3D Flip Cards */}
-      <section 
-        id="stats" 
-        className={`relative py-20 md:py-40 bg-gradient-to-b from-black to-gray-900 border-y border-[#d4af37]/20 transition-all duration-1000 ${isVisible.stats ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        <div className="container max-w-7xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-16">
-            {[
-              { value: "50", unit: "億", label: "TARGET REVENUE", delay: "0s", color: "from-[#d4af37] to-[#f4e5c3]" },
-              { value: "100", unit: "+", label: "PROJECTS", delay: "0.2s", color: "from-[#f4e5c3] to-[#d4af37]" },
-              { value: "5", unit: "年", label: "TO STANDARD", delay: "0.4s", color: "from-[#d4af37] to-[#f4e5c3]" },
-              { value: "AI", unit: "×", label: "INNOVATION", delay: "0.6s", color: "from-[#f4e5c3] to-[#d4af37]" }
-            ].map((stat, index) => (
-              <div
-                key={index}
-                className="text-center space-y-4 group cursor-pointer stagger-item"
-                style={{
-                  animationDelay: stat.delay
-                }}
-              >
-                <div
-                  className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light bg-gradient-to-r ${stat.color} bg-clip-text text-transparent group-hover:scale-110 transition-all duration-500`}
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 5}px)`
-                  }}
-                >
-                  {stat.value}<span className="text-2xl sm:text-3xl md:text-4xl">{stat.unit}</span>
-                </div>
-                <div className="h-px w-12 md:w-16 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto group-hover:w-16 md:group-hover:w-24 transition-all duration-400"></div>
-                <p className="text-xs tracking-[0.2em] md:tracking-[0.25em] text-gray-400 font-light group-hover:text-[#d4af37] transition-colors">{stat.label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -360,17 +323,17 @@ export default function Home() {
         ></div>
         
         <div className="container max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-20 items-center">
             <div 
-              className={`lg:col-span-5 space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
+              className={`lg:col-span-6 space-y-14 md:space-y-16 transition-all duration-1000 delay-200 ${isVisible.mission ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
-                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light">MISSION</span>
+                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">MISSION</span>
                 </div>
                 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] tracking-tight mb-8 md:mb-12">
+                <h2 className="title-balance max-w-[12ch] text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(3rem,4.2vw,4.75rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
                   {['空間を超え、', 'ブランドを創造する。'].map((text, i) => (
                     <span
                       key={i}
@@ -386,18 +349,18 @@ export default function Home() {
               </div>
 
               <div className="space-y-6 md:space-y-8">
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed font-light">
+                <p className="copy-balance max-w-[22ch] text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 font-mission">
                   私たちLSは、内装という「箱」を作るだけではなく、<span className="gold-gradient font-normal">事業の世界観と収益モデル</span>まで設計します。
                 </p>
 
-                <p className="text-sm md:text-base lg:text-lg text-gray-500 leading-relaxed font-light">
+                <p className="copy-balance max-w-[40rem] text-sm md:text-base lg:text-lg text-gray-500 leading-relaxed font-light">
                   立地・動線・席数・オペレーション・採用・販促——店舗の成功に関わる要素を統合し、"続く売上"が生まれるブランド体験をつくる。それが私たちの使命です。
                 </p>
               </div>
             </div>
             
             <div 
-              className={`lg:col-span-7 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+              className={`lg:col-span-6 relative transition-all duration-1000 delay-400 ${isVisible.mission ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
             >
               <div className="relative h-[350px] md:h-[500px] lg:h-[650px] group">
                 {/* Main Image with 3D Tilt */}
@@ -430,8 +393,8 @@ export default function Home() {
                     <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
                     <p className="text-xs tracking-[0.3em] text-gray-600 font-light">PHILOSOPHY</p>
                   </div>
-                  <p className="text-2xl text-black font-light leading-relaxed group-hover/card:gold-gradient transition-all duration-500">
-                    "続く売上"が生まれる<br />ブランド体験をつくる
+                  <p className="title-balance max-w-[13ch] text-2xl text-black font-light leading-[1.45] group-hover/card:gold-gradient transition-all duration-500">
+                    "続く売上"が生まれるブランド体験をつくる
                   </p>
                 </div>
                 
@@ -523,15 +486,15 @@ export default function Home() {
             </div>
             
             <div 
-              className={`lg:col-span-5 space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
+              className={`lg:col-span-5 space-y-14 md:space-y-16 order-1 lg:order-2 transition-all duration-1000 delay-400 ${isVisible.vision ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}
             >
               <div>
                 <div className="flex items-center gap-6 mb-8">
                   <div className="w-16 h-px bg-[#d4af37]"></div>
-                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light">VISION</span>
+                  <span className="text-xs tracking-[0.5em] text-gray-400 font-light font-heading-en">VISION</span>
                 </div>
                 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] tracking-tight mb-8 md:mb-12">
+                <h2 className="title-balance max-w-[13ch] text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(3rem,4vw,4.5rem)] font-light leading-[1.18] tracking-tight mb-8 md:mb-12">
                   {['業界を変革し、', 'ブランドカンパニーになる。'].map((text, i) => (
                     <span
                       key={i}
@@ -546,8 +509,8 @@ export default function Home() {
                 </h2>
               </div>
 
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-[1.6] font-light">
-                内装＝コストという常識を変え、<br />
+              <p className="copy-balance max-w-[18ch] text-lg sm:text-xl md:text-2xl text-gray-300 leading-[1.6] font-light">
+                内装＝コストという常識を変え、
                 <span className="gold-gradient font-normal">内装＝投資</span>へ。
               </p>
               
@@ -592,12 +555,12 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">BRAND FILM</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">BRAND FILM</span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight leading-tight px-4">
-              ブランドが<br />動き出す瞬間
+            <h2 className="title-balance mx-auto max-w-[10ch] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-10 tracking-tight leading-tight px-4">
+              ブランドが動き出す瞬間
             </h2>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed px-4">
@@ -660,19 +623,15 @@ export default function Home() {
           <div className="space-y-8 md:space-y-10 lg:space-y-12">
             <div className="flex items-center gap-4 md:gap-6">
               <div className="w-12 md:w-16 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">PHILOSOPHY</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">PHILOSOPHY</span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.4] tracking-tight text-black">
-              "続く売上"が生まれる
-              <br className="sm:hidden" />
-              ブランド体験をつくる
+            <h2 className="title-balance max-w-[12ch] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light leading-[1.35] tracking-tight text-black">
+              "続く売上"が生まれるブランド体験をつくる
             </h2>
 
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
-              私たちLSは、内装という「箱」を作るだけではなく、
-              <br className="sm:hidden" />
-              事業の世界観と収益モデルまで設計します。
+            <p className="copy-balance max-w-[28rem] text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-light">
+              私たちLSは、内装という「箱」を作るだけではなく、事業の世界観と収益モデルまで設計します。
             </p>
           </div>
 
@@ -697,7 +656,7 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">PROJECTS</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">PROJECTS</span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -790,7 +749,7 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">VALUES</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">VALUES</span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -902,7 +861,7 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">COMPANY</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">COMPANY</span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]/30"></div>
             </div>
 
@@ -944,8 +903,7 @@ export default function Home() {
                 { label: "代表者", value: "本間 拓彌" },
                 { label: "資本金", value: "1,000,000円" },
                 { label: "事業内容", value: "店舗内装のコンサルティング／設計デザイン／施工・PM／ブランド展開支援" },
-                { label: "建設業許可", value: "東京都知事 許可（般-7）第159994号" },
-                { label: "従業員数", value: "コアメンバー5名" }
+                { label: "建設業許可", value: "東京都知事 許可（般-7）第159994号" }
               ].map((item, index) => (
                 <div
                   key={index}
@@ -990,14 +948,12 @@ export default function Home() {
           <div className="text-center mb-16 md:mb-24 lg:mb-32">
             <div className="flex items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
-              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light">CAREERS</span>
+              <span className="text-xs tracking-[0.3em] md:tracking-[0.5em] text-gray-400 font-light font-heading-en">CAREERS</span>
               <div className="w-12 md:w-24 h-px bg-[#d4af37]"></div>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-10 md:mb-14 tracking-tight leading-[1.3]">
-              次世代の<br />
-              ブランド体験を、<br />
-              共に創造しませんか。
+            <h2 className="title-balance mx-auto max-w-[13ch] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-10 md:mb-14 tracking-tight leading-[1.2]">
+              次世代のブランド体験を、共に創造しませんか。
             </h2>
 
             <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-10 md:mb-12 font-light max-w-3xl mx-auto leading-relaxed">
@@ -1017,9 +973,9 @@ export default function Home() {
                   type: '正社員'
                 },
                 {
-                  title: 'プロジェクトマネージャー',
-                  desc: '設計から施工まで一気通貫で管理',
-                  requirements: ['PM経験2年以上', '建築・内装業界知識', 'コミュニケーション能力'],
+                  title: '営業コンサルタント',
+                  desc: 'クライアントの想いを受け取り、最適な空間提案でビジネスを動かす',
+                  requirements: ['法人営業経験 / 提案営業経験', '建築・内装業界知識', 'コミュニケーション能力'],
                   type: '正社員'
                 },
                 {
@@ -1154,7 +1110,7 @@ export default function Home() {
           {/* CTA */}
           <div className="text-center">
             <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 md:mb-12 font-light px-4">まずはカジュアル面談から。あなたのキャリアについてお聞かせください。</p>
-            <a href="/careers" className="inline-block w-full md:w-auto">
+            <a href="/careers/entry/" className="inline-block w-full md:w-auto">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-[#d4af37] to-[#f4e5c3] text-black hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] w-full md:w-auto px-8 sm:px-12 md:px-16 py-5 md:py-8 lg:py-10 text-base sm:text-lg md:text-xl tracking-[0.15em] sm:tracking-[0.2em] font-light transition-all duration-500 hover:scale-105 border-0"
@@ -1241,7 +1197,7 @@ export default function Home() {
                     採用情報
                   </Button>
                 </a>
-                <a href="https://herp.careers/v1/lscompany" target="_blank" rel="noopener noreferrer" className="block">
+                <a href="/careers/entry/" className="block">
                   <Button
                     variant="outline"
                     className="bg-transparent text-white border-2 border-white/30 hover:border-[#d4af37] hover:text-[#d4af37] transition-all duration-700 w-full px-6 py-4 text-xs tracking-[0.25em] font-light"
@@ -1260,7 +1216,7 @@ export default function Home() {
                 <a href="/#about" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
                   会社情報
                 </a>
-                <a href="/#contact" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
+                <a href="https://career-cloud.asia/" target="_blank" rel="noopener noreferrer" className="hover:text-[#d4af37] transition-colors tracking-[0.2em]">
                   お問い合わせ
                 </a>
               </div>

@@ -99,6 +99,11 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+artifacts/
+images/
+tmp_docx_check/
+client/src/test_temp.txt
+.claude/settings.local.json
 
 # Database
 *.db

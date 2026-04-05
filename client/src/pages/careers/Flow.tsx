@@ -42,15 +42,17 @@ export default function Flow() {
             variants={staggerContainer}
           >
             {flowSteps.map((step, index) => (
-              <motion.div key={step.step} className="relative" variants={fadeInUp}>
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-7">
+              <motion.div key={step.step} className="relative h-full" variants={fadeInUp}>
+                <div className="flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-7">
                   <p className="font-heading-en text-xs tracking-[0.32em] text-[#d4af37]">
                     {step.step}
                   </p>
                   <h2 className="mt-4 text-3xl font-light">{step.title}</h2>
                   <p className="mt-4 text-sm leading-8 text-gray-200">{step.desc}</p>
-                  <div className="mt-6 rounded-[1.25rem] border border-[#d4af37]/20 bg-black/40 p-4">
-                    <p className="text-sm leading-7 text-gray-300">{step.note}</p>
+                  <div className="mt-auto pt-6">
+                    <div className="rounded-[1.25rem] border border-[#d4af37]/20 bg-black/40 p-4">
+                      <p className="text-sm leading-7 text-gray-300">{step.note}</p>
+                    </div>
                   </div>
                 </div>
 

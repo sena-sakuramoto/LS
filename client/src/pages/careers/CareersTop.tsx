@@ -21,9 +21,10 @@ import {
 } from "@/components/careers/careersData";
 
 export default function CareersTop() {
+  const carouselProfiles = [...interviewProfiles, ...interviewProfiles];
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    align: "center",
+    align: "start",
     containScroll: false,
     skipSnaps: false,
     duration: 28,
@@ -36,7 +37,7 @@ export default function CareersTop() {
     if (!emblaApi) return;
 
     const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
+      setSelectedIndex(emblaApi.selectedScrollSnap() % interviewProfiles.length);
     };
 
     onSelect();
@@ -121,12 +122,13 @@ export default function CareersTop() {
                 viewport={viewportOnce}
                 variants={staggerContainer}
               >
-                {interviewProfiles.map((profile, index) => {
-                  const isActive = index === selectedIndex;
+                {carouselProfiles.map((profile, index) => {
+                  const normalizedIndex = index % interviewProfiles.length;
+                  const isActive = normalizedIndex === selectedIndex;
 
                   return (
                     <motion.div
-                      key={profile.id}
+                      key={`${profile.id}-${index}`}
                       className="min-w-0 flex-[0_0_84%] md:flex-[0_0_44%] xl:flex-[0_0_31%]"
                       variants={fadeInUp}
                     >

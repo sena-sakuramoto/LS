@@ -299,19 +299,6 @@ export default function Home() {
 
         {/* Content */}
         <div className="relative z-10 text-center space-y-12 px-4 max-w-6xl mx-auto">
-          <div className="mb-12 md:mb-20 animate-fade-in-up">
-            <img
-              src="/ls-logo-cropped.png"
-              alt="株式会社LS"
-              width="224"
-              height="224"
-              className="w-36 h-36 md:w-52 md:h-52 lg:w-60 lg:h-60 mx-auto drop-shadow-2xl transition-all duration-700"
-              style={{
-                transform: `rotate(0deg) scale(1)`,
-              }}
-            />
-          </div>
-
           <div className="space-y-6 md:space-y-8">
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-[0.15em] leading-none drop-shadow-2xl">
               {["L", "S"].map((letter, i) => (

@@ -492,14 +492,14 @@ export default function Home() {
                 </div>
 
                 {/* Floating Card */}
-                <div className="relative z-10 mx-4 mt-3 glass p-5 shadow-2xl backdrop-blur-xl border border-[#d4af37]/20 group/card cursor-pointer md:absolute md:-bottom-12 md:-right-12 md:mx-0 md:mt-0 md:max-w-sm md:p-8 hover-lift">
-                  <div className="flex items-center gap-4 mb-6">
+                <div className="relative z-10 mx-4 mt-3 glass p-5 shadow-2xl backdrop-blur-xl border border-[#d4af37]/20 group/card cursor-pointer md:absolute md:-bottom-12 md:-right-12 md:mx-0 md:mt-0 md:w-[26rem] md:max-w-none md:p-8 hover-lift">
+                  <div className="mb-5 flex items-center gap-4 md:mb-6">
                     <div className="w-12 h-px bg-[#d4af37] group-hover/card:w-20 transition-all duration-500"></div>
-                    <p className="text-xs tracking-[0.3em] text-gray-600 font-light">
+                    <p className="text-[11px] tracking-[0.32em] text-gray-500 font-light">
                       PHILOSOPHY
                     </p>
                   </div>
-                  <p className="title-balance max-w-[14ch] text-2xl text-black font-light leading-[1.45] group-hover/card:gold-gradient transition-all duration-500">
+                  <p className="title-balance max-w-[12em] text-[1.95rem] text-black font-light leading-[1.38] tracking-tight group-hover/card:gold-gradient transition-all duration-500 md:max-w-none md:text-[2.2rem]">
                     <span className="line-keep">"続く売上"が生まれる</span>
                     <span className="line-keep">ブランド体験をつくる</span>
                   </p>
@@ -773,7 +773,7 @@ export default function Home() {
               </span>
             </div>
 
-            <h2 className="title-balance max-w-[14ch] text-xl sm:max-w-[16ch] sm:text-2xl md:max-w-[18ch] md:text-3xl lg:text-4xl font-light leading-[1.35] tracking-tight text-black">
+            <h2 className="title-balance max-w-[15ch] text-xl sm:max-w-[17ch] sm:text-2xl md:max-w-[18ch] md:text-3xl lg:text-4xl font-light leading-[1.32] tracking-tight text-black">
               <span className="line-keep">"続く売上"が生まれる</span>
               <span className="line-keep">ブランド体験をつくる</span>
             </h2>

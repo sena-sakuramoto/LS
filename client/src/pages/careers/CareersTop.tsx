@@ -21,16 +21,9 @@ import {
 } from "@/components/careers/careersData";
 
 export default function CareersTop() {
-  const cloneCount = Math.min(interviewProfiles.length, 3);
-  const carouselProfiles = [
-    ...interviewProfiles.slice(-cloneCount),
-    ...interviewProfiles,
-    ...interviewProfiles.slice(0, cloneCount),
-  ];
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    startIndex: cloneCount,
-    align: "start",
+    loop: true,
+    align: "center",
     containScroll: false,
     skipSnaps: false,
     duration: 28,
@@ -43,21 +36,7 @@ export default function CareersTop() {
     if (!emblaApi) return;
 
     const onSelect = () => {
-      const snap = emblaApi.selectedScrollSnap();
-      const firstIndex = cloneCount;
-      const lastIndex = cloneCount + interviewProfiles.length - 1;
-
-      if (snap < firstIndex) {
-        emblaApi.scrollTo(snap + interviewProfiles.length, true);
-        return;
-      }
-
-      if (snap > lastIndex) {
-        emblaApi.scrollTo(snap - interviewProfiles.length, true);
-        return;
-      }
-
-      setSelectedIndex((snap - cloneCount + interviewProfiles.length) % interviewProfiles.length);
+      setSelectedIndex(emblaApi.selectedScrollSnap());
     };
 
     onSelect();
@@ -142,14 +121,12 @@ export default function CareersTop() {
                 viewport={viewportOnce}
                 variants={staggerContainer}
               >
-                {carouselProfiles.map((profile, index) => {
-                  const normalizedIndex =
-                    (index - cloneCount + interviewProfiles.length) % interviewProfiles.length;
-                  const isActive = normalizedIndex === selectedIndex;
+                {interviewProfiles.map((profile, index) => {
+                  const isActive = index === selectedIndex;
 
                   return (
                     <motion.div
-                      key={`${profile.id}-${index}`}
+                      key={profile.id}
                       className="min-w-0 flex-[0_0_84%] md:flex-[0_0_44%] xl:flex-[0_0_31%]"
                       variants={fadeInUp}
                     >

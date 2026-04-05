@@ -125,13 +125,13 @@ export function CareersHero({
             alt=""
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 h-full w-full object-cover blur-[2px]",
+              "absolute inset-0 h-full w-full object-cover blur-[2px] md:blur-none",
               backgroundImageClassName
             )}
           />
           <div
             className={cn(
-              "absolute inset-0 flex items-center justify-center px-4 pt-20 md:px-8",
+              "absolute inset-0 flex items-center justify-center px-4 pt-20 md:hidden",
               imageFrameClassName
             )}
           >

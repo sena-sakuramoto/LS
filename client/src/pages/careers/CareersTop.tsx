@@ -67,7 +67,7 @@ export default function CareersTop() {
         description="設計・営業・施工。あなたの仕事が、誰かの理想をつくる。"
         image="/careers-hero-team.jpg"
         imageMode="contain"
-        backgroundImageClassName="object-[50%_24%] lg:object-[50%_28%]"
+        backgroundImageClassName="object-[50%_18%] md:object-[50%_20%] lg:object-[50%_22%]"
         imageClassName="object-top"
         imageFrameClassName="items-start pt-20 md:items-center md:pt-28 lg:pt-32"
         minHeightClassName="min-h-[88svh] md:min-h-[84vh] lg:min-h-[86vh]"

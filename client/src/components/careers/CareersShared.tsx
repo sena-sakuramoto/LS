@@ -31,6 +31,8 @@ interface SectionHeadingProps {
   description?: string;
   align?: "left" | "center";
   className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 export function SectionHeading({
@@ -39,6 +41,8 @@ export function SectionHeading({
   description,
   align = "left",
   className,
+  titleClassName,
+  descriptionClassName,
 }: SectionHeadingProps) {
   return (
     <motion.div
@@ -60,8 +64,10 @@ export function SectionHeading({
           className={cn(
             "title-balance text-3xl font-light leading-[1.15]",
             align === "center"
-              ? "mx-auto max-w-[14em] text-[clamp(2.4rem,8vw,4.2rem)] sm:max-w-[16em] md:max-w-[22ch]"
-              : "max-w-[15ch] md:max-w-[18ch] md:text-[clamp(2.75rem,4vw,4.5rem)]"
+              ? "mx-auto max-w-[12.5em] text-[clamp(2.15rem,8vw,4rem)] sm:max-w-[15em] md:max-w-[24ch] lg:max-w-[26ch]"
+              : "max-w-[13ch] sm:max-w-[15ch] md:max-w-[17ch] md:text-[clamp(2.75rem,4vw,4.5rem)]"
+            ,
+            titleClassName
           )}
         >
           {title}
@@ -71,8 +77,9 @@ export function SectionHeading({
             className={cn(
               "copy-balance text-sm leading-7 text-gray-300 md:text-base",
               align === "center"
-                ? "mx-auto max-w-[24rem] sm:max-w-3xl"
-                : "max-w-3xl"
+                ? "mx-auto max-w-[30rem] md:max-w-[42rem]"
+                : "max-w-3xl",
+              descriptionClassName
             )}
           >
             {description}

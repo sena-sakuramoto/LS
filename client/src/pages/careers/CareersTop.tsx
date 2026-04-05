@@ -112,6 +112,7 @@ export default function CareersTop() {
             eyebrow="PEOPLE"
             title="社員スペシャリスト紹介"
             description="実際に働くメンバーの表情と言葉から、LSのカルチャーと仕事の温度感を伝えます。"
+            descriptionClassName="max-w-[38rem]"
           />
           <div className="mt-14">
             <div ref={emblaRef} className="overflow-hidden">
@@ -135,20 +136,20 @@ export default function CareersTop() {
                       <Link
                         href={`/careers/interview/${profile.id}/`}
                         data-scroll-glow
-                        className="group block"
+                        className="group block h-full"
                       >
                         <div
-                          className={`overflow-hidden rounded-[1.75rem] border bg-white/5 transition-all duration-500 ${
+                          className={`flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-white/5 transition-all duration-500 ${
                             isActive
                               ? "border-[#d4af37]/40 shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
                               : "border-white/10 opacity-85"
                           }`}
                         >
-                          <div className="relative aspect-[3/4] overflow-hidden">
+                          <div className="relative aspect-[3/4] shrink-0 overflow-hidden">
                             <img
                               src={profile.image}
                               alt={profile.displayName}
-                              className={`scroll-glow-image h-full w-full object-cover transition-all duration-700 ${
+                              className={`scroll-glow-image h-full w-full object-cover object-top transition-all duration-700 ${
                                 isActive
                                   ? "scale-[1.03] saturate-110"
                                   : "scale-100 grayscale-[0.08]"
@@ -167,7 +168,7 @@ export default function CareersTop() {
                               </p>
                             </div>
                           </div>
-                          <div className="p-6">
+                          <div className="flex min-h-[122px] flex-1 items-start p-6">
                             <p className="copy-balance text-sm leading-7 text-gray-300">
                               {profile.catchCopy}
                             </p>
@@ -215,12 +216,13 @@ export default function CareersTop() {
             eyebrow="STORIES"
             title={
               <>
-                <span className="block">仕事を知る入口を、</span>
-                <span className="block">ひとつずつ用意する。</span>
+                <span className="block md:line-keep">仕事を知る入口を、</span>
+                <span className="block md:line-keep">ひとつずつ用意する。</span>
               </>
             }
             description="仕事内容、育成環境、働く人の声。気になるテーマから、LSで働く姿を具体的に知ることができます。"
             align="center"
+            titleClassName="md:max-w-[20ch] lg:max-w-[22ch]"
           />
           <motion.div
             className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3"
@@ -242,7 +244,7 @@ export default function CareersTop() {
                       alt={banner.title}
                       className="scroll-glow-image h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="scroll-glow-overlay absolute inset-0 bg-black/45 opacity-100 transition-colors duration-700 group-hover:bg-black/25" />
+                    <div className="scroll-glow-overlay absolute inset-0 bg-gradient-to-t from-black/82 via-black/34 to-black/8 opacity-100 transition-colors duration-700 group-hover:from-black/70 group-hover:via-black/18 group-hover:to-transparent" />
                     <div className="absolute inset-0 flex flex-col justify-end p-6">
                       <p className="font-heading-en text-xs tracking-[0.3em] text-[#d4af37]">
                         {banner.sub}
@@ -268,12 +270,13 @@ export default function CareersTop() {
             eyebrow="BLOG"
             title={
               <>
-                <span className="block">採用と現場の動きを、</span>
-                <span className="block">記事でも届ける。</span>
+                <span className="block md:line-keep">採用と現場の動きを、</span>
+                <span className="block md:line-keep">記事でも届ける。</span>
               </>
             }
             description="LSの仕事やプロジェクトの背景を、記事コンテンツとして順次発信していきます。"
             align="center"
+            titleClassName="md:max-w-[19ch] lg:max-w-[21ch]"
           />
           <motion.div
             className="mt-14 grid gap-6 md:grid-cols-3"

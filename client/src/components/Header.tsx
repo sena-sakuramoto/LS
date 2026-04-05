@@ -21,7 +21,7 @@ export default function Header() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { href: "/#about", label: "MISSION" },
+    { href: "/#mission", label: "MISSION" },
     { href: "/#film", label: "FILM" },
     { href: "/#philosophy", label: "PHILOSOPHY" },
     { href: "/#projects", label: "PROJECTS" },

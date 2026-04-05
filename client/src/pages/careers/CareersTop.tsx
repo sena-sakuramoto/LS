@@ -21,8 +21,15 @@ import {
 } from "@/components/careers/careersData";
 
 export default function CareersTop() {
+  const cloneCount = Math.min(interviewProfiles.length, 3);
+  const carouselProfiles = [
+    ...interviewProfiles.slice(-cloneCount),
+    ...interviewProfiles,
+    ...interviewProfiles.slice(0, cloneCount),
+  ];
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
+    loop: false,
+    startIndex: cloneCount,
     align: "start",
     containScroll: false,
     skipSnaps: false,
@@ -36,7 +43,21 @@ export default function CareersTop() {
     if (!emblaApi) return;
 
     const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
+      const snap = emblaApi.selectedScrollSnap();
+      const firstIndex = cloneCount;
+      const lastIndex = cloneCount + interviewProfiles.length - 1;
+
+      if (snap < firstIndex) {
+        emblaApi.scrollTo(snap + interviewProfiles.length, true);
+        return;
+      }
+
+      if (snap > lastIndex) {
+        emblaApi.scrollTo(snap - interviewProfiles.length, true);
+        return;
+      }
+
+      setSelectedIndex((snap - cloneCount + interviewProfiles.length) % interviewProfiles.length);
     };
 
     onSelect();
@@ -121,12 +142,14 @@ export default function CareersTop() {
                 viewport={viewportOnce}
                 variants={staggerContainer}
               >
-                {interviewProfiles.map((profile, index) => {
-                  const isActive = index === selectedIndex;
+                {carouselProfiles.map((profile, index) => {
+                  const normalizedIndex =
+                    (index - cloneCount + interviewProfiles.length) % interviewProfiles.length;
+                  const isActive = normalizedIndex === selectedIndex;
 
                   return (
                     <motion.div
-                      key={profile.id}
+                      key={`${profile.id}-${index}`}
                       className="min-w-0 flex-[0_0_84%] md:flex-[0_0_44%] xl:flex-[0_0_31%]"
                       variants={fadeInUp}
                     >

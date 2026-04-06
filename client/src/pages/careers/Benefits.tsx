@@ -137,7 +137,15 @@ export default function Benefits() {
 
       <PageCta
         image="/IMG_6313.JPG"
-        title="制度は整っている。そのうえで、成果に集中できる。"
+        title={
+          <>
+            <span className="block md:line-keep">制度は整っている。</span>
+            <span className="block md:line-keep">
+              そのうえで、成果に集中できる。
+            </span>
+          </>
+        }
+        titleClassName="max-w-[12em] md:max-w-[15ch] lg:max-w-[16ch]"
       />
     </CareersLayout>
   );

@@ -211,7 +211,7 @@ export function CareersHero({
 }
 
 interface PageCtaProps {
-  title?: string;
+  title?: ReactNode;
   description?: string;
   image?: string;
   primaryHref?: string;
@@ -220,6 +220,7 @@ interface PageCtaProps {
   secondaryLabel?: string;
   tertiaryHref?: string;
   tertiaryLabel?: string;
+  titleClassName?: string;
 }
 
 export function PageCta({
@@ -232,7 +233,12 @@ export function PageCta({
   secondaryLabel = "選考フローを見る",
   tertiaryHref,
   tertiaryLabel,
+  titleClassName,
 }: PageCtaProps) {
+  const resolvedTitle = title ?? "次の案件を、一緒に仕掛ける側へ。";
+  const resolvedTitleAlt =
+    typeof resolvedTitle === "string" ? resolvedTitle : "ENTRY";
+
   return (
     <section className="bg-black pb-24 pt-8 md:pb-32">
       <div className="container">
@@ -245,7 +251,7 @@ export function PageCta({
         >
           <img
             src={image}
-            alt={title}
+            alt={resolvedTitleAlt}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/80" />
@@ -254,8 +260,13 @@ export function PageCta({
               <p className="font-heading-en text-xs tracking-[0.45em] text-[#d4af37]">
                 ENTRY
               </p>
-              <h2 className="title-balance max-w-3xl text-3xl font-light leading-[1.12] md:text-[clamp(2.75rem,4vw,4.5rem)]">
-                {title}
+              <h2
+                className={cn(
+                  "title-balance max-w-[12em] text-3xl font-light leading-[1.12] md:max-w-[14ch] md:text-[clamp(2.75rem,4vw,4.5rem)] lg:max-w-[15ch]",
+                  titleClassName
+                )}
+              >
+                {resolvedTitle}
               </h2>
               <p className="copy-balance max-w-2xl text-sm leading-7 text-gray-200 md:text-base">
                 {description}

@@ -92,9 +92,10 @@ export function SectionHeading({
 
 interface CareersHeroProps {
   eyebrow: string;
-  title: string;
+  title: ReactNode;
   description: string;
   image: string;
+  imageAlt?: string;
   imageClassName?: string;
   backgroundImageClassName?: string;
   imageFrameClassName?: string;
@@ -102,6 +103,7 @@ interface CareersHeroProps {
   children?: React.ReactNode;
   minHeightClassName?: string;
   align?: "left" | "center";
+  titleClassName?: string;
 }
 
 export function CareersHero({
@@ -109,6 +111,7 @@ export function CareersHero({
   title,
   description,
   image,
+  imageAlt,
   imageClassName,
   backgroundImageClassName,
   imageFrameClassName,
@@ -116,7 +119,10 @@ export function CareersHero({
   children,
   minHeightClassName = "min-h-[78vh]",
   align = "left",
+  titleClassName,
 }: CareersHeroProps) {
+  const resolvedImageAlt = imageAlt ?? (typeof title === "string" ? title : eyebrow);
+
   return (
     <section
       className={cn(
@@ -144,7 +150,7 @@ export function CareersHero({
           >
             <img
               src={image}
-              alt={title}
+              alt={resolvedImageAlt}
               className={cn("h-full w-full object-contain", imageClassName)}
             />
           </div>
@@ -152,7 +158,7 @@ export function CareersHero({
       ) : (
         <img
           src={image}
-          alt={title}
+          alt={resolvedImageAlt}
           className={cn(
             "absolute inset-0 h-full w-full object-cover",
             imageClassName
@@ -178,7 +184,10 @@ export function CareersHero({
             {eyebrow}
           </motion.p>
           <motion.h1
-            className="title-balance max-w-[9.5em] text-4xl font-light leading-[1.1] sm:max-w-[10.5em] md:max-w-[12em] md:text-[clamp(3.5rem,5vw,5.75rem)] lg:max-w-[13em]"
+            className={cn(
+              "title-balance max-w-[9.5em] text-4xl font-light leading-[1.1] sm:max-w-[10.5em] md:max-w-[12em] md:text-[clamp(3.5rem,5vw,5.75rem)] lg:max-w-[13em]",
+              titleClassName
+            )}
             variants={fadeInUp}
           >
             {title}

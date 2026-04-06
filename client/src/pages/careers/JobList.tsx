@@ -17,7 +17,15 @@ export default function JobList() {
     <CareersLayout>
       <CareersHero
         eyebrow="WORK"
-        title="役割ごとに、ブランドづくりの責任範囲は変わる。"
+        title={
+          <>
+            <span className="block md:line-keep">役割ごとに、</span>
+            <span className="block md:line-keep">
+              ブランドづくりの責任範囲は変わる。
+            </span>
+          </>
+        }
+        titleClassName="max-w-[12em] sm:max-w-[12.5em] md:max-w-[15.5ch] lg:max-w-[17ch]"
         description="設計、営業、施工管理。どの職種もクライアントの理想を空間として成功させるための重要なポジションです。"
         image="/interior-2.jpg"
       >
